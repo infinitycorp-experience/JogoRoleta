@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Roleta de Prêmios - INFINITYCORP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #070a12;
+            --surface: rgba(18, 24, 38, 0.95);
+            --surface-border: rgba(255, 255, 255, 0.12);
+            --accent: #00e5ff;
+            --accent-glow: rgba(0, 229, 255, 0.45);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --gold: #ffd700;
+            --orange: #ff6b00;
+            --red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 30%, #111a2f 0%, var(--bg) 100%);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            height: 100dvh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-fullscreen {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 99999;
+            background: rgba(18, 24, 38, 0.6);
+            border: 1px solid var(--surface-border);
+            color: var(--accent);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            opacity: 0.4;
+            transition: 0.2s;
+        }
+        .btn-fullscreen:hover { opacity: 1; background: rgba(18, 24, 38, 0.95); }
+        .btn-fullscreen svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+
+        .totem-container {
+            width: 100%;
+            height: 100%;
+            max-width: 560px;
+            padding: 12px 18px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .screen.active { display: flex; }
+
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 6px;
+            flex-shrink: 0;
+        }
+
+        .brand-logo {
+            height: clamp(50px, 7vh, 75px);
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 14px rgba(0, 150, 214, 0.35));
+        }
+
+        .title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(1.8rem, 4vh, 2.4rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 1;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .title .corp-highlight {
+            color: #0096d6;
+            text-shadow: 0 0 20px rgba(0, 150, 214, 0.4);
+        }
+
+        .brand-subtitle {
+            color: var(--text-dim);
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-top: 3px;
+        }
+
+        /* --- VITRINE DE PRÊMIOS DA TELA 1 (DESTAQUE MÁXIMO) --- */
+        .showcase-container {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 14px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .showcase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 6px;
+        }
+
+        .showcase-header span {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .prizes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .prizes-grid::-webkit-scrollbar { width: 3px; }
+        .prizes-grid::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.3); border-radius: 3px; }
+
+        .prize-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 7px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .prize-card.rare {
+            border-color: rgba(255, 215, 0, 0.35);
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent);
+        }
+
+        .prize-card-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .prize-card.rare .prize-card-name {
+            color: #ffd700;
+        }
+
+        .prize-stock-pill {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--accent);
+            background: rgba(0, 229, 255, 0.12);
+            padding: 2px 7px;
+            border-radius: 12px;
+            margin-left: 6px;
+        }
+
+        .prize-stock-pill.out {
+            color: var(--text-dim);
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* --- CAMPO DE BUSCA DISCRETA E INTELIGENTE --- */
+        .search-container {
+            width: 100%;
+            position: relative;
+            margin: 6px 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--surface-border);
+            color: #fff;
+            font-size: 1.05rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            background: rgba(0, 229, 255, 0.05);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* LISTA QUE FICA OCULTA ATÉ O USUÁRIO DIGITAR 2 LETRAS */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 56px;
+            left: 0;
+            right: 0;
+            background: #0f1626;
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            padding: 4px;
+        }
+
+        .autocomplete-dropdown.show { display: block; }
+
+        .autocomplete-item {
+            padding: 10px 12px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            transition: background 0.15s;
+        }
+
+        .autocomplete-item:hover, .autocomplete-item:active {
+            background: rgba(0, 229, 255, 0.15);
+        }
+
+        .autocomplete-item.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .player-badge-selected {
+            background: rgba(0, 229, 255, 0.1);
+            border: 1px solid var(--accent);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        /* --- TELA 2: ROLETA E MECÂNICA DA BOMBA DE FORÇA --- */
+        .roulette-wrapper {
+            position: relative;
+            width: min(82vw, 360px);
+            height: min(82vw, 360px);
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .roulette-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 35px rgba(0, 229, 255, 0.25), inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .roulette-pointer {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 40px;
+            z-index: 20;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+            transform-origin: top center;
+            transition: transform 0.08s ease;
+        }
+
+        .center-hub {
+            position: absolute;
+            width: 62px;
+            height: 62px;
+            background: radial-gradient(circle, #1e293b 40%, #070a12 100%);
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            border-radius: 50%;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .center-hub span {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 800;
+            color: #fff;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+        }
+
+        /* PAINEL DINÂMICO DE FORÇA / TEMPO */
+        .power-pump-dashboard {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+
+        .power-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .power-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .power-time-target {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 1px;
+            transition: color 0.2s, transform 0.1s;
+        }
+
+        .power-time-target.overcharged {
+            color: var(--red);
+            text-shadow: 0 0 15px var(--red);
+            animation: pulseAlert 0.3s infinite alternate;
+        }
+
+        .power-meter-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .power-meter-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 60%, var(--orange) 85%, var(--red) 100%);
+            transition: width 0.05s linear;
+        }
+
+        /* BOTÃO BOMBA DE PRESSÃO */
+        .btn-pump {
+            background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
+            color: #040812;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
+            transition: all 0.15s ease;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .btn-pump:active, .btn-pump.charging {
+            transform: scale(0.97);
+            background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
+        }
+
+        .btn-pump:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            filter: grayscale(0.8);
+            box-shadow: none;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
+            color: #040812;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-action:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            filter: grayscale(0.8);
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--surface-border);
+            color: var(--text-dim);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.2s;
+        }
+
+        /* RESULTADO */
+        #screen-end {
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .prize-presentation-card {
+            background: var(--surface);
+            border: 2px solid var(--accent);
+            border-radius: 18px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 0 40px var(--accent-glow);
+            width: 100%;
+            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .prize-presentation-card span {
+            color: var(--text-dim);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+        }
+
+        .prize-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 25px var(--accent);
+            margin: 12px 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stock-left-label {
+            display: inline-block;
+            background: rgba(0, 229, 255, 0.12);
+            color: var(--accent);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        /* MODAL CADASTRO RÁPIDO */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 10, 18, 0.88);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card {
+            background: #121826;
+            border: 1px solid var(--accent);
+            border-radius: 14px;
+            padding: 20px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 0 35px var(--accent-glow);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* SCREENSAVER */
+        #screensaver {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 40%, #0c1836 0%, #030509 100%);
+            z-index: 9990;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 20px;
+            cursor: pointer;
+        }
+        #screensaver.active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounceIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes pulseAlert { from { transform: scale(1); } to { transform: scale(1.06); } }
+    </style>
+</head>
+<body>
+
+<button class="btn-fullscreen" onclick="toggleFullScreen()" title="Tela Cheia">
+    <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+</button>
+
+<!-- SCREENSAVER -->
+<div id="screensaver" onclick="dismissScreensaver()">
+    <div style="text-align: center; margin-top: 20px;">
+        <h2 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase;">Prêmios Corporativos</h2>
+        <h1 class="title" style="font-size: 2.8rem; margin: 10px 0;">INFINITY<span class="corp-highlight">CORP</span></h1>
+        <p class="brand-subtitle">Gire e Leve seu Brinde</p>
+    </div>
+
+    <canvas id="screensaver-wheel" width="260" height="260"></canvas>
+
+    <div class="btn-action" style="max-width: 320px; text-align: center;">
+        TOQUE PARA JOGAR
+    </div>
+</div>
+
+<div class="totem-container">
+
+    <!-- TELA 1: VITRINE DE PRÊMIOS + BUSCA OCULTA -->
+    <div id="screen-start" class="screen active">
+        <div class="brand-header">
+            <h1 class="title">INFINITY<span class="corp-highlight">CORP</span></h1>
+            <p class="brand-subtitle">Desafio da Roleta de Prêmios</p>
+        </div>
+
+        <!-- VITRINE DE PRÊMIOS (DESTAQUE MÁXIMO) -->
+        <div class="showcase-container">
+            <div class="showcase-header">
+                <span>Premiações em Disputa</span>
+                <span id="total-stock-counter" style="color: var(--text-dim); font-size: 0.75rem;">Estoque Ativo</span>
+            </div>
+            <div class="prizes-grid" id="prizes-grid"></div>
+        </div>
+
+        <!-- CAMPO DE BUSCA (LISTA OCULTA POR PADRÃO) -->
+        <div class="search-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label style="font-size: 0.72rem; font-weight: 700; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase;">Identificação</label>
+                <button class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="openNewPlayerModal()">+ Cadastrar</button>
+            </div>
+
+            <input type="text" id="search-input" class="form-input" placeholder="Digite seu nome para liberar a roleta..." autocomplete="off" oninput="handleSearchInput(this.value)">
+
+            <!-- Dropdown que surge ao digitar -->
+            <div class="autocomplete-dropdown" id="autocomplete-list"></div>
+
+            <div class="player-badge-selected" id="player-badge-selected">
+                <div>
+                    <strong id="badge-name" style="color: #fff; font-size: 0.95rem; display: block;"></strong>
+                    <span id="badge-company" style="color: var(--text-dim); font-size: 0.75rem;"></span>
+                </div>
+                <button class="btn-secondary" style="padding: 2px 8px; font-size: 0.7rem;" onclick="clearSelectedPlayer()">Trocar</button>
+            </div>
+        </div>
+
+        <button id="btn-to-spin" class="btn-action" disabled onclick="goToSpinScreen()">
+            Confirmar e Ir para a Roleta
+        </button>
+    </div>
+
+    <!-- TELA 2: ROLETA COM A BOMBINHA DE FORÇA -->
+    <div id="screen-game" class="screen">
+        <div style="background: var(--surface); border: 1px solid var(--surface-border); padding: 8px 16px; border-radius: 10px; text-align: center; width: 100%; flex-shrink: 0;">
+            <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;">Vez de Girar</span>
+            <strong id="current-player-display" style="font-family: 'Rajdhani'; font-size: 1.3rem; color: var(--accent); display: block;">---</strong>
+        </div>
+
+        <div class="roulette-wrapper">
+            <svg class="roulette-pointer" id="roulette-pointer" viewBox="0 0 24 32">
+                <path d="M12 32 L2 6 C0 3 2 0 6 0 L18 0 C22 0 24 3 22 6 Z" fill="#ffd700" stroke="#fff" stroke-width="1.5"/>
+            </svg>
+            <canvas id="wheel-canvas" class="roulette-canvas" width="600" height="600"></canvas>
+            <div class="center-hub"><span>INFINITY</span></div>
+        </div>
+
+        <!-- PAINEL DA BOMBA DE FORÇA -->
+        <div class="power-pump-dashboard">
+            <div class="power-header">
+                <span class="power-label" id="power-instruction-label">Pressione & Segure para Turbinar</span>
+                <span class="power-time-target" id="power-time-target">15s</span>
+            </div>
+            <div class="power-meter-track">
+                <div class="power-meter-fill" id="power-meter-fill"></div>
+            </div>
+            <button id="btn-pump" class="btn-pump">
+                SEGURE P/ TURBINAR OU TOQUE P/ 15s
+            </button>
+        </div>
+    </div>
+
+    <!-- TELA 3: PRÊMIO CONQUISTADO -->
+    <div id="screen-end" class="screen">
+        <div class="brand-header">
+            <h1 class="title">PARABÉNS!</h1>
+            <p class="brand-subtitle">Prêmio Garantido</p>
+        </div>
+
+        <div class="prize-presentation-card">
+            <span id="awarded-player-name">Roberto Silva</span>
+            <div class="prize-title" id="awarded-prize-title">MOUSE PAD</div>
+            <div class="stock-left-label" id="awarded-stock-label">Restam 9 unidades</div>
+        </div>
+
+        <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center;">
+            Retire seu brinde com nosso consultor no estande.
+        </p>
+
+        <button id="btn-next" class="btn-action" onclick="finishAndReset()">
+            Concluir Atendimento (15s)
+        </button>
+    </div>
+
+</div>
+
+<!-- MODAL CADASTRAR PESSOAS NA HORA -->
+<div class="modal-overlay" id="modal-new-player">
+    <div class="modal-card">
+        <h3 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.3rem; letter-spacing: 1px;">NOVO PARTICIPANTE</h3>
+        <input type="text" id="new-name" class="form-input" placeholder="Nome Completo">
+        <input type="text" id="new-company" class="form-input" placeholder="Empresa">
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button class="btn-secondary" style="flex: 1;" onclick="closeNewPlayerModal()">Cancelar</button>
+            <button class="btn-action" style="flex: 1; font-size: 1rem; padding: 8px;" onclick="saveNewPlayer()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
+
+    const DEFAULT_PRIZES = [
+        { id: 1, name: "Caneta", stock: 10, isSimple: true, color: "#0c1b33" },
+        { id: 2, name: "Caneca", stock: 10, isSimple: true, color: "#14284b" },
+        { id: 3, name: "Mouse Pad", stock: 10, isSimple: true, color: "#0c1b33" },
+        { id: 4, name: "Copo", stock: 10, isSimple: true, color: "#14284b" },
+        { id: 5, name: "Bloco de Notas", stock: 10, isSimple: true, color: "#0c1b33" },
+        { id: 6, name: "Squeeze", stock: 10, isSimple: true, color: "#14284b" },
+        { id: 7, name: "Carregador", stock: 5, isSimple: false, color: "#0c1b33" },
+        { id: 8, name: "Power Bank", stock: 5, isSimple: false, color: "#14284b" },
+        { id: 9, name: "Faca", stock: 5, isSimple: false, color: "#0c1b33" },
+        { id: 10, name: "Kit Teclado e Mouse", stock: 3, isSimple: false, color: "#14284b" }
+    ];
+
+    const DEFAULT_PLAYERS = [
+        { id: 1, name: "Carlos Eduardo", company: "Empresa Alfa", targetPrize: "Kit Teclado e Mouse", played: false },
+        { id: 2, name: "Fernanda Lima", company: "Hospital São Lucas", targetPrize: "Power Bank", played: false },
+        { id: 3, name: "Marcos Vinicius", company: "Logística Express", targetPrize: "", played: false },
+        { id: 4, name: "Juliana Mendes", company: "Banco Global", targetPrize: "", played: false },
+        { id: 5, name: "Roberto Silva", company: "TechCorp TI", targetPrize: "Squeeze", played: true }
+    ];
+
+    let prizes = JSON.parse(localStorage.getItem('totem_prizes')) || DEFAULT_PRIZES;
+    let players = JSON.parse(localStorage.getItem('totem_players')) || DEFAULT_PLAYERS;
+    let selectedPlayer = null;
+
+    // FÍSICA E CONTROLE DA BOMBA DE FORÇA
+    let selectedSpinDuration = 15000; // Começa em 15s (mínimo)
+    let pumpChargeInterval = null;
+    let pumpStartTime = 0;
+    let isSpinning = false;
+    let currentWheelRotation = 0;
+    let idleTimer = null;
+    let audioCtx = null;
+
+    // SOM PROCEDURAL (CLIQUES E CARGA DE ENERGIA)
+    function playTickSound() {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(650, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
+
+            gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.03);
+        } catch (e) {}
+    }
+
+    function playChargeHum(freq) {
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        } catch (e) {}
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
+    }
+
+    function setScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        resetIdleTimer();
+    }
+
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        const isGameActive = document.getElementById('screen-game').classList.contains('active') && isSpinning;
+        if (!isGameActive) {
+            idleTimer = setTimeout(() => {
+                document.getElementById('screensaver').classList.add('active');
+                drawScreensaverWheel();
+            }, 45000);
+        }
+    }
+
+    function dismissScreensaver() {
+        document.getElementById('screensaver').classList.remove('active');
+        setScreen('screen-start');
+    }
+
+    ['click', 'touchstart'].forEach(e => window.addEventListener(e, resetIdleTimer, { passive: true }));
+
+    // INICIALIZAÇÃO
+    function init() {
+        renderShowcase();
+        drawWheel(document.getElementById('wheel-canvas'), currentWheelRotation);
+        setupPumpButton();
+        resetIdleTimer();
+        fetchFromGoogleSheets();
+    }
+
+    // VITRINE DE PRÊMIOS DA TELA 1
+    function renderShowcase() {
+        const grid = document.getElementById('prizes-grid');
+        let totalStock = 0;
+
+        grid.innerHTML = prizes.map(p => {
+            totalStock += p.stock;
+            const isRare = !p.isSimple;
+            return `
+                <div class="prize-card ${isRare ? 'rare' : ''}">
+                    <span class="prize-card-name">${p.name}</span>
+                    <span class="prize-stock-pill ${p.stock === 0 ? 'out' : ''}">
+                        ${p.stock > 0 ? `${p.stock} un` : 'ESGOTADO'}
+                    </span>
+                </div>
+            `;
+        }).join('');
+
+        document.getElementById('total-stock-counter').innerText = `${totalStock} itens disponíveis`;
+    }
+
+    // BUSCA OCULTA QUE SÓ REVELA RESULTADOS COM >= 2 LETRAS
+    function handleSearchInput(query) {
+        const clean = query.trim().toLowerCase();
+        const drop = document.getElementById('autocomplete-list');
+
+        if (clean.length < 2) {
+            drop.classList.remove('show');
+            drop.innerHTML = '';
+            return;
+        }
+
+        const filtered = players.filter(p => p.name.toLowerCase().includes(clean) || (p.company && p.company.toLowerCase().includes(clean)));
+
+        if (filtered.length === 0) {
+            drop.innerHTML = `<div style="padding: 10px; font-size: 0.8rem; color: var(--text-dim); text-align: center;">Nenhum participante localizado com essas letras.</div>`;
+            drop.classList.add('show');
+            return;
+        }
+
+        drop.innerHTML = filtered.map(player => `
+            <div class="autocomplete-item ${player.played ? 'disabled' : ''}" onclick="selectPlayer(${player.id})">
+                <div>
+                    <strong style="color: #fff; font-size: 0.9rem;">${player.name}</strong>
+                    <div style="font-size: 0.72rem; color: var(--text-dim);">${player.company || 'Convidado'}</div>
+                </div>
+                <span style="font-family: 'Rajdhani'; font-size: 0.75rem; font-weight: 700; color: ${player.played ? 'var(--text-dim)' : 'var(--accent)'};">
+                    ${player.played ? '[JÁ JOGOU]' : 'LIBERADO'}
+                </span>
+            </div>
+        `).join('');
+
+        drop.classList.add('show');
+    }
+
+    function selectPlayer(id) {
+        const p = players.find(x => x.id === id);
+        if (!p || p.played) return;
+
+        selectedPlayer = p;
+
+        // Oculta input e dropdown, exibe o cartão de confirmação
+        document.getElementById('autocomplete-list').classList.remove('show');
+        document.getElementById('search-input').style.display = 'none';
+
+        const badge = document.getElementById('player-badge-selected');
+        document.getElementById('badge-name').innerText = p.name;
+        document.getElementById('badge-company').innerText = p.company || 'Convidado';
+        badge.style.display = 'flex';
+
+        document.getElementById('btn-to-spin').disabled = false;
+    }
+
+    function clearSelectedPlayer() {
+        selectedPlayer = null;
+        document.getElementById('search-input').value = '';
+        document.getElementById('search-input').style.display = 'block';
+        document.getElementById('player-badge-selected').style.display = 'none';
+        document.getElementById('btn-to-spin').disabled = true;
+        document.getElementById('search-input').focus();
+    }
+
+    function openNewPlayerModal() {
+        document.getElementById('modal-new-player').classList.add('active');
+        document.getElementById('new-name').focus();
+    }
+
+    function closeNewPlayerModal() {
+        document.getElementById('modal-new-player').classList.remove('active');
+        document.getElementById('new-name').value = '';
+        document.getElementById('new-company').value = '';
+    }
+
+    function saveNewPlayer() {
+        const name = document.getElementById('new-name').value.trim();
+        const company = document.getElementById('new-company').value.trim();
+        if (!name) return alert('Digite ao menos o nome do participante.');
+
+        const newPlayer = {
+            id: Date.now(),
+            name,
+            company: company || 'Convidado Estande',
+            targetPrize: '',
+            played: false
+        };
+
+        players.unshift(newPlayer);
+        saveState();
+        closeNewPlayerModal();
+        selectPlayer(newPlayer.id);
+    }
+
+    function goToSpinScreen() {
+        if (!selectedPlayer) return;
+        document.getElementById('current-player-display').innerText = `${selectedPlayer.name} (${selectedPlayer.company})`;
+        resetPumpUI();
+        setScreen('screen-game');
+    }
+
+    // MECÂNICA DA BOMBA DE FORÇA (TOUCH E MOUSE)
+    function setupPumpButton() {
+        const btn = document.getElementById('btn-pump');
+
+        const startCharging = (e) => {
+            e.preventDefault();
+            if (isSpinning) return;
+
+            pumpStartTime = Date.now();
+            btn.classList.add('charging');
+
+            clearInterval(pumpChargeInterval);
+            pumpChargeInterval = setInterval(updatePumpCharge, 50);
+        };
+
+        const releaseCharging = (e) => {
+            e.preventDefault();
+            if (isSpinning) return;
+
+            btn.classList.remove('charging');
+            clearInterval(pumpChargeInterval);
+
+            // Inicia o giro com o tempo acumulado
+            startSpin(selectedSpinDuration);
+        };
+
+        btn.addEventListener('mousedown', startCharging);
+        window.addEventListener('mouseup', () => { if (btn.classList.contains('charging')) releaseCharging(new Event('mouseup')); });
+
+        btn.addEventListener('touchstart', startCharging, { passive: false });
+        btn.addEventListener('touchend', releaseCharging, { passive: false });
+    }
+
+    function updatePumpCharge() {
+        const heldTime = Date.now() - pumpStartTime; // ms pressionado
+        // A cada 700ms segurando, adiciona +5 segundos ao giro (até o teto de 30s)
+        const bonusSeconds = Math.min(15, Math.floor(heldTime / 700) * 5);
+        selectedSpinDuration = 15000 + (bonusSeconds * 1000);
+
+        const totalSecs = selectedSpinDuration / 1000;
+        const timeDisplay = document.getElementById('power-time-target');
+        timeDisplay.innerText = `${totalSecs}s`;
+
+        // Barra de progresso (0% a 100%)
+        const pct = Math.min(100, (heldTime / 2100) * 100);
+        document.getElementById('power-meter-fill').style.width = `${pct}%`;
+
+        // Efeito Sonoro e Visual conforme a carga sobe
+        playChargeHum(200 + (pct * 4));
+
+        if (totalSecs >= 30) {
+            timeDisplay.classList.add('overcharged');
+            document.getElementById('power-instruction-label').innerText = 'FORÇA MÁXIMA ATINGIDA!';
+        } else {
+            timeDisplay.classList.remove('overcharged');
+            document.getElementById('power-instruction-label').innerText = 'CARREGANDO POTÊNCIA...';
+        }
+    }
+
+    function resetPumpUI() {
+        selectedSpinDuration = 15000;
+        document.getElementById('power-meter-fill').style.width = '0%';
+        const timeDisplay = document.getElementById('power-time-target');
+        timeDisplay.innerText = '15s';
+        timeDisplay.classList.remove('overcharged');
+        document.getElementById('power-instruction-label').innerText = 'Pressione & Segure para Turbinar';
+        document.getElementById('btn-pump').disabled = false;
+    }
+
+    // DESENHO DA ROLETA
+    function drawWheel(canvas, rotationAngle) {
+        const ctx = canvas.getContext('2d');
+        const size = canvas.width;
+        const center = size / 2;
+        const radius = center - 16;
+        const total = prizes.length;
+        const arc = (2 * Math.PI) / total;
+
+        ctx.clearRect(0, 0, size, size);
+
+        // Borda Neon
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(center, center, radius + 8, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#00e5ff';
+        ctx.lineWidth = 4;
+        ctx.shadowColor = '#00e5ff';
+        ctx.shadowBlur = 18;
+        ctx.stroke();
+        ctx.restore();
+
+        for (let i = 0; i < total; i++) {
+            const angle = rotationAngle + (i * arc);
+            const prize = prizes[i];
+
+            ctx.beginPath();
+            ctx.fillStyle = prize.color;
+            ctx.moveTo(center, center);
+            ctx.arc(center, center, radius, angle, angle + arc);
+            ctx.lineTo(center, center);
+            ctx.fill();
+
+            ctx.strokeStyle = 'rgba(0, 229, 255, 0.35)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Pino
+            const pinX = center + (radius - 8) * Math.cos(angle);
+            const pinY = center + (radius - 8) * Math.sin(angle);
+            ctx.beginPath();
+            ctx.arc(pinX, pinY, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffd700';
+            ctx.fill();
+
+            // Texto
+            ctx.save();
+            ctx.translate(center, center);
+            ctx.rotate(angle + arc / 2);
+            ctx.textAlign = 'right';
+            ctx.fillStyle = prize.stock > 0 ? '#ffffff' : '#64748b';
+            ctx.font = 'bold 18px "Rajdhani", sans-serif';
+            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.shadowBlur = 4;
+            
+            const label = prize.stock > 0 ? prize.name : `${prize.name} (ESGOTADO)`;
+            ctx.fillText(label, radius - 24, 6);
+            ctx.restore();
+        }
+    }
+
+    function pickPrizeForPlayer(player) {
+        if (player.targetPrize) {
+            const targeted = prizes.find(p => p.name.toLowerCase() === player.targetPrize.toLowerCase() && p.stock > 0);
+            if (targeted) return targeted;
+        }
+
+        const simpleAvailable = prizes.filter(p => p.isSimple && p.stock > 0);
+        if (simpleAvailable.length > 0) {
+            return simpleAvailable[Math.floor(Math.random() * simpleAvailable.length)];
+        }
+
+        const anyAvailable = prizes.filter(p => p.stock > 0);
+        if (anyAvailable.length > 0) {
+            return anyAvailable[Math.floor(Math.random() * anyAvailable.length)];
+        }
+
+        return prizes[0];
+    }
+
+    // GIRO COM FÍSICA PERSONALIZADA (15s a 30s)
+    function startSpin(durationMs) {
+        if (isSpinning || !selectedPlayer) return;
+        isSpinning = true;
+
+        document.getElementById('btn-pump').disabled = true;
+        document.getElementById('power-instruction-label').innerText = `RODANDO A ROLETA (${durationMs / 1000}s)...`;
+
+        const canvas = document.getElementById('wheel-canvas');
+        const pointer = document.getElementById('roulette-pointer');
+
+        const winningPrize = pickPrizeForPlayer(selectedPlayer);
+        const winningIndex = prizes.findIndex(p => p.id === winningPrize.id);
+
+        const totalSlices = prizes.length;
+        const sliceAngle = (2 * Math.PI) / totalSlices;
+
+        const pointerTargetAngle = (3 * Math.PI) / 2;
+        const sliceCenterOffset = (winningIndex * sliceAngle) + (sliceAngle / 2);
+
+        // Calcula voltas proporcionais à duração para manter a dramaticidade
+        const turns = (durationMs / 1000) * 1.5; 
+        const fullSpins = turns * (2 * Math.PI);
+        const targetRotation = fullSpins + (pointerTargetAngle - sliceCenterOffset);
+
+        const startRotation = currentWheelRotation % (2 * Math.PI);
+        const totalDistance = targetRotation - startRotation;
+
+        const startTime = performance.now();
+        let lastTickAngle = startRotation;
+
+        function easeOutQuint(t) {
+            return 1 - Math.pow(1 - t, 5);
+        }
+
+        function animateWheel(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / durationMs, 1);
+            const easedProgress = easeOutQuint(progress);
+
+            currentWheelRotation = startRotation + (totalDistance * easedProgress);
+            drawWheel(canvas, currentWheelRotation);
+
+            // Atualiza contador em contagem regressiva
+            const remainingSecs = Math.max(0, Math.ceil((durationMs - elapsed) / 1000));
+            document.getElementById('power-time-target').innerText = `${remainingSecs}s`;
+
+            if (Math.abs(currentWheelRotation - lastTickAngle) >= sliceAngle) {
+                lastTickAngle = currentWheelRotation;
+                playTickSound();
+                pointer.style.transform = 'translateX(-50%) rotate(-18deg)';
+                setTimeout(() => { pointer.style.transform = 'translateX(-50%) rotate(0deg)'; }, 40);
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(animateWheel);
+            } else {
+                isSpinning = false;
+                onSpinComplete(winningPrize);
+            }
+        }
+
+        requestAnimationFrame(animateWheel);
+    }
+
+    function onSpinComplete(prize) {
+        if (prize.stock > 0) prize.stock--;
+        selectedPlayer.played = true;
+        selectedPlayer.wonPrize = prize.name;
+
+        saveState();
+        renderShowcase();
+
+        document.getElementById('awarded-player-name').innerText = `${selectedPlayer.name} (${selectedPlayer.company})`;
+        document.getElementById('awarded-prize-title').innerText = prize.name;
+        document.getElementById('awarded-stock-label').innerText = `Restam ${prize.stock} unidades em estoque`;
+
+        setScreen('screen-end');
+
+        sendResultToGoogleSheets({
+            name: selectedPlayer.name,
+            company: selectedPlayer.company,
+            prize: prize.name,
+            date: new Date().toLocaleString('pt-BR')
+        });
+
+        let countdown = 15;
+        const btnNext = document.getElementById('btn-next');
+        btnNext.innerText = `Concluir Atendimento (${countdown}s)`;
+        const cdInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                btnNext.innerText = `Concluir Atendimento (${countdown}s)`;
+            } else {
+                clearInterval(cdInterval);
+                finishAndReset();
+            }
+        }, 1000);
+    }
+
+    function finishAndReset() {
+        clearSelectedPlayer();
+        setScreen('screen-start');
+    }
+
+    function saveState() {
+        localStorage.setItem('totem_players', JSON.stringify(players));
+        localStorage.setItem('totem_prizes', JSON.stringify(prizes));
+    }
+
+    function sendResultToGoogleSheets(data) {
+        if (!WEBHOOK_URL) return;
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).catch(() => {});
+    }
+
+    function fetchFromGoogleSheets() {
+        if (!WEBHOOK_URL) return;
+        window.handleCloudData = function(data) {
+            if (data && data.players) {
+                players = data.players;
+                saveState();
+            }
+            if (data && data.prizes) {
+                prizes = data.prizes;
+                saveState();
+                renderShowcase();
+                drawWheel(document.getElementById('wheel-canvas'), currentWheelRotation);
+            }
+        };
+
+        const script = document.createElement('script');
+        script.src = `${WEBHOOK_URL}?callback=handleCloudData&t=${Date.now()}`;
+        document.body.appendChild(script);
+    }
+
+    function drawScreensaverWheel() {
+        const canvas = document.getElementById('screensaver-wheel');
+        if (canvas) drawWheel(canvas, currentWheelRotation);
+    }
+
+    init();
+</script>
+</body>
+</html>
