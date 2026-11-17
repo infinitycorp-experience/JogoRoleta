@@ -345,25 +345,40 @@
             transition: transform 0.08s ease;
         }
 
+        .brand-logo-img {
+            max-height: 48px;
+            max-width: 220px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.5));
+            margin-bottom: 4px;
+        }
+
         .center-hub {
             position: absolute;
-            width: 68px;
-            height: 68px;
-            background: radial-gradient(circle, #1e293b 40%, #070a12 100%);
+            width: 74px;
+            height: 74px;
+            background: radial-gradient(circle, #0e172a 30%, #050811 100%);
             border: 3px solid var(--accent);
-            box-shadow: 0 0 25px var(--accent-glow);
+            box-shadow: 0 0 25px var(--accent-glow), inset 0 0 10px rgba(0, 229, 255, 0.4);
             border-radius: 50%;
             z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
             pointer-events: none;
+            overflow: hidden;
+            padding: 4px;
+        }
+        .center-hub img {
+            width: 82%;
+            height: 82%;
+            object-fit: contain;
         }
         .center-hub span {
             font-family: 'Rajdhani', sans-serif;
             font-weight: 800;
             color: #fff;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 1.5px;
         }
 
@@ -597,25 +612,53 @@
 </button>
 
 <div id="screensaver" onclick="dismissScreensaver()">
-    <div style="text-align: center; margin-top: 20px;">
-        <h2 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase;">Prêmios Corporativos</h2>
-        <h1 class="title" style="font-size: 2.8rem; margin: 10px 0;">INFINITY<span class="corp-highlight">CORP</span></h1>
-        <p class="brand-subtitle">Gire e Leve seu Brinde</p>
+    <div style="text-align: center; margin-top: 15px;">
+        <img src="logo.png" alt="Logo" class="brand-logo-img" onerror="this.style.display='none'">
+        <h2 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase;">Desafio Corporativo</h2>
+        <p class="brand-subtitle" style="font-size: 0.75rem; margin-top: 2px;">Gire a roleta e ganhe brindes exclusivos!</p>
     </div>
 
-    <canvas id="screensaver-wheel" width="300" height="300"></canvas>
+    <!-- Roleta em Rotação Contínua com Efeito Glow -->
+    <div style="position: relative; width: 280px; height: 280px; display: flex; align-items: center; justify-content: center;">
+        <canvas id="screensaver-wheel" width="560" height="560" style="width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);"></canvas>
+        <div class="center-hub" style="width: 62px; height: 62px;">
+            <img src="logo.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span style="display: none;">INFINITY</span>
+        </div>
+    </div>
 
-    <div class="btn-action" style="max-width: 320px; text-align: center;">
-        TOQUE PARA JOGAR
+    <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+        <div style="display: inline-block; padding: 4px 14px; border-radius: 20px; background: rgba(0, 229, 255, 0.12); border: 1px solid var(--accent); color: var(--accent); font-family: 'Rajdhani'; font-weight: 700; font-size: 0.85rem; letter-spacing: 1.5px;">
+            ★ DEZENAS DE PRÊMIOS CADASTRADOS ★
+        </div>
+        <div class="btn-action" style="max-width: 320px; text-align: center; animation: pulseAlert 1.2s infinite alternate;">
+            TOQUE NA TELA PARA PARTICIPAR
+        </div>
     </div>
 </div>
+
+<!-- OVERLAY DE SINCRONIZAÇÃO / CADASTRO (8 SEGUNDOS) -->
+<div id="sync-overlay" style="display: none; position: fixed; inset: 0; background: rgba(4,8,18,0.94); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
+    <div style="text-align: center; max-width: 420px; width: 90%; padding: 30px 20px; border: 1px solid rgba(0,229,255,0.35); border-radius: 16px; background: radial-gradient(circle at center, #111c33 0%, #070d18 100%); box-shadow: 0 0 50px rgba(0,229,255,0.25);">
+        <div style="width: 55px; height: 55px; border: 3px solid rgba(0,229,255,0.15); border-top-color: #00e5ff; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 18px;"></div>
+        <h3 id="sync-main-title" style="font-family: 'Rajdhani', sans-serif; font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: 1.5px; text-transform: uppercase;">PREPARE-SE!</h3>
+        <p id="sync-sub-msg" style="font-size: 0.9rem; color: #00e5ff; min-height: 24px; margin: 8px 0 14px 0; font-weight: 500;">Validando seus dados no sistema...</p>
+        <div style="font-family: 'Rajdhani', sans-serif; font-size: 2.8rem; font-weight: 800; color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);" id="sync-countdown">8</div>
+    </div>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
 
 <div class="totem-container">
 
     <!-- TELA 1 -->
     <div id="screen-start" class="screen active">
         <div class="brand-header">
-            <h1 class="title">INFINITY<span class="corp-highlight">CORP</span></h1>
+            <img src="logo.png" alt="INFINITYCORP" class="brand-logo-img" onerror="this.style.display='none'; document.getElementById('brand-fallback-title').style.display='block';">
+            <h1 class="title" id="brand-fallback-title" style="display: none;">INFINITY<span class="corp-highlight">CORP</span></h1>
             <p class="brand-subtitle">Desafio da Roleta de Prêmios</p>
         </div>
 
@@ -666,7 +709,10 @@
                 <path d="M12 32 L2 6 C0 3 2 0 6 0 L18 0 C22 0 24 3 22 6 Z" fill="#ffd700" stroke="#fff" stroke-width="1.5"/>
             </svg>
             <canvas id="wheel-canvas" class="roulette-canvas" width="800" height="800"></canvas>
-            <div class="center-hub"><span>INFINITY</span></div>
+            <div class="center-hub">
+                <img src="logo.png" alt="Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span style="display: none;">INFINITY</span>
+            </div>
         </div>
 
         <div class="power-pump-dashboard">
@@ -724,11 +770,16 @@
 <script>
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyJCpWhcZG1qliEqWuu50KKg2Q26nb1AS_q7l-NRaKl0XWpYADv4698lvTjTrd5EQ8-Ig/exec";
 
+    // Paleta premium escura e contrastante para alta legibilidade
     const SUBTLE_PALETTE = [
-        "#0e243a", "#142e2b", "#171e3d", "#241c38", 
-        "#0f2b38", "#1c2430", "#2b1d30", "#2d2212", 
-        "#2d1818", "#33270e", "#1b2838", "#231f20"
+        "#0d2038", "#122a27", "#1a1638", "#281b33", 
+        "#0a2830", "#211a12", "#192433", "#28151f",
+        "#11261d", "#221d2b"
     ];
+
+    let gameScreenTimeout = null; // Timer de 30s para liberar tela se o jogador abandonar
+    let screensaverAnimId = null;
+    let screensaverAngle = 0;
 
     const DEFAULT_PRIZES = [
         { id: 1, name: "Caneta", stock: 10, isSimple: true },
@@ -798,14 +849,20 @@
         if (!isGameActive) {
             idleTimer = setTimeout(() => {
                 document.getElementById('screensaver').classList.add('active');
-                drawScreensaverWheel();
+                startScreensaverAnimation();
             }, 45000);
         }
 
-        // Toque na tela dispara sincronização em segundo plano (respeitando intervalo mínimo de 2s)
         if (Date.now() - lastSyncTime > 2000 && !isSpinning) {
             fetchFromGoogleSheets(true);
         }
+    }
+
+    function dismissScreensaver() {
+        stopScreensaverAnimation();
+        document.getElementById('screensaver').classList.remove('active');
+        setScreen('screen-start');
+        fetchFromGoogleSheets();
     }
 
     function dismissScreensaver() {
@@ -896,59 +953,101 @@
         const ctx = canvas.getContext('2d');
         const cx = canvas.width / 2;
         const cy = canvas.height / 2;
-        const radius = cx - 10;
+        const radius = cx - 14;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(rotationAngle);
 
-        dynamicSlices.forEach(slice => {
+        dynamicSlices.forEach((slice, idx) => {
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.arc(0, 0, radius, slice.startAngle, slice.endAngle);
             ctx.closePath();
 
-            ctx.fillStyle = slice.color;
+            // Gradiente radial na fatia para dar volume 3D
+            const grad = ctx.createRadialGradient(0, 0, radius * 0.15, 0, 0, radius);
+            if (slice.isOutOfStock) {
+                grad.addColorStop(0, "#1a202c");
+                grad.addColorStop(1, "#101520");
+            } else if (slice.isNoPrize) {
+                grad.addColorStop(0, "#192233");
+                grad.addColorStop(1, "#0d131f");
+            } else if (!slice.isSimple) {
+                // Fatia de Prêmio Especial / Raro
+                grad.addColorStop(0, "#332608");
+                grad.addColorStop(1, "#1f1604");
+            } else {
+                grad.addColorStop(0, slice.color);
+                grad.addColorStop(1, "#080c14");
+            }
+
+            ctx.fillStyle = grad;
             ctx.fill();
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = slice.isOutOfStock ? '#334155' : 'rgba(255, 255, 255, 0.1)';
+
+            // Borda divisória entre as fatias
+            ctx.lineWidth = 1.8;
+            ctx.strokeStyle = !slice.isSimple ? 'rgba(255, 215, 0, 0.4)' : 'rgba(255, 255, 255, 0.12)';
             ctx.stroke();
 
-            // Texto da fatia
+            // Tipografia calibrada e posicionada para não invadir o miolo
             ctx.save();
             ctx.rotate(slice.midAngle);
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
-            
+
+            const textDist = radius - 20;
+
             if (slice.isOutOfStock) {
                 ctx.fillStyle = '#64748b';
-                ctx.font = 'bold 15px Rajdhani';
-                ctx.fillText(`${slice.name} (ESGOTADO)`, radius - 24, 0);
+                ctx.font = '700 15px Rajdhani';
+                ctx.fillText(`${slice.name} (ESGOTADO)`, textDist, 0);
             } else if (slice.isNoPrize) {
-                ctx.fillStyle = '#94a3b8';
-                ctx.font = '600 16px Rajdhani';
-                ctx.fillText(slice.name, radius - 24, 0);
+                ctx.fillStyle = '#8192a8';
+                ctx.font = '600 15px Rajdhani';
+                ctx.fillText(slice.name, textDist, 0);
             } else {
-                ctx.fillStyle = slice.isSimple ? '#ffffff' : '#ffd700';
-                ctx.font = `bold ${slice.isSimple ? '18px' : '17px'} Rajdhani`;
-                ctx.fillText(slice.name.toUpperCase(), radius - 24, 0);
+                const isSpecial = !slice.isSimple;
+                ctx.fillStyle = isSpecial ? '#ffd700' : '#ffffff';
+                ctx.font = `800 ${isSpecial ? '17px' : '16px'} Rajdhani`;
+                
+                // Sombra no texto para garantir leitura
+                ctx.shadowColor = isSpecial ? 'rgba(255, 215, 0, 0.6)' : 'rgba(0, 229, 255, 0.5)';
+                ctx.shadowBlur = 6;
+                ctx.fillText(slice.name.toUpperCase(), textDist, 0);
             }
             ctx.restore();
         });
 
-        // Borda externa decorativa
+        // Borda externa neon da roleta
         ctx.beginPath();
         ctx.arc(0, 0, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = '#00e5ff';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 4;
+        ctx.shadowColor = '#00e5ff';
+        ctx.shadowBlur = 14;
         ctx.stroke();
 
         ctx.restore();
     }
 
-    function drawScreensaverWheel() {
-        renderWheel('screensaver-wheel', 0);
+    // Animação viva e contínua do Screensaver
+    function startScreensaverAnimation() {
+        if (screensaverAnimId) cancelAnimationFrame(screensaverAnimId);
+        function loop() {
+            screensaverAngle += 0.007; // Velocidade de rotação suave
+            renderWheel('screensaver-wheel', screensaverAngle);
+            screensaverAnimId = requestAnimationFrame(loop);
+        }
+        screensaverAnimId = requestAnimationFrame(loop);
+    }
+
+    function stopScreensaverAnimation() {
+        if (screensaverAnimId) {
+            cancelAnimationFrame(screensaverAnimId);
+            screensaverAnimId = null;
+        }
     }
 
     // BUSCA COM SUPORTE A EMAIL
@@ -1019,6 +1118,26 @@
     }
 
     // TRAVA DE SEGURANÇA: REVALIDA NA NUVEM ANTES DE GIRAR
+    // TIMER DE DESISTÊNCIA: SE FICAR 30s SEM JOGAR NA TELA DA ROLETA, LIBERA
+    function startGameScreenInactivityWatchdog() {
+        clearTimeout(gameScreenTimeout);
+        gameScreenTimeout = setTimeout(() => {
+            if (!isSpinning && document.getElementById('screen-game').classList.contains('active')) {
+                clearSelectedPlayer();
+                setScreen('screen-start');
+            }
+        }, 30000); // 30 segundos
+    }
+
+    // Interações na tela do jogo resetam o timer de desistência
+    ['click', 'touchstart', 'mousedown'].forEach(ev => {
+        window.addEventListener(ev, () => {
+            if (document.getElementById('screen-game').classList.contains('active') && !isSpinning) {
+                startGameScreenInactivityWatchdog();
+            }
+        }, { passive: true });
+    });
+
     async function confirmAndGoToSpin() {
         if (!selectedPlayer) return;
         
@@ -1026,10 +1145,8 @@
         btn.disabled = true;
         btn.textContent = "VALIDANDO DIRECIONAMENTO...";
 
-        // Sincroniza imediatamente para pegar a última alteração feita no Admin
         await fetchFromGoogleSheets();
 
-        // Atualiza a referência do jogador selecionado com os dados recém-chegados
         const updated = players.find(p => p.name.toLowerCase() === selectedPlayer.name.toLowerCase());
         if (updated) {
             selectedPlayer = updated;
@@ -1042,6 +1159,9 @@
         setScreen('screen-game');
         resetPump();
         renderWheel('wheel-canvas', currentWheelRotation);
+        
+        // Inicia contagem de 30s para liberar a tela se a pessoa não girar
+        startGameScreenInactivityWatchdog();
     }
 
     // SINCRONIZAÇÃO EM SEGUNDO PLANO VIA JSONP
@@ -1192,6 +1312,7 @@
     // FÍSICA E SORTEIO DO RESULTADO
     function executeSpin() {
         if (isSpinning) return;
+        clearTimeout(gameScreenTimeout); // Jogador começou a girar, cancela timer de desistência
         isSpinning = true;
         pumpBtn.disabled = true;
         pumpBtn.textContent = 'GIRANDO ROLETA...';
@@ -1360,42 +1481,94 @@
         document.getElementById('modal-new-player').classList.remove('active');
     }
 
-    function saveNewPlayer() {
-        const name = document.getElementById('new-name').value.trim();
-        const email = document.getElementById('new-email').value.trim();
-        const company = document.getElementById('new-company').value.trim();
+function saveNewPlayer() {
+    const name = document.getElementById('new-name').value.trim();
+    const email = document.getElementById('new-email').value.trim();
+    const company = document.getElementById('new-company').value.trim();
 
-        if (!name) {
-            alert('Por favor, informe o nome do participante.');
-            return;
-        }
+    if (!name || !email) {
+        alert("Preencha ao menos Nome e E-mail!");
+        return;
+    }
 
-        const newP = {
-            id: players.length + 1,
+    closeNewPlayerModal();
+
+    // 1. Grava no Google Sheets em segundo plano
+    fetch(WEBHOOK_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+            action: "register",
             name: name,
             email: email,
-            company: company,
-            targetPrize: "",
-            played: false
-        };
+            company: company
+        })
+    }).catch(err => console.error("Erro POST registro:", err));
 
-        players.unshift(newP);
-        closeNewPlayerModal();
-        selectPlayer(newP);
+    // 2. Abre a tela de espera calibrada para 8 segundos com textos motivacionais
+    const overlay = document.getElementById('sync-overlay');
+    const countdownEl = document.getElementById('sync-countdown');
+    const titleEl = document.getElementById('sync-main-title');
+    const subEl = document.getElementById('sync-sub-msg');
 
-        // Grava no Sheets identificando a ação 'register'
-        fetch(WEBHOOK_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: "register",
-                name: name,
-                email: email,
-                company: company
-            })
-        });
-    }
+    overlay.style.display = 'flex';
+
+    let secondsLeft = 8;
+    countdownEl.innerText = secondsLeft;
+    titleEl.innerText = "PREPARE-SE!";
+    subEl.innerText = "Validando seu cadastro...";
+
+    const dynamicPhrases = {
+        7: "Conectando ao sistema...",
+        6: "Sincronizando prêmios em estoque...",
+        5: "Carregando a roleta...",
+        4: "Ajustando sua pontaria...",
+        3: "Quase tudo pronto...",
+        2: "Concentração total...",
+        1: "Sua vez de brilhar!"
+    };
+
+    const timer = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+            countdownEl.innerText = secondsLeft;
+            if (dynamicPhrases[secondsLeft]) {
+                subEl.innerText = dynamicPhrases[secondsLeft];
+            }
+        } else {
+            clearInterval(timer);
+            countdownEl.innerText = "BOA SORTE!";
+            subEl.innerText = "Entrando na arena...";
+
+            // Ao final dos 8 segundos, busca os dados mais recentes na planilha
+            fetchFromGoogleSheets().then(() => {
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+
+                    const registered = players.find(p => 
+                        (p.email && p.email.toLowerCase() === email.toLowerCase()) || 
+                        (p.name && p.name.toLowerCase() === name.toLowerCase())
+                    );
+
+                    if (registered) {
+                        selectPlayer(registered);
+                    } else {
+                        selectPlayer({
+                            name: name,
+                            email: email,
+                            company: company,
+                            played: false,
+                            targetPrize: ""
+                        });
+                    }
+
+                    confirmAndGoToSpin();
+                }, 400);
+            });
+        }
+    }, 1000);
+}
 
     // INICIALIZAÇÃO
     window.onload = () => {
