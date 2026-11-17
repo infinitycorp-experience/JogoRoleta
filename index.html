@@ -406,15 +406,9 @@
             gap: 6px;
             margin-top: 6px;
             flex-shrink: 0;
+            position: relative;
+            z-index: 15;
             transition: all 0.3s ease;
-        }
-
-        /* Efeito de destaque para o botão durante o tutorial */
-        .power-pump-dashboard.tutorial-focus {
-            z-index: 70 !important;
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.7), 0 0 10px rgba(255, 215, 0, 0.4);
-            border-color: var(--accent);
-            transform: scale(1.02);
         }
 
         .power-header {
@@ -481,6 +475,7 @@
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
+            z-index: 10;
         }
 
         .btn-pump:active, .btn-pump.charging {
@@ -650,12 +645,12 @@
         }
 
         /* ========================================================
-           NOVO TUTORIAL COM MÃO ULTRA-DEFINIDA E SIMULAÇÃO COMPLETA
+           SISTEMA DE TUTORIAL (INTRO + SIMULAÇÃO REALISTA)
            ======================================================== */
         .tutorial-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(4, 7, 14, 0.82);
+            background: rgba(4, 7, 14, 0.78);
             backdrop-filter: blur(5px);
             z-index: 60;
             display: none;
@@ -673,7 +668,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            z-index: 1000;
         }
 
         .tutorial-badge {
@@ -708,16 +704,37 @@
             color: #fff;
         }
 
+        /* Banner de Introdução (1.5s) */
+        .tutorial-intro-card {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, #152238 0%, #0a1120 100%);
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+            border-radius: 18px;
+            padding: 24px 28px;
+            text-align: center;
+            z-index: 1200;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
         .tutorial-text-box {
-            background: rgba(18, 24, 38, 0.9);
+            background: rgba(18, 24, 38, 0.94);
             border: 1px solid var(--accent);
             padding: 10px 18px;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 229, 255, 0.25);
-            margin-top: 6px;
-            z-index: 80;
+            margin-top: 4px;
+            z-index: 1000;
             min-height: 58px;
+            width: 100%;
+            max-width: 480px;
         }
         .tutorial-text-box h4 {
             font-family: 'Rajdhani', sans-serif;
@@ -733,134 +750,151 @@
             margin-top: 2px;
         }
 
-        /* Arco e Rastro de Arraste na Roleta */
+        /* Arco indicando a puxada na roleta */
         .tutorial-swipe-indicator {
             position: absolute;
-            top: 23%;
+            top: 26%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 260px;
-            height: 260px;
-            border: 3px dashed rgba(0, 229, 255, 0.65);
-            border-color: rgba(0, 229, 255, 0.9) transparent transparent transparent;
+            width: 280px;
+            height: 280px;
+            border: 3.5px dashed var(--accent);
+            border-color: var(--accent) transparent transparent transparent;
             border-radius: 50%;
             pointer-events: none;
             opacity: 0;
-            animation: arcSpinIndicator 6.5s infinite;
+            display: none;
+        }
+        .tutorial-swipe-indicator.active {
+            display: block;
+            animation: arcSpinIndicator 2.6s infinite ease-out;
         }
 
-        /* Mão Flutuante Guiada */
+        /* Mão em Primeiro Plano Absoluto (z-index: 99999) */
         .tutorial-cursor-wrapper {
             position: absolute;
-            width: 68px;
-            height: 68px;
+            width: 74px;
+            height: 74px;
             pointer-events: none;
-            z-index: 90;
-            top: 24%;
-            left: 45%;
+            z-index: 99999 !important;
+            display: none;
             transform: translate(-50%, -50%);
-            animation: tutorialMotionTrack 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .tutorial-cursor-wrapper.active {
+            display: block;
         }
 
         .touch-ripple {
             position: absolute;
-            top: 6px;
-            left: 20px;
-            width: 24px;
-            height: 24px;
+            top: 10px;
+            left: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             border: 2px solid var(--accent);
-            background: rgba(0, 229, 255, 0.35);
+            background: rgba(0, 229, 255, 0.45);
             transform: translate(-50%, -50%) scale(0);
             opacity: 0;
-            animation: ripplePulse 6.5s infinite;
         }
 
         .hand-pointer-svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 10px rgba(0, 229, 255, 0.5));
+            filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 12px rgba(0, 229, 255, 0.7));
         }
 
+        /* Animações dos Gestos */
         @keyframes arcSpinIndicator {
-            0%, 5% { opacity: 0; transform: translate(-50%, -50%) rotate(-45deg); }
-            10%, 38% { opacity: 1; transform: translate(-50%, -50%) rotate(55deg); }
-            45%, 100% { opacity: 0; }
+            0% { opacity: 0; transform: translate(-50%, -50%) rotate(-40deg); }
+            20%, 75% { opacity: 1; transform: translate(-50%, -50%) rotate(45deg); }
+            95%, 100% { opacity: 0; }
         }
 
-        @keyframes ripplePulse {
-            0%, 7% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
-            9% { opacity: 1; transform: translate(-50%, -50%) scale(1.6); }
-            18% { opacity: 0; transform: translate(-50%, -50%) scale(2.2); }
-            54% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
-            58% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
-            65%, 85% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
-            92%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+        /* Gesto 1: Arraste da Roleta */
+        .cursor-anim-wheel {
+            animation: handDragWheel 2.8s forwards cubic-bezier(0.25, 1, 0.5, 1);
         }
-
-        /* Movimentação Realística da Mão:
-           0% -> 42%: Gesto na Roleta (Topo)
-           45% -> 50%: Deslocamento Suave para o Botão Inferior
-           52% -> 90%: Pressiona e Segura o Botão
-           95% -> 100%: Fade out / Reset
-        */
-        @keyframes tutorialMotionTrack {
+        @keyframes handDragWheel {
             0% {
-                top: 28%;
+                top: 30%;
                 left: 36%;
-                transform: translate(-50%, -50%) scale(0.9) rotate(-12deg);
+                transform: translate(-50%, -50%) scale(0.9) rotate(-15deg);
                 opacity: 0;
             }
-            7% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.05) rotate(0deg);
-            }
             15% {
-                top: 20%;
-                left: 56%;
-                transform: translate(-50%, -50%) scale(1) rotate(18deg);
-            }
-            32% {
-                top: 27%;
-                left: 68%;
-                transform: translate(-50%, -50%) scale(0.95) rotate(35deg);
                 opacity: 1;
-            }
-            42% {
-                top: 36%;
-                left: 64%;
-                opacity: 0.3;
-            }
-            /* Transição para cima do botão inferior */
-            48% {
-                top: 86%;
-                left: 50%;
                 transform: translate(-50%, -50%) scale(1.1) rotate(0deg);
-                opacity: 0.9;
             }
-            54% {
-                top: 92%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(0.88); /* Dedo pressionando botão */
-                opacity: 1;
+            50% {
+                top: 22%;
+                left: 56%;
+                transform: translate(-50%, -50%) scale(1.05) rotate(16deg);
             }
-            60%, 88% {
-                top: 92%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(0.86);
-                opacity: 1;
-            }
-            94% {
-                top: 88%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(1.05);
+            85% {
+                top: 30%;
+                left: 68%;
+                transform: translate(-50%, -50%) scale(1) rotate(32deg);
                 opacity: 1;
             }
             100% {
-                top: 88%;
-                left: 50%;
+                top: 34%;
+                left: 64%;
+                transform: translate(-50%, -50%) scale(0.95) rotate(20deg);
                 opacity: 0;
             }
+        }
+
+        /* Gesto 2: Desce e Pressiona DIRETAMENTE SOBRE O BOTÃO */
+        .cursor-anim-button {
+            animation: handPressButton 3.4s forwards cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes handPressButton {
+            0% {
+                top: 60%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(1.15) rotate(-5deg);
+                opacity: 0;
+            }
+            20% {
+                top: 92%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(1.05) rotate(0deg);
+                opacity: 1;
+            }
+            30% {
+                top: 92%;
+                left: 50%;
+                transform: translate(-50%, -46%) scale(0.88); /* Afunda encostando no botão */
+                opacity: 1;
+            }
+            32%, 85% {
+                top: 92%;
+                left: 50%;
+                transform: translate(-50%, -46%) scale(0.86); /* Pressionando o botão em primeiro plano */
+                opacity: 1;
+            }
+            92% {
+                top: 88%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(1.05); /* Solta o botão */
+                opacity: 1;
+            }
+            100% {
+                top: 86%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .cursor-anim-button .touch-ripple {
+            animation: rippleBtnPulse 3.4s forwards;
+        }
+        @keyframes rippleBtnPulse {
+            0%, 26% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.8); }
+            45%, 80% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.3); }
+            90%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
         }
     </style>
 </head>
@@ -957,49 +991,57 @@
     <!-- TELA 2 -->
     <div id="screen-game" class="screen">
 
-        <!-- TUTORIAL ELEGANTE SOBREPOSTO -->
+        <!-- TUTORIAL OVERLAY -->
         <div id="game-tutorial-overlay" class="tutorial-overlay">
             <div class="tutorial-top-bar">
                 <div class="tutorial-badge">
-                    COMO JOGAR • <span id="tutorial-timer" style="color:#fff;">6s</span>
+                    COMO JOGAR • <span id="tutorial-timer" style="color:#fff;">8s</span>
                 </div>
                 <button class="btn-skip-tutorial" onclick="closeGameTutorial()">
                     Pular Tutorial ✕
                 </button>
             </div>
 
-            <div class="tutorial-text-box">
-                <h4 id="tutorial-step-title">Gire Diretamente na Roleta</h4>
-                <p id="tutorial-step-desc">Toque e puxe com força a roleta para acelerar!</p>
+            <!-- Intro Inicial de 1.5s -->
+            <div class="tutorial-intro-card" id="tutorial-intro-card">
+                <div style="font-size: 2.2rem;">👋</div>
+                <h3 style="font-family: 'Rajdhani'; color: #fff; font-size: 1.6rem; letter-spacing: 2px;">VEJA O TUTORIAL</h3>
+                <p style="font-size: 0.85rem; color: var(--text-dim);">Aprenda a girar em 2 passos rápidos!</p>
             </div>
 
-            <!-- Arco de arraste da roleta -->
-            <div class="tutorial-swipe-indicator"></div>
+            <!-- Caixa de instrução que muda de texto -->
+            <div class="tutorial-text-box" id="tutorial-text-box" style="display: none;">
+                <h4 id="tutorial-step-title">1. Gire Diretamente na Roleta</h4>
+                <p id="tutorial-step-desc">Toque e puxe a roleta na tela para dar o impulso!</p>
+            </div>
 
-            <!-- Cursor com mão de alta definição e ripple de toque -->
-            <div class="tutorial-cursor-wrapper">
+            <!-- Indicador do arco de arraste -->
+            <div class="tutorial-swipe-indicator" id="tutorial-swipe-arc"></div>
+
+            <!-- Cursor Mão SVG (Sempre por cima de tudo) -->
+            <div class="tutorial-cursor-wrapper" id="tutorial-cursor">
                 <div class="touch-ripple"></div>
                 <svg class="hand-pointer-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <linearGradient id="handBodyGrad" x1="20" y1="20" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                        <linearGradient id="handGrad" x1="20" y1="20" x2="100" y2="100" gradientUnits="userSpaceOnUse">
                             <stop offset="0%" stop-color="#ffffff"/>
-                            <stop offset="45%" stop-color="#00e5ff"/>
+                            <stop offset="35%" stop-color="#00e5ff"/>
                             <stop offset="100%" stop-color="#0052cc"/>
                         </linearGradient>
-                        <linearGradient id="fingerShine" x1="30" y1="10" x2="45" y2="60" gradientUnits="userSpaceOnUse">
-                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                        <linearGradient id="fingerShineGrad" x1="30" y1="10" x2="45" y2="60" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
                             <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.2"/>
                         </linearGradient>
                     </defs>
 
-                    <!-- Base da Mão / Palma e Dedos Dobrados -->
+                    <!-- Palma e Dedos -->
                     <path d="M48 45 C48 38 56 38 56 45 L56 62 C56 65 60 65 60 62 L60 48 C60 41 68 41 68 48 L68 64 C68 67 72 67 72 64 L72 53 C72 46 80 46 80 53 L80 72 C80 88 68 102 52 102 C42 102 34 96 30 88 L18 68 C15 63 18 57 23 57 C27 57 30 60 34 66 L38 72 L38 20 C38 12 48 12 48 20 Z" 
-                          fill="url(#handBodyGrad)" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+                          fill="url(#handGrad)" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
 
-                    <!-- Brilho no indicador estendido -->
-                    <path d="M40 22 C40 16 46 16 46 22 L46 58 L40 58 Z" fill="url(#fingerShine)"/>
+                    <!-- Brilho no Indicador -->
+                    <path d="M40 22 C40 16 46 16 46 22 L46 58 L40 58 Z" fill="url(#fingerShineGrad)"/>
 
-                    <!-- Detalhes das juntas / linhas de dobra -->
+                    <!-- Dobras dos dedos -->
                     <path d="M40 34 C43 36 45 36 47 34" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
                     <path d="M57 54 C58 55 59 55 60 54" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
                     <path d="M68 56 C69 57 71 57 72 56" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
@@ -1120,62 +1162,99 @@
     let lastSyncTime = 0;
 
     // ==========================================
-    // CONTROLE DO TUTORIAL INTERATIVO
+    // TUTORIAL INTRO + DEMONSTRAÇÃO REALISTA
     // ==========================================
     let tutorialInterval = null;
-    let tutorialTextTimer = null;
+    let tutorialTimeouts = [];
     let tutorialSimInterval = null;
 
     function openGameTutorial() {
         const overlay = document.getElementById('game-tutorial-overlay');
         const timerEl = document.getElementById('tutorial-timer');
+        const introCard = document.getElementById('tutorial-intro-card');
+        const textBox = document.getElementById('tutorial-text-box');
         const titleEl = document.getElementById('tutorial-step-title');
         const descEl = document.getElementById('tutorial-step-desc');
-        const dash = document.getElementById('main-power-dashboard');
-        
+        const swipeArc = document.getElementById('tutorial-swipe-arc');
+        const cursor = document.getElementById('tutorial-cursor');
+
+        // Limpa timers anteriores
+        tutorialTimeouts.forEach(t => clearTimeout(t));
+        tutorialTimeouts = [];
+        clearInterval(tutorialInterval);
+        clearInterval(tutorialSimInterval);
+
+        // Prepara estados iniciais
         overlay.classList.add('active');
-        dash.classList.remove('tutorial-focus');
+        introCard.style.display = 'flex';
+        textBox.style.display = 'none';
+        swipeArc.classList.remove('active');
+        cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
+
         resetPump();
 
-        let timeLeft = 6;
+        let timeLeft = 8;
         timerEl.textContent = `${timeLeft}s`;
 
-        titleEl.textContent = "1. Gire Diretamente na Roleta";
-        descEl.textContent = "Toque e puxe a roleta na tela para dar o impulso!";
-
-        // ETAPA 2: Aos 3.1s a mão desce para o botão inferior e inicia a simulação realista
-        clearTimeout(tutorialTextTimer);
-        tutorialTextTimer = setTimeout(() => {
+        // 1. APRESENTAÇÃO INICIAL (1.5 segundos)
+        tutorialTimeouts.push(setTimeout(() => {
             if (!overlay.classList.contains('active')) return;
 
+            // Esconde Intro e exibe instruções
+            introCard.style.display = 'none';
+            textBox.style.display = 'block';
+
+            titleEl.textContent = "1. Gire Diretamente na Roleta";
+            descEl.textContent = "Toque e puxe a roleta na tela para dar o impulso!";
+
+            // Ativa demonstração da roleta
+            swipeArc.classList.add('active');
+            cursor.classList.add('active', 'cursor-anim-wheel');
+
+        }, 1500));
+
+        // 2. DEMONSTRAÇÃO DO BOTÃO INFERIOR (Aos 4.5 segundos)
+        tutorialTimeouts.push(setTimeout(() => {
+            if (!overlay.classList.contains('active')) return;
+
+            swipeArc.classList.remove('active');
+            cursor.classList.remove('cursor-anim-wheel');
+
             titleEl.textContent = "2. Ou Pressione & Segure o Botão";
-            descEl.textContent = "Segure para acumular pressão e turbinar o giro!";
-            dash.classList.add('tutorial-focus');
+            descEl.textContent = "Segure firme para turbinar o tempo da roleta!";
 
-            // Simula o pressionamento no botão físico
-            pumpBtn.classList.add('charging');
-            let simProgress = 0;
-            
-            clearInterval(tutorialSimInterval);
-            tutorialSimInterval = setInterval(() => {
-                simProgress += 0.045;
-                const p = Math.min(1, simProgress);
-                meterFill.style.width = `${p * 100}%`;
-                const calcSec = Math.round(15 + (p * 15));
-                timeTarget.textContent = `${calcSec}s`;
+            // Posiciona a mão em primeiro plano sobre o botão
+            cursor.classList.add('cursor-anim-button');
 
-                if (calcSec >= 30) {
-                    timeTarget.classList.add('overcharged');
-                }
+            // Delay para casar o toque com o início da pressão (30% da animação ~= 1s)
+            tutorialTimeouts.push(setTimeout(() => {
+                if (!overlay.classList.contains('active')) return;
 
-                if (p >= 1) {
-                    clearInterval(tutorialSimInterval);
-                }
-            }, 60);
+                pumpBtn.classList.add('charging');
+                let simProgress = 0;
 
-        }, 3100);
+                clearInterval(tutorialSimInterval);
+                tutorialSimInterval = setInterval(() => {
+                    simProgress += 0.055;
+                    const p = Math.min(1, simProgress);
+                    meterFill.style.width = `${p * 100}%`;
+                    const calcSec = Math.round(15 + (p * 15));
+                    timeTarget.textContent = `${calcSec}s`;
 
-        clearInterval(tutorialInterval);
+                    if (calcSec >= 30) {
+                        timeTarget.classList.add('overcharged');
+                    }
+
+                    if (p >= 1) {
+                        clearInterval(tutorialSimInterval);
+                    }
+                }, 55);
+
+            }, 900));
+
+        }, 4500));
+
+        // Contador regressivo total (8s)
         tutorialInterval = setInterval(() => {
             timeLeft--;
             if (timeLeft > 0) {
@@ -1188,16 +1267,19 @@
 
     function closeGameTutorial() {
         clearInterval(tutorialInterval);
-        clearTimeout(tutorialTextTimer);
         clearInterval(tutorialSimInterval);
+        tutorialTimeouts.forEach(t => clearTimeout(t));
+        tutorialTimeouts = [];
 
         const overlay = document.getElementById('game-tutorial-overlay');
-        const dash = document.getElementById('main-power-dashboard');
-        
+        const cursor = document.getElementById('tutorial-cursor');
+        const swipeArc = document.getElementById('tutorial-swipe-arc');
+
+        cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
+        swipeArc.classList.remove('active');
         overlay.classList.remove('active');
-        dash.classList.remove('tutorial-focus');
-        
-        // Devolve o botão e o contador ao estado padrão prontos para o jogador real
+
+        // Garante botão limpo para o jogador real
         resetPump();
         fetchFromGoogleSheets(true);
     }
