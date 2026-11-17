@@ -17,6 +17,7 @@
             --gold: #ffd700;
             --orange: #ff6b00;
             --red: #ef4444;
+            --green: #10b981;
         }
 
         * {
@@ -66,8 +67,8 @@
         .totem-container {
             width: 100%;
             height: 100%;
-            max-width: 560px;
-            padding: 12px 18px;
+            max-width: 600px;
+            padding: 10px 16px;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -88,20 +89,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             flex-shrink: 0;
-        }
-
-        .brand-logo {
-            height: clamp(50px, 7vh, 75px);
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 14px rgba(0, 150, 214, 0.35));
         }
 
         .title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: clamp(1.8rem, 4vh, 2.4rem);
+            font-size: clamp(1.8rem, 3.8vh, 2.3rem);
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 3px;
@@ -123,16 +117,15 @@
             margin-top: 3px;
         }
 
-        /* --- VITRINE DE PRÊMIOS DA TELA 1 (DESTAQUE MÁXIMO) --- */
         .showcase-container {
             width: 100%;
             background: var(--surface);
             border: 1px solid var(--surface-border);
             border-radius: 14px;
-            padding: 10px 12px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             flex-shrink: 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
@@ -142,23 +135,23 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding-bottom: 6px;
+            padding-bottom: 4px;
         }
 
         .showcase-header span {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--accent);
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
         .prizes-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-            max-height: 220px;
+            gap: 5px;
+            max-height: 180px;
             overflow-y: auto;
             padding-right: 2px;
         }
@@ -169,12 +162,11 @@
         .prize-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 7px 10px;
+            border-radius: 7px;
+            padding: 6px 9px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s;
         }
 
         .prize-card.rare {
@@ -182,8 +174,14 @@
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent);
         }
 
+        .prize-card.out-of-stock {
+            opacity: 0.4;
+            filter: grayscale(1);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+
         .prize-card-name {
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #fff;
             white-space: nowrap;
@@ -191,27 +189,24 @@
             text-overflow: ellipsis;
         }
 
-        .prize-card.rare .prize-card-name {
-            color: #ffd700;
-        }
+        .prize-card.rare .prize-card-name { color: #ffd700; }
 
         .prize-stock-pill {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 800;
             color: var(--accent);
             background: rgba(0, 229, 255, 0.12);
-            padding: 2px 7px;
-            border-radius: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
             margin-left: 6px;
         }
 
         .prize-stock-pill.out {
-            color: var(--text-dim);
-            background: rgba(255,255,255,0.05);
+            color: var(--red);
+            background: rgba(239, 68, 68, 0.12);
         }
 
-        /* --- CAMPO DE BUSCA DISCRETA E INTELIGENTE --- */
         .search-container {
             width: 100%;
             position: relative;
@@ -222,14 +217,42 @@
             justify-content: flex-start;
         }
 
+        .search-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .sync-indicator {
+            font-size: 0.68rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .sync-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-dim);
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .sync-dot.online { background: var(--green); box-shadow: 0 0 10px var(--green); }
+        .sync-dot.syncing { background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+
         .form-input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--surface-border);
             color: #fff;
-            font-size: 1.05rem;
+            font-size: 1rem;
             outline: none;
             transition: 0.2s;
         }
@@ -240,27 +263,26 @@
             box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        /* LISTA QUE FICA OCULTA ATÉ O USUÁRIO DIGITAR 2 LETRAS */
         .autocomplete-dropdown {
             position: absolute;
-            top: 56px;
+            top: 60px;
             left: 0;
             right: 0;
             background: #0f1626;
             border: 1px solid var(--accent);
             border-radius: 10px;
-            max-height: 180px;
+            max-height: 190px;
             overflow-y: auto;
             z-index: 100;
             display: none;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.85);
             padding: 4px;
         }
 
         .autocomplete-dropdown.show { display: block; }
 
         .autocomplete-item {
-            padding: 10px 12px;
+            padding: 8px 10px;
             border-radius: 6px;
             display: flex;
             justify-content: space-between;
@@ -291,11 +313,10 @@
             margin-top: 6px;
         }
 
-        /* --- TELA 2: ROLETA E MECÂNICA DA BOMBA DE FORÇA --- */
         .roulette-wrapper {
             position: relative;
-            width: min(82vw, 360px);
-            height: min(82vw, 360px);
+            width: min(88vw, 410px);
+            height: min(88vw, 410px);
             margin: auto;
             display: flex;
             align-items: center;
@@ -307,29 +328,29 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: 0 0 35px rgba(0, 229, 255, 0.25), inset 0 0 20px rgba(0,0,0,0.8);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.3), inset 0 0 25px rgba(0,0,0,0.85);
         }
 
         .roulette-pointer {
             position: absolute;
-            top: -14px;
+            top: -16px;
             left: 50%;
             transform: translateX(-50%);
             width: 32px;
-            height: 40px;
+            height: 42px;
             z-index: 20;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.9));
             transform-origin: top center;
             transition: transform 0.08s ease;
         }
 
         .center-hub {
             position: absolute;
-            width: 62px;
-            height: 62px;
+            width: 68px;
+            height: 68px;
             background: radial-gradient(circle, #1e293b 40%, #070a12 100%);
             border: 3px solid var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 25px var(--accent-glow);
             border-radius: 50%;
             z-index: 10;
             display: flex;
@@ -341,11 +362,10 @@
             font-family: 'Rajdhani', sans-serif;
             font-weight: 800;
             color: #fff;
-            font-size: 0.78rem;
-            letter-spacing: 1px;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
         }
 
-        /* PAINEL DINÂMICO DE FORÇA / TEMPO */
         .power-pump-dashboard {
             width: 100%;
             background: var(--surface);
@@ -355,7 +375,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            margin-top: 10px;
+            margin-top: 6px;
             flex-shrink: 0;
         }
 
@@ -367,7 +387,7 @@
 
         .power-label {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--text-dim);
             letter-spacing: 1.5px;
@@ -376,11 +396,11 @@
 
         .power-time-target {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.45rem;
             font-weight: 800;
             color: var(--accent);
             letter-spacing: 1px;
-            transition: color 0.2s, transform 0.1s;
+            transition: color 0.2s;
         }
 
         .power-time-target.overcharged {
@@ -391,11 +411,10 @@
 
         .power-meter-track {
             width: 100%;
-            height: 12px;
+            height: 11px;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 6px;
             overflow: hidden;
-            position: relative;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -406,15 +425,14 @@
             transition: width 0.05s linear;
         }
 
-        /* BOTÃO BOMBA DE PRESSÃO */
         .btn-pump {
             background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
             color: #040812;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.25rem;
             font-weight: 800;
             border: none;
-            padding: 14px 20px;
+            padding: 13px 18px;
             border-radius: 12px;
             cursor: pointer;
             width: 100%;
@@ -436,7 +454,6 @@
         .btn-pump:disabled {
             opacity: 0.4;
             cursor: not-allowed;
-            transform: none !important;
             filter: grayscale(0.8);
             box-shadow: none;
         }
@@ -445,10 +462,10 @@
             background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
             color: #040812;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 800;
             border: none;
-            padding: 14px 20px;
+            padding: 13px 18px;
             border-radius: 10px;
             cursor: pointer;
             width: 100%;
@@ -471,17 +488,16 @@
             border: 1px solid var(--surface-border);
             color: var(--text-dim);
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 1.5px;
             font-weight: 700;
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 8px;
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.2s;
         }
 
-        /* RESULTADO */
         #screen-end {
             justify-content: center;
             gap: 16px;
@@ -507,7 +523,7 @@
 
         .prize-title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.6rem;
+            font-size: 2.3rem;
             font-weight: 800;
             color: #fff;
             text-shadow: 0 0 25px var(--accent);
@@ -521,15 +537,14 @@
             background: rgba(0, 229, 255, 0.12);
             color: var(--accent);
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 700;
-            padding: 4px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
             letter-spacing: 1px;
             margin-top: 6px;
         }
 
-        /* MODAL CADASTRO RÁPIDO */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -546,16 +561,15 @@
             background: #121826;
             border: 1px solid var(--accent);
             border-radius: 14px;
-            padding: 20px;
+            padding: 18px;
             width: 100%;
             max-width: 420px;
             box-shadow: 0 0 35px var(--accent-glow);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
-        /* SCREENSAVER */
         #screensaver {
             position: fixed;
             inset: 0;
@@ -581,7 +595,6 @@
     <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
 </button>
 
-<!-- SCREENSAVER -->
 <div id="screensaver" onclick="dismissScreensaver()">
     <div style="text-align: center; margin-top: 20px;">
         <h2 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase;">Prêmios Corporativos</h2>
@@ -589,7 +602,7 @@
         <p class="brand-subtitle">Gire e Leve seu Brinde</p>
     </div>
 
-    <canvas id="screensaver-wheel" width="260" height="260"></canvas>
+    <canvas id="screensaver-wheel" width="300" height="300"></canvas>
 
     <div class="btn-action" style="max-width: 320px; text-align: center;">
         TOQUE PARA JOGAR
@@ -598,14 +611,13 @@
 
 <div class="totem-container">
 
-    <!-- TELA 1: VITRINE DE PRÊMIOS + BUSCA OCULTA -->
+    <!-- TELA 1 -->
     <div id="screen-start" class="screen active">
         <div class="brand-header">
             <h1 class="title">INFINITY<span class="corp-highlight">CORP</span></h1>
             <p class="brand-subtitle">Desafio da Roleta de Prêmios</p>
         </div>
 
-        <!-- VITRINE DE PRÊMIOS (DESTAQUE MÁXIMO) -->
         <div class="showcase-container">
             <div class="showcase-header">
                 <span>Premiações em Disputa</span>
@@ -614,48 +626,48 @@
             <div class="prizes-grid" id="prizes-grid"></div>
         </div>
 
-        <!-- CAMPO DE BUSCA (LISTA OCULTA POR PADRÃO) -->
         <div class="search-container">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <label style="font-size: 0.72rem; font-weight: 700; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase;">Identificação</label>
-                <button class="btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="openNewPlayerModal()">+ Cadastrar</button>
+            <div class="search-top-bar">
+                <div class="sync-indicator">
+                    <span class="sync-dot" id="sync-dot"></span>
+                    <span id="sync-text">Sincronizando...</span>
+                </div>
+                <button class="btn-secondary" onclick="openNewPlayerModal()">+ Cadastrar</button>
             </div>
 
-            <input type="text" id="search-input" class="form-input" placeholder="Digite seu nome para liberar a roleta..." autocomplete="off" oninput="handleSearchInput(this.value)">
+            <input type="text" id="search-input" class="form-input" placeholder="Digite seu nome ou e-mail..." autocomplete="off" oninput="handleSearchInput(this.value)" onfocus="fetchFromGoogleSheets()">
 
-            <!-- Dropdown que surge ao digitar -->
             <div class="autocomplete-dropdown" id="autocomplete-list"></div>
 
             <div class="player-badge-selected" id="player-badge-selected">
                 <div>
                     <strong id="badge-name" style="color: #fff; font-size: 0.95rem; display: block;"></strong>
-                    <span id="badge-company" style="color: var(--text-dim); font-size: 0.75rem;"></span>
+                    <span id="badge-details" style="color: var(--text-dim); font-size: 0.72rem;"></span>
                 </div>
                 <button class="btn-secondary" style="padding: 2px 8px; font-size: 0.7rem;" onclick="clearSelectedPlayer()">Trocar</button>
             </div>
         </div>
 
-        <button id="btn-to-spin" class="btn-action" disabled onclick="goToSpinScreen()">
+        <button id="btn-to-spin" class="btn-action" disabled onclick="confirmAndGoToSpin()">
             Confirmar e Ir para a Roleta
         </button>
     </div>
 
-    <!-- TELA 2: ROLETA COM A BOMBINHA DE FORÇA -->
+    <!-- TELA 2 -->
     <div id="screen-game" class="screen">
         <div style="background: var(--surface); border: 1px solid var(--surface-border); padding: 8px 16px; border-radius: 10px; text-align: center; width: 100%; flex-shrink: 0;">
             <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;">Vez de Girar</span>
-            <strong id="current-player-display" style="font-family: 'Rajdhani'; font-size: 1.3rem; color: var(--accent); display: block;">---</strong>
+            <strong id="current-player-display" style="font-family: 'Rajdhani'; font-size: 1.25rem; color: var(--accent); display: block;">---</strong>
         </div>
 
         <div class="roulette-wrapper">
             <svg class="roulette-pointer" id="roulette-pointer" viewBox="0 0 24 32">
                 <path d="M12 32 L2 6 C0 3 2 0 6 0 L18 0 C22 0 24 3 22 6 Z" fill="#ffd700" stroke="#fff" stroke-width="1.5"/>
             </svg>
-            <canvas id="wheel-canvas" class="roulette-canvas" width="600" height="600"></canvas>
+            <canvas id="wheel-canvas" class="roulette-canvas" width="800" height="800"></canvas>
             <div class="center-hub"><span>INFINITY</span></div>
         </div>
 
-        <!-- PAINEL DA BOMBA DE FORÇA -->
         <div class="power-pump-dashboard">
             <div class="power-header">
                 <span class="power-label" id="power-instruction-label">Pressione & Segure para Turbinar</span>
@@ -670,11 +682,11 @@
         </div>
     </div>
 
-    <!-- TELA 3: PRÊMIO CONQUISTADO -->
+    <!-- TELA 3 -->
     <div id="screen-end" class="screen">
         <div class="brand-header">
-            <h1 class="title">PARABÉNS!</h1>
-            <p class="brand-subtitle">Prêmio Garantido</p>
+            <h1 class="title" id="end-title-header">PARABÉNS!</h1>
+            <p class="brand-subtitle" id="end-subtitle-header">Prêmio Garantido</p>
         </div>
 
         <div class="prize-presentation-card">
@@ -683,7 +695,7 @@
             <div class="stock-left-label" id="awarded-stock-label">Restam 9 unidades</div>
         </div>
 
-        <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center;">
+        <p id="end-helper-text" style="color: var(--text-dim); font-size: 0.85rem; text-align: center;">
             Retire seu brinde com nosso consultor no estande.
         </p>
 
@@ -694,13 +706,14 @@
 
 </div>
 
-<!-- MODAL CADASTRAR PESSOAS NA HORA -->
+<!-- MODAL CADASTRAR -->
 <div class="modal-overlay" id="modal-new-player">
     <div class="modal-card">
         <h3 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.3rem; letter-spacing: 1px;">NOVO PARTICIPANTE</h3>
         <input type="text" id="new-name" class="form-input" placeholder="Nome Completo">
+        <input type="email" id="new-email" class="form-input" placeholder="E-mail Corporativo">
         <input type="text" id="new-company" class="form-input" placeholder="Empresa">
-        <div style="display: flex; gap: 8px; margin-top: 8px;">
+        <div style="display: flex; gap: 8px; margin-top: 6px;">
             <button class="btn-secondary" style="flex: 1;" onclick="closeNewPlayerModal()">Cancelar</button>
             <button class="btn-action" style="flex: 1; font-size: 1rem; padding: 8px;" onclick="saveNewPlayer()">Salvar</button>
         </div>
@@ -708,80 +721,57 @@
 </div>
 
 <script>
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyJCpWhcZG1qliEqWuu50KKg2Q26nb1AS_q7l-NRaKl0XWpYADv4698lvTjTrd5EQ8-Ig/exec";
+
+    const SUBTLE_PALETTE = [
+        "#0e243a", "#142e2b", "#171e3d", "#241c38", 
+        "#0f2b38", "#1c2430", "#2b1d30", "#2d2212", 
+        "#2d1818", "#33270e", "#1b2838", "#231f20"
+    ];
 
     const DEFAULT_PRIZES = [
-        { id: 1, name: "Caneta", stock: 10, isSimple: true, color: "#0c1b33" },
-        { id: 2, name: "Caneca", stock: 10, isSimple: true, color: "#14284b" },
-        { id: 3, name: "Mouse Pad", stock: 10, isSimple: true, color: "#0c1b33" },
-        { id: 4, name: "Copo", stock: 10, isSimple: true, color: "#14284b" },
-        { id: 5, name: "Bloco de Notas", stock: 10, isSimple: true, color: "#0c1b33" },
-        { id: 6, name: "Squeeze", stock: 10, isSimple: true, color: "#14284b" },
-        { id: 7, name: "Carregador", stock: 5, isSimple: false, color: "#0c1b33" },
-        { id: 8, name: "Power Bank", stock: 5, isSimple: false, color: "#14284b" },
-        { id: 9, name: "Faca", stock: 5, isSimple: false, color: "#0c1b33" },
-        { id: 10, name: "Kit Teclado e Mouse", stock: 3, isSimple: false, color: "#14284b" }
+        { id: 1, name: "Caneta", stock: 10, isSimple: true },
+        { id: 2, name: "Caneca", stock: 10, isSimple: true },
+        { id: 3, name: "Mouse Pad", stock: 10, isSimple: true },
+        { id: 4, name: "Copo", stock: 10, isSimple: true },
+        { id: 5, name: "Bloco de Notas", stock: 10, isSimple: true },
+        { id: 6, name: "Squeeze", stock: 10, isSimple: true },
+        { id: 7, name: "Carregador", stock: 5, isSimple: false },
+        { id: 8, name: "Power Bank", stock: 5, isSimple: false },
+        { id: 9, name: "Faca", stock: 5, isSimple: false },
+        { id: 10, name: "Kit Teclado e Mouse", stock: 3, isSimple: false }
     ];
 
-    const DEFAULT_PLAYERS = [
-        { id: 1, name: "Carlos Eduardo", company: "Empresa Alfa", targetPrize: "Kit Teclado e Mouse", played: false },
-        { id: 2, name: "Fernanda Lima", company: "Hospital São Lucas", targetPrize: "Power Bank", played: false },
-        { id: 3, name: "Marcos Vinicius", company: "Logística Express", targetPrize: "", played: false },
-        { id: 4, name: "Juliana Mendes", company: "Banco Global", targetPrize: "", played: false },
-        { id: 5, name: "Roberto Silva", company: "TechCorp TI", targetPrize: "Squeeze", played: true }
-    ];
-
-    let prizes = JSON.parse(localStorage.getItem('totem_prizes')) || DEFAULT_PRIZES;
-    let players = JSON.parse(localStorage.getItem('totem_players')) || DEFAULT_PLAYERS;
+    let rawPrizes = JSON.parse(localStorage.getItem('totem_prizes')) || DEFAULT_PRIZES;
+    let players = JSON.parse(localStorage.getItem('totem_players')) || [];
+    let dynamicSlices = [];
     let selectedPlayer = null;
 
-    // FÍSICA E CONTROLE DA BOMBA DE FORÇA
-    let selectedSpinDuration = 15000; // Começa em 15s (mínimo)
+    let selectedSpinDuration = 15000;
     let pumpChargeInterval = null;
     let pumpStartTime = 0;
     let isSpinning = false;
     let currentWheelRotation = 0;
     let idleTimer = null;
     let audioCtx = null;
+    let autoSyncInterval = null;
+    let lastSyncTime = 0;
 
-    // SOM PROCEDURAL (CLIQUES E CARGA DE ENERGIA)
     function playTickSound() {
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
-
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(650, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.03);
-
             gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
-
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + 0.03);
-        } catch (e) {}
-    }
-
-    function playChargeHum(freq) {
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.08);
         } catch (e) {}
     }
 
@@ -808,92 +798,210 @@
                 drawScreensaverWheel();
             }, 45000);
         }
+
+        // Toque na tela dispara sincronização em segundo plano (respeitando intervalo mínimo de 2s)
+        if (Date.now() - lastSyncTime > 2000 && !isSpinning) {
+            fetchFromGoogleSheets(true);
+        }
     }
 
     function dismissScreensaver() {
         document.getElementById('screensaver').classList.remove('active');
         setScreen('screen-start');
+        fetchFromGoogleSheets();
     }
 
     ['click', 'touchstart'].forEach(e => window.addEventListener(e, resetIdleTimer, { passive: true }));
 
-    // INICIALIZAÇÃO
-    function init() {
-        renderShowcase();
-        drawWheel(document.getElementById('wheel-canvas'), currentWheelRotation);
-        setupPumpButton();
-        resetIdleTimer();
-        fetchFromGoogleSheets();
+    // CONSTRÓI AS FATIAS COM OS 3 VAZIOS E TAMANHOS DINÂMICOS
+    function generateWheelSlices() {
+        const slices = [];
+        const prizeCount = rawPrizes.length;
+
+        const emptyItems = [
+            { id: 'empty_1', name: 'Não foi dessa vez', isNoPrize: true, stock: 9999, isSimple: true, weight: 0.85, color: '#161d2a' },
+            { id: 'empty_2', name: 'Passou Perto!', isNoPrize: true, stock: 9999, isSimple: true, weight: 0.85, color: '#1a1f2b' },
+            { id: 'empty_3', name: 'Tente Novamente', isNoPrize: true, stock: 9999, isSimple: true, weight: 0.85, color: '#161d2a' }
+        ];
+
+        let emptyIdx = 0;
+        const interval = Math.max(2, Math.floor(prizeCount / 3));
+
+        for (let i = 0; i < prizeCount; i++) {
+            const p = rawPrizes[i];
+            const weight = p.isSimple ? 1.0 : 0.55; // Comum maior, raro menor
+            const isOut = (p.stock <= 0);
+            const color = isOut ? '#232a36' : SUBTLE_PALETTE[i % SUBTLE_PALETTE.length];
+
+            slices.push({
+                ...p,
+                weight: weight,
+                color: color,
+                isOutOfStock: isOut
+            });
+
+            if ((i + 1) % interval === 0 && emptyIdx < emptyItems.length) {
+                slices.push(emptyItems[emptyIdx]);
+                emptyIdx++;
+            }
+        }
+
+        while (emptyIdx < emptyItems.length) {
+            slices.push(emptyItems[emptyIdx]);
+            emptyIdx++;
+        }
+
+        // Calcula os arcos exatos (startAngle e endAngle)
+        const totalWeight = slices.reduce((acc, curr) => acc + curr.weight, 0);
+        let currentAngle = 0;
+
+        slices.forEach(slice => {
+            const angleSpan = (slice.weight / totalWeight) * (2 * Math.PI);
+            slice.startAngle = currentAngle;
+            slice.endAngle = currentAngle + angleSpan;
+            slice.midAngle = currentAngle + (angleSpan / 2);
+            currentAngle += angleSpan;
+        });
+
+        dynamicSlices = slices;
     }
 
-    // VITRINE DE PRÊMIOS DA TELA 1
     function renderShowcase() {
         const grid = document.getElementById('prizes-grid');
-        let totalStock = 0;
+        grid.innerHTML = '';
+        let totalActiveStock = 0;
 
-        grid.innerHTML = prizes.map(p => {
-            totalStock += p.stock;
-            const isRare = !p.isSimple;
-            return `
-                <div class="prize-card ${isRare ? 'rare' : ''}">
-                    <span class="prize-card-name">${p.name}</span>
-                    <span class="prize-stock-pill ${p.stock === 0 ? 'out' : ''}">
-                        ${p.stock > 0 ? `${p.stock} un` : 'ESGOTADO'}
-                    </span>
+        rawPrizes.forEach(p => {
+            const isOut = p.stock <= 0;
+            if (!isOut) totalActiveStock += p.stock;
+
+            const card = document.createElement('div');
+            card.className = `prize-card ${!p.isSimple ? 'rare' : ''} ${isOut ? 'out-of-stock' : ''}`;
+            card.innerHTML = `
+                <div class="prize-card-name" title="${p.name}">${p.name}</div>
+                <div class="prize-stock-pill ${isOut ? 'out' : ''}">${isOut ? 'ESGOTADO' : p.stock + ' un'}</div>
+            `;
+            grid.appendChild(card);
+        });
+
+        document.getElementById('total-stock-counter').textContent = `${totalActiveStock} un disponíveis`;
+    }
+
+    function renderWheel(canvasId, rotationAngle = 0) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const radius = cx - 10;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rotationAngle);
+
+        dynamicSlices.forEach(slice => {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, radius, slice.startAngle, slice.endAngle);
+            ctx.closePath();
+
+            ctx.fillStyle = slice.color;
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = slice.isOutOfStock ? '#334155' : 'rgba(255, 255, 255, 0.1)';
+            ctx.stroke();
+
+            // Texto da fatia
+            ctx.save();
+            ctx.rotate(slice.midAngle);
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            
+            if (slice.isOutOfStock) {
+                ctx.fillStyle = '#64748b';
+                ctx.font = 'bold 15px Rajdhani';
+                ctx.fillText(`${slice.name} (ESGOTADO)`, radius - 24, 0);
+            } else if (slice.isNoPrize) {
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '600 16px Rajdhani';
+                ctx.fillText(slice.name, radius - 24, 0);
+            } else {
+                ctx.fillStyle = slice.isSimple ? '#ffffff' : '#ffd700';
+                ctx.font = `bold ${slice.isSimple ? '18px' : '17px'} Rajdhani`;
+                ctx.fillText(slice.name.toUpperCase(), radius - 24, 0);
+            }
+            ctx.restore();
+        });
+
+        // Borda externa decorativa
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#00e5ff';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
+    function drawScreensaverWheel() {
+        renderWheel('screensaver-wheel', 0);
+    }
+
+    // BUSCA COM SUPORTE A EMAIL
+    function handleSearchInput(val) {
+        const list = document.getElementById('autocomplete-list');
+        const query = val.trim().toLowerCase();
+
+        if (query.length === 0) {
+            list.innerHTML = '';
+            list.classList.remove('show');
+            return;
+        }
+
+        const filtered = players.filter(p => 
+            p.name.toLowerCase().includes(query) || 
+            (p.email && p.email.toLowerCase().includes(query)) ||
+            (p.company && p.company.toLowerCase().includes(query))
+        );
+
+        list.innerHTML = '';
+        if (filtered.length === 0) {
+            list.innerHTML = `<div style="padding:10px; font-size:0.8rem; color:var(--text-dim); text-align:center;">Nenhum participante encontrado.</div>`;
+            list.classList.add('show');
+            return;
+        }
+
+        filtered.slice(0, 8).forEach(p => {
+            const item = document.createElement('div');
+            item.className = `autocomplete-item ${p.played ? 'disabled' : ''}`;
+            item.innerHTML = `
+                <div>
+                    <strong style="color:#fff; font-size:0.85rem; display:block;">${p.name}</strong>
+                    <span style="color:var(--text-dim); font-size:0.72rem;">${p.email || 'Sem e-mail'} | ${p.company || 'InfinityCorp'}</span>
+                </div>
+                <div>
+                    ${p.played ? '<span style="font-size:0.7rem; color:var(--red); font-weight:700;">JÁ JOGOU</span>' : '<span style="font-size:0.7rem; color:var(--green); font-weight:700;">LIBERADO</span>'}
                 </div>
             `;
-        }).join('');
 
-        document.getElementById('total-stock-counter').innerText = `${totalStock} itens disponíveis`;
+            if (!p.played) {
+                item.onclick = () => selectPlayer(p);
+            }
+            list.appendChild(item);
+        });
+
+        list.classList.add('show');
     }
 
-    // BUSCA OCULTA QUE SÓ REVELA RESULTADOS COM >= 2 LETRAS
-    function handleSearchInput(query) {
-        const clean = query.trim().toLowerCase();
-        const drop = document.getElementById('autocomplete-list');
-
-        if (clean.length < 2) {
-            drop.classList.remove('show');
-            drop.innerHTML = '';
-            return;
-        }
-
-        const filtered = players.filter(p => p.name.toLowerCase().includes(clean) || (p.company && p.company.toLowerCase().includes(clean)));
-
-        if (filtered.length === 0) {
-            drop.innerHTML = `<div style="padding: 10px; font-size: 0.8rem; color: var(--text-dim); text-align: center;">Nenhum participante localizado com essas letras.</div>`;
-            drop.classList.add('show');
-            return;
-        }
-
-        drop.innerHTML = filtered.map(player => `
-            <div class="autocomplete-item ${player.played ? 'disabled' : ''}" onclick="selectPlayer(${player.id})">
-                <div>
-                    <strong style="color: #fff; font-size: 0.9rem;">${player.name}</strong>
-                    <div style="font-size: 0.72rem; color: var(--text-dim);">${player.company || 'Convidado'}</div>
-                </div>
-                <span style="font-family: 'Rajdhani'; font-size: 0.75rem; font-weight: 700; color: ${player.played ? 'var(--text-dim)' : 'var(--accent)'};">
-                    ${player.played ? '[JÁ JOGOU]' : 'LIBERADO'}
-                </span>
-            </div>
-        `).join('');
-
-        drop.classList.add('show');
-    }
-
-    function selectPlayer(id) {
-        const p = players.find(x => x.id === id);
-        if (!p || p.played) return;
-
+    function selectPlayer(p) {
         selectedPlayer = p;
-
-        // Oculta input e dropdown, exibe o cartão de confirmação
-        document.getElementById('autocomplete-list').classList.remove('show');
         document.getElementById('search-input').style.display = 'none';
-
+        document.getElementById('autocomplete-list').classList.remove('show');
+        
         const badge = document.getElementById('player-badge-selected');
-        document.getElementById('badge-name').innerText = p.name;
-        document.getElementById('badge-company').innerText = p.company || 'Convidado';
+        document.getElementById('badge-name').textContent = p.name;
+        document.getElementById('badge-details').textContent = `${p.email ? p.email + ' • ' : ''}${p.company || 'InfinityCorp'}`;
         badge.style.display = 'flex';
 
         document.getElementById('btn-to-spin').disabled = false;
@@ -905,290 +1013,285 @@
         document.getElementById('search-input').style.display = 'block';
         document.getElementById('player-badge-selected').style.display = 'none';
         document.getElementById('btn-to-spin').disabled = true;
-        document.getElementById('search-input').focus();
     }
 
-    function openNewPlayerModal() {
-        document.getElementById('modal-new-player').classList.add('active');
-        document.getElementById('new-name').focus();
-    }
-
-    function closeNewPlayerModal() {
-        document.getElementById('modal-new-player').classList.remove('active');
-        document.getElementById('new-name').value = '';
-        document.getElementById('new-company').value = '';
-    }
-
-    function saveNewPlayer() {
-        const name = document.getElementById('new-name').value.trim();
-        const company = document.getElementById('new-company').value.trim();
-        if (!name) return alert('Digite ao menos o nome do participante.');
-
-        const newPlayer = {
-            id: Date.now(),
-            name,
-            company: company || 'Convidado Estande',
-            targetPrize: '',
-            played: false
-        };
-
-        players.unshift(newPlayer);
-        saveState();
-        closeNewPlayerModal();
-        selectPlayer(newPlayer.id);
-    }
-
-    function goToSpinScreen() {
+    // TRAVA DE SEGURANÇA: REVALIDA NA NUVEM ANTES DE GIRAR
+    async function confirmAndGoToSpin() {
         if (!selectedPlayer) return;
-        document.getElementById('current-player-display').innerText = `${selectedPlayer.name} (${selectedPlayer.company})`;
-        resetPumpUI();
+        
+        const btn = document.getElementById('btn-to-spin');
+        btn.disabled = true;
+        btn.textContent = "VALIDANDO DIRECIONAMENTO...";
+
+        // Sincroniza imediatamente para pegar a última alteração feita no Admin
+        await fetchFromGoogleSheets();
+
+        // Atualiza a referência do jogador selecionado com os dados recém-chegados
+        const updated = players.find(p => p.name.toLowerCase() === selectedPlayer.name.toLowerCase());
+        if (updated) {
+            selectedPlayer = updated;
+        }
+
+        btn.disabled = false;
+        btn.textContent = "Confirmar e Ir para a Roleta";
+
+        document.getElementById('current-player-display').textContent = selectedPlayer.name.toUpperCase();
         setScreen('screen-game');
+        resetPump();
+        renderWheel('wheel-canvas', currentWheelRotation);
     }
 
-    // MECÂNICA DA BOMBA DE FORÇA (TOUCH E MOUSE)
-    function setupPumpButton() {
-        const btn = document.getElementById('btn-pump');
+    // SINCRONIZAÇÃO EM SEGUNDO PLANO VIA JSONP
+    function fetchFromGoogleSheets(silent = false) {
+        return new Promise((resolve) => {
+            const dot = document.getElementById('sync-dot');
+            const syncText = document.getElementById('sync-text');
 
-        const startCharging = (e) => {
-            e.preventDefault();
-            if (isSpinning) return;
-
-            pumpStartTime = Date.now();
-            btn.classList.add('charging');
-
-            clearInterval(pumpChargeInterval);
-            pumpChargeInterval = setInterval(updatePumpCharge, 50);
-        };
-
-        const releaseCharging = (e) => {
-            e.preventDefault();
-            if (isSpinning) return;
-
-            btn.classList.remove('charging');
-            clearInterval(pumpChargeInterval);
-
-            // Inicia o giro com o tempo acumulado
-            startSpin(selectedSpinDuration);
-        };
-
-        btn.addEventListener('mousedown', startCharging);
-        window.addEventListener('mouseup', () => { if (btn.classList.contains('charging')) releaseCharging(new Event('mouseup')); });
-
-        btn.addEventListener('touchstart', startCharging, { passive: false });
-        btn.addEventListener('touchend', releaseCharging, { passive: false });
-    }
-
-    function updatePumpCharge() {
-        const heldTime = Date.now() - pumpStartTime; // ms pressionado
-        // A cada 700ms segurando, adiciona +5 segundos ao giro (até o teto de 30s)
-        const bonusSeconds = Math.min(15, Math.floor(heldTime / 700) * 5);
-        selectedSpinDuration = 15000 + (bonusSeconds * 1000);
-
-        const totalSecs = selectedSpinDuration / 1000;
-        const timeDisplay = document.getElementById('power-time-target');
-        timeDisplay.innerText = `${totalSecs}s`;
-
-        // Barra de progresso (0% a 100%)
-        const pct = Math.min(100, (heldTime / 2100) * 100);
-        document.getElementById('power-meter-fill').style.width = `${pct}%`;
-
-        // Efeito Sonoro e Visual conforme a carga sobe
-        playChargeHum(200 + (pct * 4));
-
-        if (totalSecs >= 30) {
-            timeDisplay.classList.add('overcharged');
-            document.getElementById('power-instruction-label').innerText = 'FORÇA MÁXIMA ATINGIDA!';
-        } else {
-            timeDisplay.classList.remove('overcharged');
-            document.getElementById('power-instruction-label').innerText = 'CARREGANDO POTÊNCIA...';
-        }
-    }
-
-    function resetPumpUI() {
-        selectedSpinDuration = 15000;
-        document.getElementById('power-meter-fill').style.width = '0%';
-        const timeDisplay = document.getElementById('power-time-target');
-        timeDisplay.innerText = '15s';
-        timeDisplay.classList.remove('overcharged');
-        document.getElementById('power-instruction-label').innerText = 'Pressione & Segure para Turbinar';
-        document.getElementById('btn-pump').disabled = false;
-    }
-
-    // DESENHO DA ROLETA
-    function drawWheel(canvas, rotationAngle) {
-        const ctx = canvas.getContext('2d');
-        const size = canvas.width;
-        const center = size / 2;
-        const radius = center - 16;
-        const total = prizes.length;
-        const arc = (2 * Math.PI) / total;
-
-        ctx.clearRect(0, 0, size, size);
-
-        // Borda Neon
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(center, center, radius + 8, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#00e5ff';
-        ctx.lineWidth = 4;
-        ctx.shadowColor = '#00e5ff';
-        ctx.shadowBlur = 18;
-        ctx.stroke();
-        ctx.restore();
-
-        for (let i = 0; i < total; i++) {
-            const angle = rotationAngle + (i * arc);
-            const prize = prizes[i];
-
-            ctx.beginPath();
-            ctx.fillStyle = prize.color;
-            ctx.moveTo(center, center);
-            ctx.arc(center, center, radius, angle, angle + arc);
-            ctx.lineTo(center, center);
-            ctx.fill();
-
-            ctx.strokeStyle = 'rgba(0, 229, 255, 0.35)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Pino
-            const pinX = center + (radius - 8) * Math.cos(angle);
-            const pinY = center + (radius - 8) * Math.sin(angle);
-            ctx.beginPath();
-            ctx.arc(pinX, pinY, 4, 0, 2 * Math.PI);
-            ctx.fillStyle = '#ffd700';
-            ctx.fill();
-
-            // Texto
-            ctx.save();
-            ctx.translate(center, center);
-            ctx.rotate(angle + arc / 2);
-            ctx.textAlign = 'right';
-            ctx.fillStyle = prize.stock > 0 ? '#ffffff' : '#64748b';
-            ctx.font = 'bold 18px "Rajdhani", sans-serif';
-            ctx.shadowColor = 'rgba(0,0,0,0.8)';
-            ctx.shadowBlur = 4;
-            
-            const label = prize.stock > 0 ? prize.name : `${prize.name} (ESGOTADO)`;
-            ctx.fillText(label, radius - 24, 6);
-            ctx.restore();
-        }
-    }
-
-    function pickPrizeForPlayer(player) {
-        if (player.targetPrize) {
-            const targeted = prizes.find(p => p.name.toLowerCase() === player.targetPrize.toLowerCase() && p.stock > 0);
-            if (targeted) return targeted;
-        }
-
-        const simpleAvailable = prizes.filter(p => p.isSimple && p.stock > 0);
-        if (simpleAvailable.length > 0) {
-            return simpleAvailable[Math.floor(Math.random() * simpleAvailable.length)];
-        }
-
-        const anyAvailable = prizes.filter(p => p.stock > 0);
-        if (anyAvailable.length > 0) {
-            return anyAvailable[Math.floor(Math.random() * anyAvailable.length)];
-        }
-
-        return prizes[0];
-    }
-
-    // GIRO COM FÍSICA PERSONALIZADA (15s a 30s)
-    function startSpin(durationMs) {
-        if (isSpinning || !selectedPlayer) return;
-        isSpinning = true;
-
-        document.getElementById('btn-pump').disabled = true;
-        document.getElementById('power-instruction-label').innerText = `RODANDO A ROLETA (${durationMs / 1000}s)...`;
-
-        const canvas = document.getElementById('wheel-canvas');
-        const pointer = document.getElementById('roulette-pointer');
-
-        const winningPrize = pickPrizeForPlayer(selectedPlayer);
-        const winningIndex = prizes.findIndex(p => p.id === winningPrize.id);
-
-        const totalSlices = prizes.length;
-        const sliceAngle = (2 * Math.PI) / totalSlices;
-
-        const pointerTargetAngle = (3 * Math.PI) / 2;
-        const sliceCenterOffset = (winningIndex * sliceAngle) + (sliceAngle / 2);
-
-        // Calcula voltas proporcionais à duração para manter a dramaticidade
-        const turns = (durationMs / 1000) * 1.5; 
-        const fullSpins = turns * (2 * Math.PI);
-        const targetRotation = fullSpins + (pointerTargetAngle - sliceCenterOffset);
-
-        const startRotation = currentWheelRotation % (2 * Math.PI);
-        const totalDistance = targetRotation - startRotation;
-
-        const startTime = performance.now();
-        let lastTickAngle = startRotation;
-
-        function easeOutQuint(t) {
-            return 1 - Math.pow(1 - t, 5);
-        }
-
-        function animateWheel(now) {
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / durationMs, 1);
-            const easedProgress = easeOutQuint(progress);
-
-            currentWheelRotation = startRotation + (totalDistance * easedProgress);
-            drawWheel(canvas, currentWheelRotation);
-
-            // Atualiza contador em contagem regressiva
-            const remainingSecs = Math.max(0, Math.ceil((durationMs - elapsed) / 1000));
-            document.getElementById('power-time-target').innerText = `${remainingSecs}s`;
-
-            if (Math.abs(currentWheelRotation - lastTickAngle) >= sliceAngle) {
-                lastTickAngle = currentWheelRotation;
-                playTickSound();
-                pointer.style.transform = 'translateX(-50%) rotate(-18deg)';
-                setTimeout(() => { pointer.style.transform = 'translateX(-50%) rotate(0deg)'; }, 40);
+            if (!silent) {
+                dot.className = 'sync-dot syncing';
+                syncText.textContent = 'Sincronizando...';
             }
 
-            if (progress < 1) {
+            const cbName = 'sync_cb_' + Date.now();
+            const script = document.createElement('script');
+            script.src = `${WEBHOOK_URL}?callback=${cbName}&t=${Date.now()}`;
+
+            const timeoutId = setTimeout(() => {
+                cleanup();
+                if (!silent) {
+                    dot.className = 'sync-dot';
+                    syncText.textContent = 'Offline (Cache)';
+                }
+                resolve();
+            }, 6000);
+
+            window[cbName] = (data) => {
+                clearTimeout(timeoutId);
+                cleanup();
+
+                if (data && data.prizes && data.players) {
+                    rawPrizes = data.prizes;
+                    players = data.players;
+                    localStorage.setItem('totem_prizes', JSON.stringify(rawPrizes));
+                    localStorage.setItem('totem_players', JSON.stringify(players));
+                    
+                    lastSyncTime = Date.now();
+                    generateWheelSlices();
+                    renderShowcase();
+                    renderWheel('wheel-canvas', currentWheelRotation);
+
+                    dot.className = 'sync-dot online';
+                    syncText.textContent = 'Nuvem Conectada';
+                }
+                resolve();
+            };
+
+            function cleanup() {
+                delete window[cbName];
+                if (script.parentNode) script.parentNode.removeChild(script);
+            }
+
+            document.body.appendChild(script);
+        });
+    }
+
+    // BOMBA DE CARGA DE TEMPO (15s a 30s)
+    const pumpBtn = document.getElementById('btn-pump');
+    const meterFill = document.getElementById('power-meter-fill');
+    const timeTarget = document.getElementById('power-time-target');
+
+    function resetPump() {
+        meterFill.style.width = '0%';
+        timeTarget.textContent = '15s';
+        timeTarget.classList.remove('overcharged');
+        selectedSpinDuration = 15000;
+        pumpBtn.disabled = false;
+        pumpBtn.textContent = 'SEGURE P/ TURBINAR OU TOQUE P/ 15s';
+    }
+
+    function startCharging(e) {
+        if (isSpinning) return;
+        e.preventDefault();
+        pumpStartTime = Date.now();
+        pumpBtn.classList.add('charging');
+
+        pumpChargeInterval = setInterval(() => {
+            const elapsed = Date.now() - pumpStartTime;
+            const progress = Math.min(1, elapsed / 3000); // 3s para atingir 30s
+            meterFill.style.width = `${progress * 100}%`;
+
+            const calcSeconds = Math.round(15 + (progress * 15));
+            timeTarget.textContent = `${calcSeconds}s`;
+
+            if (calcSeconds >= 30) {
+                timeTarget.classList.add('overcharged');
+            }
+        }, 50);
+    }
+
+    function releaseAndSpin(e) {
+        if (isSpinning || !pumpChargeInterval && pumpStartTime === 0) return;
+        if (e) e.preventDefault();
+        
+        clearInterval(pumpChargeInterval);
+        pumpChargeInterval = null;
+        pumpBtn.classList.remove('charging');
+
+        const elapsed = Date.now() - pumpStartTime;
+        pumpStartTime = 0;
+
+        const progress = Math.min(1, elapsed / 3000);
+        selectedSpinDuration = Math.round(15000 + (progress * 15000));
+
+        executeSpin();
+    }
+
+    pumpBtn.addEventListener('mousedown', startCharging);
+    window.addEventListener('mouseup', releaseAndSpin);
+    pumpBtn.addEventListener('touchstart', startCharging, { passive: false });
+    window.addEventListener('touchend', releaseAndSpin, { passive: false });
+
+    // FÍSICA E SORTEIO DO RESULTADO
+    function executeSpin() {
+        if (isSpinning) return;
+        isSpinning = true;
+        pumpBtn.disabled = true;
+        pumpBtn.textContent = 'GIRANDO ROLETA...';
+
+        // 1. Determina o Brinde Sorteado
+        let winningSlice = null;
+
+        // Regra A: Brinde Pré-definido pelo Admin (Cartas Marcadas)
+        if (selectedPlayer && selectedPlayer.targetPrize) {
+            winningSlice = dynamicSlices.find(s => 
+                !s.isOutOfStock && 
+                s.name.toLowerCase() === selectedPlayer.targetPrize.toLowerCase()
+            );
+        }
+
+        // Regra B: Se não tem direcionado ou o prêmio direcionado acabou o estoque, prioriza simples com estoque
+        if (!winningSlice) {
+            const availableValid = dynamicSlices.filter(s => !s.isOutOfStock && !s.isNoPrize);
+            const simpleOnes = availableValid.filter(s => s.isSimple);
+            
+            const pool = simpleOnes.length > 0 ? simpleOnes : availableValid;
+            if (pool.length > 0) {
+                winningSlice = pool[Math.floor(Math.random() * pool.length)];
+            } else {
+                // Caso extremo: acabou tudo
+                winningSlice = dynamicSlices.find(s => s.isNoPrize) || dynamicSlices[0];
+            }
+        }
+
+        // 2. Cálculo do Ângulo de Parada Exato
+        // O ponteiro fica no topo (3 * PI / 2 radianos ou 270 graus)
+        const pointerAngle = (3 * Math.PI) / 2;
+        const targetSliceMid = winningSlice.midAngle;
+
+        // Inversão trigonométrica para alinhar a fatia ao ponteiro
+        let baseStopAngle = pointerAngle - targetSliceMid;
+        while (baseStopAngle < 0) baseStopAngle += (2 * Math.PI);
+
+        // Voltas extras de emoção (mínimo 10 voltas)
+        const extraTurns = 10 + Math.floor(selectedSpinDuration / 2000);
+        const finalRotation = (extraTurns * 2 * Math.PI) + baseStopAngle;
+
+        const startRot = currentWheelRotation % (2 * Math.PI);
+        const totalDelta = (finalRotation - startRot);
+
+        const duration = selectedSpinDuration;
+        const startTime = performance.now();
+        let lastTickAngle = startRot;
+
+        function animateWheel(now) {
+            const timeElapsed = now - startTime;
+            const t = Math.min(1, timeElapsed / duration);
+
+            // Curva de desaceleração suave (Quartic Ease Out)
+            const easeOut = 1 - Math.pow(1 - t, 4);
+            const currentAngle = startRot + (totalDelta * easeOut);
+
+            currentWheelRotation = currentAngle;
+            renderWheel('wheel-canvas', currentAngle);
+
+            // Simula clique sonoro a cada passagem de arco
+            if (Math.abs(currentAngle - lastTickAngle) > 0.28) {
+                playTickSound();
+                lastTickAngle = currentAngle;
+                
+                const ptr = document.getElementById('roulette-pointer');
+                ptr.style.transform = 'translateX(-50%) rotate(-12deg)';
+                setTimeout(() => ptr.style.transform = 'translateX(-50%) rotate(0deg)', 40);
+            }
+
+            if (t < 1) {
                 requestAnimationFrame(animateWheel);
             } else {
                 isSpinning = false;
-                onSpinComplete(winningPrize);
+                setTimeout(() => showResult(winningSlice), 600);
             }
         }
 
         requestAnimationFrame(animateWheel);
     }
 
-    function onSpinComplete(prize) {
-        if (prize.stock > 0) prize.stock--;
+    function showResult(wonSlice) {
+        // Envia resultado para a Planilha do Google via POST em segundo plano
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: selectedPlayer.name,
+                email: selectedPlayer.email || '',
+                company: selectedPlayer.company || '',
+                prize: wonSlice.name
+            })
+        });
+
+        // Atualiza estoque local imediatamente
+        if (!wonSlice.isNoPrize) {
+            const localPrize = rawPrizes.find(p => p.name === wonSlice.name);
+            if (localPrize && localPrize.stock > 0) {
+                localPrize.stock -= 1;
+            }
+        }
+
         selectedPlayer.played = true;
-        selectedPlayer.wonPrize = prize.name;
+        selectedPlayer.wonPrize = wonSlice.name;
 
-        saveState();
-        renderShowcase();
+        // Atualiza telas
+        document.getElementById('awarded-player-name').textContent = selectedPlayer.name;
+        document.getElementById('awarded-prize-title').textContent = wonSlice.name.toUpperCase();
 
-        document.getElementById('awarded-player-name').innerText = `${selectedPlayer.name} (${selectedPlayer.company})`;
-        document.getElementById('awarded-prize-title').innerText = prize.name;
-        document.getElementById('awarded-stock-label').innerText = `Restam ${prize.stock} unidades em estoque`;
+        const titleHeader = document.getElementById('end-title-header');
+        const subtitleHeader = document.getElementById('end-subtitle-header');
+        const stockLabel = document.getElementById('awarded-stock-label');
+        const helperText = document.getElementById('end-helper-text');
+
+        if (wonSlice.isNoPrize) {
+            titleHeader.textContent = "QUE PENA!";
+            subtitleHeader.textContent = "Mais sorte na próxima";
+            stockLabel.style.display = 'none';
+            helperText.textContent = "Agradecemos a sua visita ao nosso estande!";
+        } else {
+            titleHeader.textContent = "PARABÉNS!";
+            subtitleHeader.textContent = "Prêmio Garantido";
+            stockLabel.style.display = 'inline-block';
+            const itemP = rawPrizes.find(p => p.name === wonSlice.name);
+            stockLabel.textContent = `Restam ${itemP ? itemP.stock : 0} unidades`;
+            helperText.textContent = "Retire seu brinde com nosso consultor no estande.";
+        }
 
         setScreen('screen-end');
 
-        sendResultToGoogleSheets({
-            name: selectedPlayer.name,
-            company: selectedPlayer.company,
-            prize: prize.name,
-            date: new Date().toLocaleString('pt-BR')
-        });
-
         let countdown = 15;
         const btnNext = document.getElementById('btn-next');
-        btnNext.innerText = `Concluir Atendimento (${countdown}s)`;
-        const cdInterval = setInterval(() => {
+        const countdownInterval = setInterval(() => {
             countdown--;
-            if (countdown > 0) {
-                btnNext.innerText = `Concluir Atendimento (${countdown}s)`;
-            } else {
-                clearInterval(cdInterval);
+            btnNext.textContent = `Concluir Atendimento (${countdown}s)`;
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
                 finishAndReset();
             }
         }, 1000);
@@ -1196,50 +1299,76 @@
 
     function finishAndReset() {
         clearSelectedPlayer();
+        generateWheelSlices();
+        renderShowcase();
         setScreen('screen-start');
+        fetchFromGoogleSheets(true);
     }
 
-    function saveState() {
-        localStorage.setItem('totem_players', JSON.stringify(players));
-        localStorage.setItem('totem_prizes', JSON.stringify(prizes));
+    // MODAL DE NOVO CADASTRO
+    function openNewPlayerModal() {
+        document.getElementById('modal-new-player').classList.add('active');
+        document.getElementById('new-name').value = '';
+        document.getElementById('new-email').value = '';
+        document.getElementById('new-company').value = '';
     }
 
-    function sendResultToGoogleSheets(data) {
-        if (!WEBHOOK_URL) return;
+    function closeNewPlayerModal() {
+        document.getElementById('modal-new-player').classList.remove('active');
+    }
+
+    function saveNewPlayer() {
+        const name = document.getElementById('new-name').value.trim();
+        const email = document.getElementById('new-email').value.trim();
+        const company = document.getElementById('new-company').value.trim();
+
+        if (!name) {
+            alert('Por favor, informe o nome do participante.');
+            return;
+        }
+
+        const newP = {
+            id: players.length + 1,
+            name: name,
+            email: email,
+            company: company,
+            targetPrize: "",
+            played: false
+        };
+
+        players.unshift(newP);
+        closeNewPlayerModal();
+        selectPlayer(newP);
+
+        // Grava no Sheets em segundo plano
         fetch(WEBHOOK_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        }).catch(() => {});
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                company: company,
+                prize: "" // Em branco pois ainda não jogou
+            })
+        });
     }
 
-    function fetchFromGoogleSheets() {
-        if (!WEBHOOK_URL) return;
-        window.handleCloudData = function(data) {
-            if (data && data.players) {
-                players = data.players;
-                saveState();
+    // INICIALIZAÇÃO
+    window.onload = () => {
+        generateWheelSlices();
+        renderShowcase();
+        renderWheel('wheel-canvas', 0);
+        fetchFromGoogleSheets();
+
+        // Polling constante a cada 3 segundos na tela inicial
+        autoSyncInterval = setInterval(() => {
+            const isStartActive = document.getElementById('screen-start').classList.contains('active');
+            if (isStartActive && !isSpinning) {
+                fetchFromGoogleSheets(true);
             }
-            if (data && data.prizes) {
-                prizes = data.prizes;
-                saveState();
-                renderShowcase();
-                drawWheel(document.getElementById('wheel-canvas'), currentWheelRotation);
-            }
-        };
-
-        const script = document.createElement('script');
-        script.src = `${WEBHOOK_URL}?callback=handleCloudData&t=${Date.now()}`;
-        document.body.appendChild(script);
-    }
-
-    function drawScreensaverWheel() {
-        const canvas = document.getElementById('screensaver-wheel');
-        if (canvas) drawWheel(canvas, currentWheelRotation);
-    }
-
-    init();
+        }, 3000);
+    };
 </script>
 </body>
 </html>
