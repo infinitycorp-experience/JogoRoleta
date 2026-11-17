@@ -743,6 +743,8 @@
         { id: 10, name: "Kit Teclado e Mouse", stock: 3, isSimple: false }
     ];
 
+    let endCountdownInterval = null;
+
     let rawPrizes = JSON.parse(localStorage.getItem('totem_prizes')) || DEFAULT_PRIZES;
     let players = JSON.parse(localStorage.getItem('totem_players')) || [];
     let dynamicSlices = [];
@@ -1046,7 +1048,7 @@
     let isFetchingSheet = false; // Trava para não encavalar requisições
 
     function fetchFromGoogleSheets(silent = false) {
-        if (isFetchingSheet) return Promise.resolve(); // Se já tem uma em andamento, aguarda
+        if (isFetchingSheet) return Promise.resolve();
 
         isFetchingSheet = true;
         const dot = document.getElementById('sync-dot');
@@ -1064,24 +1066,21 @@
 
             let finished = false;
 
-            // Timeout estendido para 15s (tempo do Google Apps Script acordar)
             const timeoutId = setTimeout(() => {
                 if (!finished) {
                     finished = true;
                     isFetchingSheet = false;
-                    // Mantém uma função vazia para não dar erro se o script responder atrasado
                     window[cbName] = () => { delete window[cbName]; };
                     if (script.parentNode) script.parentNode.removeChild(script);
 
-                    if (!silent && dot && syncText) {
+                    if (dot && syncText) {
                         dot.className = 'sync-dot';
                         syncText.textContent = 'Offline (Cache)';
                     }
                     resolve();
                 }
-            }, 15000);
+            }, 10000); // 10 segundos
 
-            // Callback disparado pelo Google Sheets
             window[cbName] = (data) => {
                 if (finished) {
                     delete window[cbName];
@@ -1091,7 +1090,6 @@
                 clearTimeout(timeoutId);
                 isFetchingSheet = false;
 
-                // Remove o script do DOM e apaga o callback
                 delete window[cbName];
                 if (script.parentNode) script.parentNode.removeChild(script);
 
@@ -1114,6 +1112,7 @@
                 resolve();
             };
 
+            // SE DER ERRO NO APPS SCRIPT:
             script.onerror = () => {
                 if (!finished) {
                     finished = true;
@@ -1121,6 +1120,11 @@
                     clearTimeout(timeoutId);
                     delete window[cbName];
                     if (script.parentNode) script.parentNode.removeChild(script);
+
+                    if (dot && syncText) {
+                        dot.className = 'sync-dot';
+                        syncText.textContent = 'Falha no Apps Script';
+                    }
                     resolve();
                 }
             };
@@ -1205,7 +1209,7 @@
 
         // Regra B: Se não tem direcionado ou o prêmio direcionado acabou o estoque, prioriza simples com estoque
         if (!winningSlice) {
-            const availableValid = dynamicSlices.filter(s => !s.isOutOfStock && !s.isNoPrize);
+            const availableValid = dynamicSlices.filter(s => !s.isOutOfStock && !s.isNoPrize)
             const simpleOnes = availableValid.filter(s => s.isSimple);
             
             const pool = simpleOnes.length > 0 ? simpleOnes : availableValid;
@@ -1276,10 +1280,12 @@
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                action: "spin",
                 name: selectedPlayer.name,
                 email: selectedPlayer.email || '',
                 company: selectedPlayer.company || '',
-                prize: wonSlice.name
+                prize: wonSlice.name,
+                date: new Date().toLocaleString("pt-BR")
             })
         });
 
@@ -1320,24 +1326,27 @@
         setScreen('screen-end');
 
         let countdown = 15;
-        const btnNext = document.getElementById('btn-next');
-        const countdownInterval = setInterval(() => {
-            countdown--;
-            btnNext.textContent = `Concluir Atendimento (${countdown}s)`;
-            if (countdown <= 0) {
-                clearInterval(countdownInterval);
-                finishAndReset();
-            }
+          const btnNext = document.getElementById('btn-next');
+          btnNext.textContent = `Concluir Atendimento (${countdown}s)`;
+          clearInterval(endCountdownInterval); // limpa qualquer anterior
+          endCountdownInterval = setInterval(() => {
+          countdown--;
+          btnNext.textContent = `Concluir Atendimento (${countdown}s)`;
+        if (countdown <= 0) {
+          clearInterval(endCountdownInterval);
+          finishAndReset();
+          }
         }, 1000);
     }
 
     function finishAndReset() {
-        clearSelectedPlayer();
-        generateWheelSlices();
-        renderShowcase();
-        setScreen('screen-start');
-        fetchFromGoogleSheets(true);
-    }
+      clearInterval(endCountdownInterval); // <-- Evita disparar de surpresa
+      clearSelectedPlayer();
+      generateWheelSlices();
+      renderShowcase();
+      setScreen('screen-start');
+      fetchFromGoogleSheets(true);
+    }  
 
     // MODAL DE NOVO CADASTRO
     function openNewPlayerModal() {
@@ -1374,16 +1383,16 @@
         closeNewPlayerModal();
         selectPlayer(newP);
 
-        // Grava no Sheets em segundo plano
+        // Grava no Sheets identificando a ação 'register'
         fetch(WEBHOOK_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                action: "register",
                 name: name,
                 email: email,
-                company: company,
-                prize: "" // Em branco pois ainda não jogou
+                company: company
             })
         });
     }
