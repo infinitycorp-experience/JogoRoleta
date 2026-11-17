@@ -768,15 +768,114 @@
             }
 
             /* Quando for para o Passo 2, o texto desce colado no botão e na mão */
+            /* Subimos o card para dar folga de respiro e não bater no painel inferior */
             .tutorial-text-box.step-button {
                 margin-top: auto;
-                margin-bottom: 110px; /* Posiciona logo acima do painel de turbo */
+                margin-bottom: 135px; /* Altura ideal: fica logo acima sem encostar */
                 border-color: var(--gold);
                 box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
             }
 
             .tutorial-text-box.step-button p {
                 color: var(--gold);
+            }
+
+            /* TELA DE TRANSIÇÃO "VAMOS LÁ" */
+            /* CARD DE TRANSIÇÃO FLUIDA "VAMOS LÁ" */
+            .tutorial-ready-card {
+                position: absolute;
+                top: 45%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.9);
+                background: radial-gradient(circle, rgba(21, 34, 56, 0.95) 0%, rgba(6, 10, 20, 0.98) 100%);
+                border: 2px solid var(--accent);
+                box-shadow: 0 0 50px var(--accent-glow), 0 25px 60px rgba(0,0,0,0.85);
+                border-radius: 28px;
+                padding: 40px 30px;
+                text-align: center;
+                z-index: 1500;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                width: 86%;
+                max-width: 400px;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            }
+
+            /* Quando ativo, entra suavemente */
+            .tutorial-ready-card.show {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            .tutorial-ready-card h3 {
+                font-family: 'Rajdhani', sans-serif;
+                font-size: 2.2rem;
+                font-weight: 800;
+                color: #fff;
+                letter-spacing: 3px;
+                text-shadow: 0 0 20px var(--accent);
+                margin: 0;
+            }
+
+            .tutorial-ready-card p {
+                font-size: 0.95rem;
+                color: var(--text-dim);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            /* Container fixo para o número não pular o layout */
+            .ready-countdown-box {
+                height: 90px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 5px;
+            }
+
+            /* Efeito pop fluído para cada número da contagem */
+            .ready-countdown-num {
+                font-family: 'Rajdhani', sans-serif;
+                font-size: 4.8rem;
+                font-weight: 900;
+                color: #ffd700;
+                line-height: 1;
+                text-shadow: 0 0 35px rgba(255, 215, 0, 0.7);
+                display: inline-block;
+            }
+
+            .count-pop {
+                animation: countPopAnim 0.75s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+            }
+
+            @keyframes countPopAnim {
+                0% {
+                    opacity: 0;
+                    transform: scale(1.6);
+                    filter: blur(8px);
+                }
+                35% {
+                    opacity: 1;
+                    transform: scale(1);
+                    filter: blur(0px);
+                }
+                80% {
+                    opacity: 1;
+                    transform: scale(0.95);
+                    filter: blur(0px);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0.8);
+                    filter: blur(4px);
+                }
             }
 
         .tutorial-text-box h4 {
@@ -1044,12 +1143,23 @@
                 </button>
             </div>
 
-            <!-- Card Central "Veja o Tutorial" -->
-            <div class="tutorial-intro-card" id="tutorial-intro-card">
-                <div style="font-size: 2.5rem;">🎯</div>
-                <h3 style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; letter-spacing: 2.5px;">VEJA O TUTORIAL</h3>
-                <p style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">Aprenda a girar em 2 passos rápidos!</p>
-            </div>
+                <!-- Card Central "Veja o Tutorial" -->
+                <div class="tutorial-intro-card" id="tutorial-intro-card">
+                    <div style="font-size: 2.5rem;">🎯</div>
+                    <h3 style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; letter-spacing: 2.5px;">VEJA O TUTORIAL</h3>
+                    <p style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">Aprenda a girar em 2 passos rápidos!</p>
+                </div>
+
+                  <!-- CARD DE TRANSIÇÃO VAMOS LÁ -->
+                <div class="tutorial-ready-card" id="tutorial-ready-card">
+                    <div style="font-size: 2.6rem;">🚀</div>
+                    <h3>VAMOS LÁ!</h3>
+                    <p>SUA VEZ EM</p>
+                    <div class="ready-countdown-box">
+                        <span class="ready-countdown-num" id="ready-countdown">3</span>
+                    </div>
+                </div>
+
 
             <!-- Caixa de instrução superior -->
             <div class="tutorial-text-box" id="tutorial-text-box" style="display: none;">
@@ -1309,26 +1419,87 @@
             }, 1000);
         }
     
-        function closeGameTutorial() {
+        let isTransitioningTutorial = false;
+
+        function closeGameTutorial(immediate = false) {
+            if (isTransitioningTutorial && !immediate) return;
+
             clearInterval(tutorialInterval);
             clearInterval(tutorialSimInterval);
             tutorialTimeouts.forEach(t => clearTimeout(t));
             tutorialTimeouts = [];
-    
+
             const overlay = document.getElementById('game-tutorial-overlay');
             const cursor = document.getElementById('tutorial-cursor');
             const textBox = document.getElementById('tutorial-text-box');
+            const introCard = document.getElementById('tutorial-intro-card');
             const swipeArc = document.getElementById('tutorial-swipe-arc');
             const powerDashboard = document.getElementById('main-power-dashboard');
-    
+            const readyCard = document.getElementById('tutorial-ready-card');
+            const readyNum = document.getElementById('ready-countdown');
+
+            // Limpa elementos anteriores com transição suave
             powerDashboard.classList.remove('tutorial-spotlight');
-            textBox.classList.remove('step-button');
             cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
             swipeArc.classList.remove('active');
-            overlay.classList.remove('active');
-    
+            
+            // Fade-out suave no box de texto
+            textBox.style.opacity = '0';
+            setTimeout(() => { textBox.style.display = 'none'; }, 300);
+            introCard.style.display = 'none';
             resetPump();
-            fetchFromGoogleSheets(true);
+
+            if (immediate) {
+                isTransitioningTutorial = false;
+                readyCard.classList.remove('show');
+                overlay.classList.remove('active');
+                textBox.classList.remove('step-button');
+                fetchFromGoogleSheets(true);
+                return;
+            }
+
+            isTransitioningTutorial = true;
+            readyCard.classList.add('show');
+
+            // Sequência fluida dos números com animação individual
+            const steps = [
+                { text: '3', color: '#ffd700', size: '4.8rem' },
+                { text: '2', color: '#ffb700', size: '4.8rem' },
+                { text: '1', color: '#00e5ff', size: '4.8rem' },
+                { text: 'GIRE!', color: '#00e5ff', size: '3.6rem' }
+            ];
+
+            let stepIndex = 0;
+
+            function triggerStep() {
+                if (stepIndex < steps.length) {
+                    const current = steps[stepIndex];
+                    readyNum.textContent = current.text;
+                    readyNum.style.color = current.color;
+                    readyNum.style.fontSize = current.size;
+                    
+                    // Reinicia a animação de pop fluida
+                    readyNum.classList.remove('count-pop');
+                    void readyNum.offsetWidth; // Força repaint
+                    readyNum.classList.add('count-pop');
+
+                    playTickSound();
+                    stepIndex++;
+                    setTimeout(triggerStep, 780);
+                } else {
+                    // Saída fluida do card e do overlay
+                    readyCard.classList.remove('show');
+                    setTimeout(() => {
+                        overlay.classList.remove('active');
+                        textBox.classList.remove('step-button');
+                        isTransitioningTutorial = false;
+                        fetchFromGoogleSheets(true);
+                    }, 400);
+                }
+            }
+
+            // Inicia o primeiro número após uma breve respiração de 200ms
+            setTimeout(triggerStep, 200);
         }
 
     function playTickSound() {
