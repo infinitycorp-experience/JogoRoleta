@@ -1178,10 +1178,8 @@
         // Sincroniza uma última vez antes de montar o tabuleiro
         await fetchFromGoogleSheets();
 
-        const updated = players.find(p => 
-            (p.email && selectedPlayer.email && p.email.toLowerCase() === selectedPlayer.email.toLowerCase()) ||
-            (p.name.toLowerCase() === selectedPlayer.name.toLowerCase())
-        );
+        // Prioriza busca pelo nome exato para não misturar cadastros de teste com mesmo e-mail
+        const updated = players.find(p => p.name.trim().toLowerCase() === selectedPlayer.name.trim().toLowerCase());
         if (updated) {
             selectedPlayer = updated;
         }
@@ -1506,7 +1504,8 @@
         fetch(WEBHOOK_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            keepalive: true,
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
                 action: "spin",
                 name: selectedPlayer.name,
@@ -1515,7 +1514,7 @@
                 prize: wonSlice.name,
                 date: new Date().toLocaleString("pt-BR")
             })
-        });
+        }).catch(err => console.error("Erro ao registrar giro:", err));
 
         if (!wonSlice.isNoPrize) {
             const localPrize = rawPrizes.find(p => p.name === wonSlice.name);
@@ -1589,19 +1588,44 @@
 
     function saveNewPlayer() {
         const name = document.getElementById('new-name').value.trim();
-        const email = document.getElementById('new-email').value.trim();
+        const email = document.getElementById('new-email').value.trim().toLowerCase();
         const company = document.getElementById('new-company').value.trim();
 
+        // 1. Validação de preenchimento
         if (!name || !email) {
-            alert("Preencha ao menos Nome e E-mail!");
+            alert("Nome e E-mail são obrigatórios!");
             return;
         }
 
+        // 2. Validação básica de formato de e-mail (evita "teste", "a@a", etc.)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Por favor, insira um e-mail válido!");
+            return;
+        }
+
+        // 3. Regra anti-fraude: Verifica se o e-mail já existe na base
+        const existingPlayer = players.find(p => p.email && p.email.toLowerCase() === email);
+        if (existingPlayer) {
+            if (existingPlayer.played) {
+                alert(`Atenção: O e-mail (${email}) já participou e retirou o brinde: ${existingPlayer.wonPrize || 'N/A'}. Limite de 1 giro por participante!`);
+                return;
+            } else {
+                // Já cadastrado pelo admin e liberado para jogar
+                closeNewPlayerModal();
+                selectPlayer(existingPlayer);
+                confirmAndGoToSpin();
+                return;
+            }
+        }
+
+        // Fecha modal e inicia processo de gravação
         closeNewPlayerModal();
 
         fetch(WEBHOOK_URL, {
             method: "POST",
             mode: "no-cors",
+            keepalive: true,
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({
                 action: "register",
@@ -1624,7 +1648,7 @@
         subEl.innerText = "Validando seu cadastro...";
 
         const dynamicPhrases = {
-            7: "Conectando ao sistema...",
+            7: "Verificando dados...",
             6: "Sincronizando prêmios em estoque...",
             5: "Carregando a roleta...",
             4: "Ajustando sua pontaria...",
@@ -1649,10 +1673,8 @@
                     setTimeout(() => {
                         overlay.style.display = 'none';
 
-                        const registered = players.find(p => 
-                            (p.email && p.email.toLowerCase() === email.toLowerCase()) || 
-                            (p.name && p.name.toLowerCase() === name.toLowerCase())
-                        );
+                        // Busca garantida pelo E-MAIL ÚNICO
+                        const registered = players.find(p => p.email && p.email.toLowerCase() === email);
 
                         if (registered) {
                             selectPlayer(registered);
