@@ -235,7 +235,7 @@
             transition: transform 0.08s ease;
         }
 
-        .brand-logo-img {max-height: 85px;max-width: 340px;object-fit: contain;filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.6));margin-bottom: 6px;}
+        .brand-logo-img {max-height: 120px;max-width: 420px;object-fit: contain;filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.6));margin-bottom: 6px;}
         .center-hub {
             position: absolute;
             width: 102px;
@@ -817,7 +817,7 @@
             <div class="search-top-bar">
                 <div class="sync-indicator">
                     <span class="sync-dot" id="sync-dot"></span>
-                    <span id="sync-text">Sincronizando...</span>
+                    <span id="sync-text">Verificando Servidor...</span>
                 </div>
                 <button class="btn-secondary" style="background: var(--green); color: #040812; border-color: var(--green); font-weight: 800; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);" onclick="openNewPlayerModal()">+ Cadastrar</button>
             </div>
@@ -1580,7 +1580,7 @@
 
         if (!silent && dot && syncText) {
             dot.className = 'sync-dot syncing';
-            syncText.textContent = 'Sincronizando...';
+            syncText.textContent = 'Verificando Servidor...';
         }
 
         return new Promise((resolve) => {
@@ -1643,7 +1643,7 @@
 
                     if (dot && syncText) {
                         dot.className = 'sync-dot online';
-                        syncText.textContent = 'Conectado';
+                        syncText.textContent = 'Dados Sincronizados';
                     }
                 }
                 resolve();
@@ -2100,7 +2100,7 @@
             4: "Ajustando sua pontaria...",
             3: "Quase tudo pronto...",
             2: "Concentração total...",
-            1: "Sua vez de brilhar!"
+            1: "Agora é a hora!"
         };
 
         const timer = setInterval(() => {
