@@ -538,14 +538,14 @@
         }
 
         .prize-presentation-card {
-            background: var(--surface);
+            background: radial-gradient(circle at center, #1a2744 0%, #0c1424 100%);
             border: 2px solid var(--accent);
-            border-radius: 18px;
-            padding: 24px 20px;
+            border-radius: 22px;
+            padding: 35px 24px;
             text-align: center;
-            box-shadow: 0 0 40px var(--accent-glow);
             width: 100%;
-            animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), trophyGlow 3s infinite alternate;
+            position: relative;
         }
 
         .prize-presentation-card span {
@@ -564,19 +564,6 @@
             margin: 12px 0 6px 0;
             text-transform: uppercase;
             letter-spacing: 2px;
-        }
-
-        .stock-left-label {
-            display: inline-block;
-            background: rgba(0, 229, 255, 0.12);
-            color: var(--accent);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            letter-spacing: 1px;
-            margin-top: 6px;
         }
 
         .modal-overlay {
@@ -630,17 +617,6 @@
             50% { box-shadow: 0 0 60px rgba(0, 229, 255, 0.8), inset 0 0 30px rgba(0, 229, 255, 0.3); }
         }
 
-        .prize-presentation-card {
-            background: radial-gradient(circle at center, #1a2744 0%, #0c1424 100%);
-            border: 2px solid var(--accent);
-            border-radius: 22px;
-            padding: 35px 24px;
-            text-align: center;
-            width: 100%;
-            animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), trophyGlow 3s infinite alternate;
-            position: relative;
-        }
-
         #confetti-canvas {
             position: fixed;
             inset: 0;
@@ -648,14 +624,12 @@
             z-index: 99998;
         }
 
-        /* Destaque Troféu na Vitrine */
         .prize-card.trophy-rare {
             border: 1px solid rgba(255, 215, 0, 0.6) !important;
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.18), rgba(255, 107, 0, 0.05)) !important;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
         }
     </style>
-
 </head>
 <body>
 
@@ -670,7 +644,6 @@
         <p class="brand-subtitle" style="font-size: 0.75rem; margin-top: 2px;">Gire a roleta e ganhe brindes exclusivos!</p>
     </div>
 
-    <!-- Roleta em Rotação Contínua com Efeito Glow -->
     <div style="position: relative; width: 280px; height: 280px; display: flex; align-items: center; justify-content: center;">
         <canvas id="screensaver-wheel" width="560" height="560" style="width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 50px rgba(0, 229, 255, 0.4);"></canvas>
         <div class="center-hub" style="width: 62px; height: 62px;">
@@ -681,7 +654,7 @@
 
     <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
         <div style="display: inline-block; padding: 4px 14px; border-radius: 20px; background: rgba(0, 229, 255, 0.12); border: 1px solid var(--accent); color: var(--accent); font-family: 'Rajdhani'; font-weight: 700; font-size: 0.85rem; letter-spacing: 1.5px;">
-            ★ VÁRIOS DE PRÊMIOS CADASTRADOS ★
+            ★ VÁRIOS PRÊMIOS CADASTRADOS ★
         </div>
         <div class="btn-action" style="max-width: 320px; text-align: center; animation: pulseAlert 1.2s infinite alternate;">
             TOQUE NA TELA PARA PARTICIPAR
@@ -702,7 +675,6 @@
 <style>
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
-
 
 <div class="totem-container">
 
@@ -795,8 +767,8 @@
             <div class="prize-title" id="awarded-prize-title" style="font-size: 2.9rem; margin: 16px 0;">MOUSE PAD</div>
         </div>
 
-        <p id="end-helper-text" style="color: var(--text-dim); font-size: 1rem; text-align: center; font-weight: 600;">
-            Obrigado por participar das nossas brincadeiras.
+        <p id="end-helper-text" style="color: var(--text-dim); font-size: 1.05rem; text-align: center; font-weight: 600;">
+            Obrigado por participar de nossas brincadeiras.
         </p>
 
         <button id="btn-next" class="btn-action" onclick="finishAndReset()" style="font-size: 1.3rem; padding: 16px;">
@@ -823,14 +795,13 @@
 <script>
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyJCpWhcZG1qliEqWuu50KKg2Q26nb1AS_q7l-NRaKl0XWpYADv4698lvTjTrd5EQ8-Ig/exec";
 
-    // Paleta premium escura e contrastante para alta legibilidade
     const SUBTLE_PALETTE = [
         "#0d2038", "#122a27", "#1a1638", "#281b33", 
         "#0a2830", "#211a12", "#192433", "#28151f",
         "#11261d", "#221d2b"
     ];
 
-    let gameScreenTimeout = null; // Timer de 30s para liberar tela se o jogador abandonar
+    let gameScreenTimeout = null;
     let screensaverAnimId = null;
     let screensaverAngle = 0;
 
@@ -898,15 +869,17 @@
 
     function resetIdleTimer() {
         clearTimeout(idleTimer);
-        const isGameActive = document.getElementById('screen-game').classList.contains('active') && isSpinning;
-        if (!isGameActive) {
+        const isGameActive = document.getElementById('screen-game').classList.contains('active');
+        if (!isGameActive || !isSpinning) {
             idleTimer = setTimeout(() => {
                 document.getElementById('screensaver').classList.add('active');
                 startScreensaverAnimation();
             }, 45000);
         }
 
-        if (Date.now() - lastSyncTime > 2000 && !isSpinning) {
+        // Se estiver na tela inicial, pode sincronizar silenciosamente
+        const isStartActive = document.getElementById('screen-start').classList.contains('active');
+        if (isStartActive && Date.now() - lastSyncTime > 2000 && !isSpinning) {
             fetchFromGoogleSheets(true);
         }
     }
@@ -918,15 +891,10 @@
         fetchFromGoogleSheets();
     }
 
-    function dismissScreensaver() {
-        document.getElementById('screensaver').classList.remove('active');
-        setScreen('screen-start');
-        fetchFromGoogleSheets();
-    }
-
     ['click', 'touchstart'].forEach(e => window.addEventListener(e, resetIdleTimer, { passive: true }));
 
     // CONSTRÓI AS FATIAS COM OS 3 VAZIOS E EMBARALHAMENTO DINÂMICO
+    // ESSA FUNÇÃO SÓ DEVE SER CHAMADA ANTES DE ABRIR A ROLETA, NUNCA DURANTE O JOGO OU GIRO
     function generateWheelSlices() {
         const slices = [];
 
@@ -950,7 +918,7 @@
 
         for (let i = 0; i < prizeCount; i++) {
             const p = shuffledPrizes[i];
-            const weight = p.isSimple ? 1.0 : 0.55; // Comum maior, raro menor
+            const weight = p.isSimple ? 1.0 : 0.55;
             const isOut = (p.stock <= 0);
             const color = isOut ? '#232a36' : SUBTLE_PALETTE[i % SUBTLE_PALETTE.length];
 
@@ -972,7 +940,6 @@
             emptyIdx++;
         }
 
-        // Calcula os arcos exatos (startAngle e endAngle)
         const totalWeight = slices.reduce((acc, curr) => acc + curr.weight, 0);
         let currentAngle = 0;
 
@@ -992,10 +959,9 @@
         grid.innerHTML = '';
         let totalActiveStock = 0;
 
-        // Ordena: Especiais/Raros (troféu) primeiro, depois Simples; e dentro do grupo por nome
         const sortedPrizes = [...rawPrizes].sort((a, b) => {
             if (a.isSimple === b.isSimple) return a.name.localeCompare(b.name);
-            return a.isSimple ? 1 : -1; // Raros (isSimple == false) sobem ao topo
+            return a.isSimple ? 1 : -1;
         });
 
         sortedPrizes.forEach(p => {
@@ -1030,13 +996,12 @@
         ctx.translate(cx, cy);
         ctx.rotate(rotationAngle);
 
-        dynamicSlices.forEach((slice, idx) => {
+        dynamicSlices.forEach((slice) => {
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.arc(0, 0, radius, slice.startAngle, slice.endAngle);
             ctx.closePath();
 
-            // Gradiente radial na fatia para dar volume 3D
             const grad = ctx.createRadialGradient(0, 0, radius * 0.15, 0, 0, radius);
             if (slice.isOutOfStock) {
                 grad.addColorStop(0, "#1a202c");
@@ -1045,7 +1010,6 @@
                 grad.addColorStop(0, "#192233");
                 grad.addColorStop(1, "#0d131f");
             } else if (!slice.isSimple) {
-                // Fatia de Prêmio Especial / Raro
                 grad.addColorStop(0, "#332608");
                 grad.addColorStop(1, "#1f1604");
             } else {
@@ -1056,18 +1020,16 @@
             ctx.fillStyle = grad;
             ctx.fill();
 
-            // Borda divisória entre as fatias
             ctx.lineWidth = 1.8;
             ctx.strokeStyle = !slice.isSimple ? 'rgba(255, 215, 0, 0.4)' : 'rgba(255, 255, 255, 0.12)';
             ctx.stroke();
 
-            // Tipografia calibrada e posicionada para não invadir o miolo
             ctx.save();
             ctx.rotate(slice.midAngle);
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
 
-            const textDist = radius - 30; // Afasta mais do miolo ampliado
+            const textDist = radius - 30;
 
             if (slice.isOutOfStock) {
                 ctx.fillStyle = '#64748b';
@@ -1090,7 +1052,6 @@
             ctx.restore();
         });
 
-        // Borda externa neon da roleta
         ctx.beginPath();
         ctx.arc(0, 0, radius, 0, 2 * Math.PI);
         ctx.strokeStyle = '#00e5ff';
@@ -1102,11 +1063,10 @@
         ctx.restore();
     }
 
-    // Animação viva e contínua do Screensaver
     function startScreensaverAnimation() {
         if (screensaverAnimId) cancelAnimationFrame(screensaverAnimId);
         function loop() {
-            screensaverAngle += 0.007; // Velocidade de rotação suave
+            screensaverAngle += 0.007;
             renderWheel('screensaver-wheel', screensaverAngle);
             screensaverAnimId = requestAnimationFrame(loop);
         }
@@ -1120,7 +1080,6 @@
         }
     }
 
-    // BUSCA COM SUPORTE A EMAIL
     function handleSearchInput(val) {
         const list = document.getElementById('autocomplete-list');
         const query = val.trim().toLowerCase();
@@ -1131,7 +1090,6 @@
             return;
         }
 
-        // Filtra por início ou qualquer parte do nome/e-mail/empresa
         const filtered = players.filter(p => 
             p.name.toLowerCase().includes(query) || 
             (p.email && p.email.toLowerCase().includes(query)) ||
@@ -1162,7 +1120,6 @@
             if (!p.played) {
                 item.onclick = () => {
                     selectPlayer(p);
-                    // Oculta o teclado virtual automaticamente ao selecionar
                     document.activeElement.blur();
                 };
             }
@@ -1193,8 +1150,6 @@
         document.getElementById('btn-to-spin').disabled = true;
     }
 
-    // TRAVA DE SEGURANÇA: REVALIDA NA NUVEM ANTES DE GIRAR
-    // TIMER DE DESISTÊNCIA: SE FICAR 30s SEM JOGAR NA TELA DA ROLETA, LIBERA
     function startGameScreenInactivityWatchdog() {
         clearTimeout(gameScreenTimeout);
         gameScreenTimeout = setTimeout(() => {
@@ -1202,10 +1157,9 @@
                 clearSelectedPlayer();
                 setScreen('screen-start');
             }
-        }, 30000); // 30 segundos
+        }, 30000);
     }
 
-    // Interações na tela do jogo resetam o timer de desistência
     ['click', 'touchstart', 'mousedown'].forEach(ev => {
         window.addEventListener(ev, () => {
             if (document.getElementById('screen-game').classList.contains('active') && !isSpinning) {
@@ -1221,12 +1175,19 @@
         btn.disabled = true;
         btn.textContent = "VALIDANDO DIRECIONAMENTO...";
 
+        // Sincroniza uma última vez antes de montar o tabuleiro
         await fetchFromGoogleSheets();
 
-        const updated = players.find(p => p.name.toLowerCase() === selectedPlayer.name.toLowerCase());
+        const updated = players.find(p => 
+            (p.email && selectedPlayer.email && p.email.toLowerCase() === selectedPlayer.email.toLowerCase()) ||
+            (p.name.toLowerCase() === selectedPlayer.name.toLowerCase())
+        );
         if (updated) {
             selectedPlayer = updated;
         }
+
+        // MONTA A ROLETA ALEATORIAMENTE UMA ÚNICA VEZ AQUI
+        generateWheelSlices();
 
         btn.disabled = false;
         btn.textContent = "Confirmar e Ir para a Roleta";
@@ -1236,12 +1197,11 @@
         resetPump();
         renderWheel('wheel-canvas', currentWheelRotation);
         
-        // Inicia contagem de 30s para liberar a tela se a pessoa não girar
         startGameScreenInactivityWatchdog();
     }
 
-    // SINCRONIZAÇÃO EM SEGUNDO PLANO VIA JSONP
-    let isFetchingSheet = false; // Trava para não encavalar requisições
+    // SINCRONIZAÇÃO EM SEGUNDO PLANO
+    let isFetchingSheet = false;
 
     function fetchFromGoogleSheets(silent = false) {
         if (isFetchingSheet) return Promise.resolve();
@@ -1275,7 +1235,7 @@
                     }
                     resolve();
                 }
-            }, 10000); // 10 segundos
+            }, 10000);
 
             window[cbName] = (data) => {
                 if (finished) {
@@ -1294,11 +1254,28 @@
                     players = data.players;
                     localStorage.setItem('totem_prizes', JSON.stringify(rawPrizes));
                     localStorage.setItem('totem_players', JSON.stringify(players));
-                    
                     lastSyncTime = Date.now();
-                    generateWheelSlices();
-                    renderShowcase();
-                    renderWheel('wheel-canvas', currentWheelRotation);
+
+                    // Se houver um participante selecionado, atualiza o direcionamento dele em tempo real
+                    if (selectedPlayer) {
+                        const upPlayer = players.find(p => 
+                            (p.email && selectedPlayer.email && p.email.toLowerCase() === selectedPlayer.email.toLowerCase()) ||
+                            (p.name.toLowerCase() === selectedPlayer.name.toLowerCase())
+                        );
+                        if (upPlayer) {
+                            selectedPlayer.targetPrize = upPlayer.targetPrize;
+                        }
+                    }
+
+                    const isStartActive = document.getElementById('screen-start').classList.contains('active');
+                    
+                    // IMPORTANTE: Só atualiza vitrine e refaz fatias se estiver na TELA 1 (Start).
+                    // Se já estiver na tela do jogo ou girando, A ROLETA PERMANECE 100% FIXA.
+                    if (isStartActive) {
+                        renderShowcase();
+                        generateWheelSlices();
+                        renderWheel('wheel-canvas', currentWheelRotation);
+                    }
 
                     if (dot && syncText) {
                         dot.className = 'sync-dot online';
@@ -1308,7 +1285,6 @@
                 resolve();
             };
 
-            // SE DER ERRO NO APPS SCRIPT:
             script.onerror = () => {
                 if (!finished) {
                     finished = true;
@@ -1319,7 +1295,7 @@
 
                     if (dot && syncText) {
                         dot.className = 'sync-dot';
-                        syncText.textContent = 'Falha no Apps Script';
+                        syncText.textContent = 'Falha de Conexão';
                     }
                     resolve();
                 }
@@ -1329,7 +1305,7 @@
         });
     }
 
-    // BOMBA DE CARGA DE TEMPO (15s a 30s)
+    // CONTROLE DE PRESSÃO / GIRO
     const pumpBtn = document.getElementById('btn-pump');
     const meterFill = document.getElementById('power-meter-fill');
     const timeTarget = document.getElementById('power-time-target');
@@ -1351,7 +1327,7 @@
 
         pumpChargeInterval = setInterval(() => {
             const elapsed = Date.now() - pumpStartTime;
-            const progress = Math.min(1, elapsed / 3000); // 3s para atingir 30s
+            const progress = Math.min(1, elapsed / 3000);
             meterFill.style.width = `${progress * 100}%`;
 
             const calcSeconds = Math.round(15 + (progress * 15));
@@ -1388,15 +1364,19 @@
     // FÍSICA E SORTEIO DO RESULTADO
     function executeSpin() {
         if (isSpinning) return;
-        clearTimeout(gameScreenTimeout); // Jogador começou a girar, cancela timer de desistência
+        clearTimeout(gameScreenTimeout);
         isSpinning = true;
         pumpBtn.disabled = true;
         pumpBtn.textContent = 'GIRANDO ROLETA...';
 
+        // Dispara uma sincronização rápida no exato momento que começa o giro para capturar
+        // qualquer troca de última hora feita no Admin, sem mexer no visual da roleta
+        fetchFromGoogleSheets(true);
+
         // 1. Determina o Brinde Sorteado
         let winningSlice = null;
 
-        // Regra A: Brinde Pré-definido pelo Admin (Cartas Marcadas)
+        // Regra A: Brinde Pré-definido pelo Admin
         if (selectedPlayer && selectedPlayer.targetPrize) {
             winningSlice = dynamicSlices.find(s => 
                 !s.isOutOfStock && 
@@ -1404,30 +1384,26 @@
             );
         }
 
-        // Regra B: Se não tem direcionado ou o prêmio direcionado acabou o estoque, prioriza simples com estoque
+        // Regra B: Sorteio randômico padrão
         if (!winningSlice) {
-            const availableValid = dynamicSlices.filter(s => !s.isOutOfStock && !s.isNoPrize)
+            const availableValid = dynamicSlices.filter(s => !s.isOutOfStock && !s.isNoPrize);
             const simpleOnes = availableValid.filter(s => s.isSimple);
             
             const pool = simpleOnes.length > 0 ? simpleOnes : availableValid;
             if (pool.length > 0) {
                 winningSlice = pool[Math.floor(Math.random() * pool.length)];
             } else {
-                // Caso extremo: acabou tudo
                 winningSlice = dynamicSlices.find(s => s.isNoPrize) || dynamicSlices[0];
             }
         }
 
         // 2. Cálculo do Ângulo de Parada Exato
-        // O ponteiro fica no topo (3 * PI / 2 radianos ou 270 graus)
         const pointerAngle = (3 * Math.PI) / 2;
         const targetSliceMid = winningSlice.midAngle;
 
-        // Inversão trigonométrica para alinhar a fatia ao ponteiro
         let baseStopAngle = pointerAngle - targetSliceMid;
         while (baseStopAngle < 0) baseStopAngle += (2 * Math.PI);
 
-        // Voltas extras de emoção (mínimo 10 voltas)
         const extraTurns = 10 + Math.floor(selectedSpinDuration / 2000);
         const finalRotation = (extraTurns * 2 * Math.PI) + baseStopAngle;
 
@@ -1442,14 +1418,12 @@
             const timeElapsed = now - startTime;
             const t = Math.min(1, timeElapsed / duration);
 
-            // Curva de desaceleração suave (Quartic Ease Out)
             const easeOut = 1 - Math.pow(1 - t, 4);
             const currentAngle = startRot + (totalDelta * easeOut);
 
             currentWheelRotation = currentAngle;
             renderWheel('wheel-canvas', currentAngle);
 
-            // Simula clique sonoro a cada passagem de arco
             if (Math.abs(currentAngle - lastTickAngle) > 0.28) {
                 playTickSound();
                 lastTickAngle = currentAngle;
@@ -1470,7 +1444,6 @@
         requestAnimationFrame(animateWheel);
     }
 
-    // ANIMAÇÃO DE CONFETES CELEBRATÓRIOS
     let confettiAnimId = null;
     function triggerConfetti() {
         const canvas = document.getElementById('confetti-canvas');
@@ -1530,7 +1503,6 @@
     }
 
     function showResult(wonSlice) {
-        // Envia resultado para a Planilha do Google via POST em segundo plano
         fetch(WEBHOOK_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -1545,7 +1517,6 @@
             })
         });
 
-        // Atualiza estoque local
         if (!wonSlice.isNoPrize) {
             const localPrize = rawPrizes.find(p => p.name === wonSlice.name);
             if (localPrize && localPrize.stock > 0) {
@@ -1556,7 +1527,6 @@
         selectedPlayer.played = true;
         selectedPlayer.wonPrize = wonSlice.name;
 
-        // Atualiza textos na tela
         document.getElementById('awarded-player-name').textContent = selectedPlayer.name;
         document.getElementById('awarded-prize-title').textContent = wonSlice.name.toUpperCase();
 
@@ -1596,8 +1566,11 @@
         clearInterval(endCountdownInterval);
         stopConfetti();
         clearSelectedPlayer();
+        
+        // Novo embaralhamento para a próxima pessoa
         generateWheelSlices();
         renderShowcase();
+        
         setScreen('screen-start');
         fetchFromGoogleSheets(true);
     }
@@ -1614,94 +1587,91 @@
         document.getElementById('modal-new-player').classList.remove('active');
     }
 
-function saveNewPlayer() {
-    const name = document.getElementById('new-name').value.trim();
-    const email = document.getElementById('new-email').value.trim();
-    const company = document.getElementById('new-company').value.trim();
+    function saveNewPlayer() {
+        const name = document.getElementById('new-name').value.trim();
+        const email = document.getElementById('new-email').value.trim();
+        const company = document.getElementById('new-company').value.trim();
 
-    if (!name || !email) {
-        alert("Preencha ao menos Nome e E-mail!");
-        return;
-    }
-
-    closeNewPlayerModal();
-
-    // 1. Grava no Google Sheets em segundo plano
-    fetch(WEBHOOK_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({
-            action: "register",
-            name: name,
-            email: email,
-            company: company
-        })
-    }).catch(err => console.error("Erro POST registro:", err));
-
-    // 2. Abre a tela de espera calibrada para 8 segundos com textos motivacionais
-    const overlay = document.getElementById('sync-overlay');
-    const countdownEl = document.getElementById('sync-countdown');
-    const titleEl = document.getElementById('sync-main-title');
-    const subEl = document.getElementById('sync-sub-msg');
-
-    overlay.style.display = 'flex';
-
-    let secondsLeft = 8;
-    countdownEl.innerText = secondsLeft;
-    titleEl.innerText = "PREPARE-SE!";
-    subEl.innerText = "Validando seu cadastro...";
-
-    const dynamicPhrases = {
-        7: "Conectando ao sistema...",
-        6: "Sincronizando prêmios em estoque...",
-        5: "Carregando a roleta...",
-        4: "Ajustando sua pontaria...",
-        3: "Quase tudo pronto...",
-        2: "Concentração total...",
-        1: "Sua vez de brilhar!"
-    };
-
-    const timer = setInterval(() => {
-        secondsLeft--;
-        if (secondsLeft > 0) {
-            countdownEl.innerText = secondsLeft;
-            if (dynamicPhrases[secondsLeft]) {
-                subEl.innerText = dynamicPhrases[secondsLeft];
-            }
-        } else {
-            clearInterval(timer);
-            countdownEl.innerText = "BOA SORTE!";
-            subEl.innerText = "Entrando na arena...";
-
-            // Ao final dos 8 segundos, busca os dados mais recentes na planilha
-            fetchFromGoogleSheets().then(() => {
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-
-                    const registered = players.find(p => 
-                        (p.email && p.email.toLowerCase() === email.toLowerCase()) || 
-                        (p.name && p.name.toLowerCase() === name.toLowerCase())
-                    );
-
-                    if (registered) {
-                        selectPlayer(registered);
-                    } else {
-                        selectPlayer({
-                            name: name,
-                            email: email,
-                            company: company,
-                            played: false,
-                            targetPrize: ""
-                        });
-                    }
-
-                    confirmAndGoToSpin();
-                }, 400);
-            });
+        if (!name || !email) {
+            alert("Preencha ao menos Nome e E-mail!");
+            return;
         }
-    }, 1000);
-}
+
+        closeNewPlayerModal();
+
+        fetch(WEBHOOK_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({
+                action: "register",
+                name: name,
+                email: email,
+                company: company
+            })
+        }).catch(err => console.error("Erro POST registro:", err));
+
+        const overlay = document.getElementById('sync-overlay');
+        const countdownEl = document.getElementById('sync-countdown');
+        const titleEl = document.getElementById('sync-main-title');
+        const subEl = document.getElementById('sync-sub-msg');
+
+        overlay.style.display = 'flex';
+
+        let secondsLeft = 8;
+        countdownEl.innerText = secondsLeft;
+        titleEl.innerText = "PREPARE-SE!";
+        subEl.innerText = "Validando seu cadastro...";
+
+        const dynamicPhrases = {
+            7: "Conectando ao sistema...",
+            6: "Sincronizando prêmios em estoque...",
+            5: "Carregando a roleta...",
+            4: "Ajustando sua pontaria...",
+            3: "Quase tudo pronto...",
+            2: "Concentração total...",
+            1: "Sua vez de brilhar!"
+        };
+
+        const timer = setInterval(() => {
+            secondsLeft--;
+            if (secondsLeft > 0) {
+                countdownEl.innerText = secondsLeft;
+                if (dynamicPhrases[secondsLeft]) {
+                    subEl.innerText = dynamicPhrases[secondsLeft];
+                }
+            } else {
+                clearInterval(timer);
+                countdownEl.innerText = "BOA SORTE!";
+                subEl.innerText = "Entrando na arena...";
+
+                fetchFromGoogleSheets().then(() => {
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+
+                        const registered = players.find(p => 
+                            (p.email && p.email.toLowerCase() === email.toLowerCase()) || 
+                            (p.name && p.name.toLowerCase() === name.toLowerCase())
+                        );
+
+                        if (registered) {
+                            selectPlayer(registered);
+                        } else {
+                            selectPlayer({
+                                name: name,
+                                email: email,
+                                company: company,
+                                played: false,
+                                targetPrize: ""
+                            });
+                        }
+
+                        confirmAndGoToSpin();
+                    }, 400);
+                });
+            }
+        }, 1000);
+    }
 
     // INICIALIZAÇÃO
     window.onload = () => {
@@ -1710,7 +1680,7 @@ function saveNewPlayer() {
         renderWheel('wheel-canvas', 0);
         fetchFromGoogleSheets();
 
-        // Polling constante a cada 3 segundos na tela inicial
+        // Polling de 3s roda apenas na tela inicial
         autoSyncInterval = setInterval(() => {
             const isStartActive = document.getElementById('screen-start').classList.contains('active');
             if (isStartActive && !isSpinning) {
