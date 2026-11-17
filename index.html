@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Roleta de Prêmios - INFINITYCORP</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
-    <!-- Configurações para Web App / Tela Cheia Nativa no Chrome Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#070a12">
@@ -89,6 +88,7 @@
             align-items: center;
             animation: fadeIn 0.3s ease-out;
             gap: 12px;
+            position: relative;
         }
 
         .screen.active { display: flex; }
@@ -406,6 +406,15 @@
             gap: 6px;
             margin-top: 6px;
             flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Efeito de destaque para o botão durante o tutorial */
+        .power-pump-dashboard.tutorial-focus {
+            z-index: 70 !important;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.7), 0 0 10px rgba(255, 215, 0, 0.4);
+            border-color: var(--accent);
+            transform: scale(1.02);
         }
 
         .power-header {
@@ -639,6 +648,220 @@
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.18), rgba(255, 107, 0, 0.05)) !important;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
         }
+
+        /* ========================================================
+           NOVO TUTORIAL COM MÃO ULTRA-DEFINIDA E SIMULAÇÃO COMPLETA
+           ======================================================== */
+        .tutorial-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(4, 7, 14, 0.82);
+            backdrop-filter: blur(5px);
+            z-index: 60;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 14px 18px;
+            pointer-events: all;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .tutorial-overlay.active { display: flex; }
+
+        .tutorial-top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .tutorial-badge {
+            background: rgba(0, 229, 255, 0.15);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 800;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .btn-skip-tutorial {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--surface-border);
+            color: var(--text-dim);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-transform: uppercase;
+        }
+        .btn-skip-tutorial:hover {
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .tutorial-text-box {
+            background: rgba(18, 24, 38, 0.9);
+            border: 1px solid var(--accent);
+            padding: 10px 18px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.25);
+            margin-top: 6px;
+            z-index: 80;
+            min-height: 58px;
+        }
+        .tutorial-text-box h4 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1.5px;
+        }
+        .tutorial-text-box p {
+            color: var(--accent);
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* Arco e Rastro de Arraste na Roleta */
+        .tutorial-swipe-indicator {
+            position: absolute;
+            top: 23%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px;
+            height: 260px;
+            border: 3px dashed rgba(0, 229, 255, 0.65);
+            border-color: rgba(0, 229, 255, 0.9) transparent transparent transparent;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: arcSpinIndicator 6.5s infinite;
+        }
+
+        /* Mão Flutuante Guiada */
+        .tutorial-cursor-wrapper {
+            position: absolute;
+            width: 68px;
+            height: 68px;
+            pointer-events: none;
+            z-index: 90;
+            top: 24%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            animation: tutorialMotionTrack 6.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .touch-ripple {
+            position: absolute;
+            top: 6px;
+            left: 20px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            background: rgba(0, 229, 255, 0.35);
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            animation: ripplePulse 6.5s infinite;
+        }
+
+        .hand-pointer-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 10px rgba(0, 229, 255, 0.5));
+        }
+
+        @keyframes arcSpinIndicator {
+            0%, 5% { opacity: 0; transform: translate(-50%, -50%) rotate(-45deg); }
+            10%, 38% { opacity: 1; transform: translate(-50%, -50%) rotate(55deg); }
+            45%, 100% { opacity: 0; }
+        }
+
+        @keyframes ripplePulse {
+            0%, 7% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            9% { opacity: 1; transform: translate(-50%, -50%) scale(1.6); }
+            18% { opacity: 0; transform: translate(-50%, -50%) scale(2.2); }
+            54% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            58% { opacity: 1; transform: translate(-50%, -50%) scale(1.5); }
+            65%, 85% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
+            92%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+        }
+
+        /* Movimentação Realística da Mão:
+           0% -> 42%: Gesto na Roleta (Topo)
+           45% -> 50%: Deslocamento Suave para o Botão Inferior
+           52% -> 90%: Pressiona e Segura o Botão
+           95% -> 100%: Fade out / Reset
+        */
+        @keyframes tutorialMotionTrack {
+            0% {
+                top: 28%;
+                left: 36%;
+                transform: translate(-50%, -50%) scale(0.9) rotate(-12deg);
+                opacity: 0;
+            }
+            7% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.05) rotate(0deg);
+            }
+            15% {
+                top: 20%;
+                left: 56%;
+                transform: translate(-50%, -50%) scale(1) rotate(18deg);
+            }
+            32% {
+                top: 27%;
+                left: 68%;
+                transform: translate(-50%, -50%) scale(0.95) rotate(35deg);
+                opacity: 1;
+            }
+            42% {
+                top: 36%;
+                left: 64%;
+                opacity: 0.3;
+            }
+            /* Transição para cima do botão inferior */
+            48% {
+                top: 86%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(1.1) rotate(0deg);
+                opacity: 0.9;
+            }
+            54% {
+                top: 92%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.88); /* Dedo pressionando botão */
+                opacity: 1;
+            }
+            60%, 88% {
+                top: 92%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.86);
+                opacity: 1;
+            }
+            94% {
+                top: 88%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                top: 88%;
+                left: 50%;
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -733,6 +956,57 @@
 
     <!-- TELA 2 -->
     <div id="screen-game" class="screen">
+
+        <!-- TUTORIAL ELEGANTE SOBREPOSTO -->
+        <div id="game-tutorial-overlay" class="tutorial-overlay">
+            <div class="tutorial-top-bar">
+                <div class="tutorial-badge">
+                    COMO JOGAR • <span id="tutorial-timer" style="color:#fff;">6s</span>
+                </div>
+                <button class="btn-skip-tutorial" onclick="closeGameTutorial()">
+                    Pular Tutorial ✕
+                </button>
+            </div>
+
+            <div class="tutorial-text-box">
+                <h4 id="tutorial-step-title">Gire Diretamente na Roleta</h4>
+                <p id="tutorial-step-desc">Toque e puxe com força a roleta para acelerar!</p>
+            </div>
+
+            <!-- Arco de arraste da roleta -->
+            <div class="tutorial-swipe-indicator"></div>
+
+            <!-- Cursor com mão de alta definição e ripple de toque -->
+            <div class="tutorial-cursor-wrapper">
+                <div class="touch-ripple"></div>
+                <svg class="hand-pointer-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="handBodyGrad" x1="20" y1="20" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="45%" stop-color="#00e5ff"/>
+                            <stop offset="100%" stop-color="#0052cc"/>
+                        </linearGradient>
+                        <linearGradient id="fingerShine" x1="30" y1="10" x2="45" y2="60" gradientUnits="userSpaceOnUse">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#00e5ff" stop-opacity="0.2"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Base da Mão / Palma e Dedos Dobrados -->
+                    <path d="M48 45 C48 38 56 38 56 45 L56 62 C56 65 60 65 60 62 L60 48 C60 41 68 41 68 48 L68 64 C68 67 72 67 72 64 L72 53 C72 46 80 46 80 53 L80 72 C80 88 68 102 52 102 C42 102 34 96 30 88 L18 68 C15 63 18 57 23 57 C27 57 30 60 34 66 L38 72 L38 20 C38 12 48 12 48 20 Z" 
+                          fill="url(#handBodyGrad)" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+
+                    <!-- Brilho no indicador estendido -->
+                    <path d="M40 22 C40 16 46 16 46 22 L46 58 L40 58 Z" fill="url(#fingerShine)"/>
+
+                    <!-- Detalhes das juntas / linhas de dobra -->
+                    <path d="M40 34 C43 36 45 36 47 34" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M57 54 C58 55 59 55 60 54" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M68 56 C69 57 71 57 72 56" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+
         <div style="background: var(--surface); border: 1px solid var(--surface-border); padding: 8px 16px; border-radius: 10px; text-align: center; width: 100%; flex-shrink: 0;">
             <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px;">Vez de Girar</span>
             <strong id="current-player-display" style="font-family: 'Rajdhani'; font-size: 1.25rem; color: var(--accent); display: block;">---</strong>
@@ -749,7 +1023,7 @@
             </div>
         </div>
 
-        <div class="power-pump-dashboard">
+        <div class="power-pump-dashboard" id="main-power-dashboard">
             <div class="power-header">
                 <span class="power-label" id="power-instruction-label">Pressione & Segure para Turbinar</span>
                 <span class="power-time-target" id="power-time-target">15s</span>
@@ -845,6 +1119,89 @@
     let autoSyncInterval = null;
     let lastSyncTime = 0;
 
+    // ==========================================
+    // CONTROLE DO TUTORIAL INTERATIVO
+    // ==========================================
+    let tutorialInterval = null;
+    let tutorialTextTimer = null;
+    let tutorialSimInterval = null;
+
+    function openGameTutorial() {
+        const overlay = document.getElementById('game-tutorial-overlay');
+        const timerEl = document.getElementById('tutorial-timer');
+        const titleEl = document.getElementById('tutorial-step-title');
+        const descEl = document.getElementById('tutorial-step-desc');
+        const dash = document.getElementById('main-power-dashboard');
+        
+        overlay.classList.add('active');
+        dash.classList.remove('tutorial-focus');
+        resetPump();
+
+        let timeLeft = 6;
+        timerEl.textContent = `${timeLeft}s`;
+
+        titleEl.textContent = "1. Gire Diretamente na Roleta";
+        descEl.textContent = "Toque e puxe a roleta na tela para dar o impulso!";
+
+        // ETAPA 2: Aos 3.1s a mão desce para o botão inferior e inicia a simulação realista
+        clearTimeout(tutorialTextTimer);
+        tutorialTextTimer = setTimeout(() => {
+            if (!overlay.classList.contains('active')) return;
+
+            titleEl.textContent = "2. Ou Pressione & Segure o Botão";
+            descEl.textContent = "Segure para acumular pressão e turbinar o giro!";
+            dash.classList.add('tutorial-focus');
+
+            // Simula o pressionamento no botão físico
+            pumpBtn.classList.add('charging');
+            let simProgress = 0;
+            
+            clearInterval(tutorialSimInterval);
+            tutorialSimInterval = setInterval(() => {
+                simProgress += 0.045;
+                const p = Math.min(1, simProgress);
+                meterFill.style.width = `${p * 100}%`;
+                const calcSec = Math.round(15 + (p * 15));
+                timeTarget.textContent = `${calcSec}s`;
+
+                if (calcSec >= 30) {
+                    timeTarget.classList.add('overcharged');
+                }
+
+                if (p >= 1) {
+                    clearInterval(tutorialSimInterval);
+                }
+            }, 60);
+
+        }, 3100);
+
+        clearInterval(tutorialInterval);
+        tutorialInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                timerEl.textContent = `${timeLeft}s`;
+            } else {
+                closeGameTutorial();
+            }
+        }, 1000);
+    }
+
+    function closeGameTutorial() {
+        clearInterval(tutorialInterval);
+        clearTimeout(tutorialTextTimer);
+        clearInterval(tutorialSimInterval);
+
+        const overlay = document.getElementById('game-tutorial-overlay');
+        const dash = document.getElementById('main-power-dashboard');
+        
+        overlay.classList.remove('active');
+        dash.classList.remove('tutorial-focus');
+        
+        // Devolve o botão e o contador ao estado padrão prontos para o jogador real
+        resetPump();
+        fetchFromGoogleSheets(true);
+    }
+
     function playTickSound() {
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -887,7 +1244,6 @@
             }, 45000);
         }
 
-        // Se estiver na tela inicial, pode sincronizar silenciosamente
         const isStartActive = document.getElementById('screen-start').classList.contains('active');
         if (isStartActive && Date.now() - lastSyncTime > 2000 && !isSpinning) {
             fetchFromGoogleSheets(true);
@@ -903,12 +1259,8 @@
 
     ['click', 'touchstart'].forEach(e => window.addEventListener(e, resetIdleTimer, { passive: true }));
 
-    // CONSTRÓI AS FATIAS COM OS 3 VAZIOS E EMBARALHAMENTO DINÂMICO
-    // ESSA FUNÇÃO SÓ DEVE SER CHAMADA ANTES DE ABRIR A ROLETA, NUNCA DURANTE O JOGO OU GIRO
     function generateWheelSlices() {
         const slices = [];
-
-        // Embaralha uma cópia dos prêmios (Fisher-Yates) para mudar as posições a cada partida
         const shuffledPrizes = [...rawPrizes];
         for (let i = shuffledPrizes.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -916,7 +1268,6 @@
         }
 
         const prizeCount = shuffledPrizes.length;
-
         const emptyItems = [
             { id: 'empty_1', name: 'Não foi dessa vez', isNoPrize: true, stock: 9999, isSimple: true, weight: 0.85, color: '#161d2a' },
             { id: 'empty_2', name: 'Passou Perto!', isNoPrize: true, stock: 9999, isSimple: true, weight: 0.85, color: '#1a1f2b' },
@@ -1185,16 +1536,13 @@
         btn.disabled = true;
         btn.textContent = "VALIDANDO DIRECIONAMENTO...";
 
-        // Sincroniza uma última vez antes de montar o tabuleiro
         await fetchFromGoogleSheets();
 
-        // Prioriza busca pelo nome exato para não misturar cadastros de teste com mesmo e-mail
         const updated = players.find(p => p.name.trim().toLowerCase() === selectedPlayer.name.trim().toLowerCase());
         if (updated) {
             selectedPlayer = updated;
         }
 
-        // MONTA A ROLETA ALEATORIAMENTE UMA ÚNICA VEZ AQUI
         generateWheelSlices();
 
         btn.disabled = false;
@@ -1206,6 +1554,7 @@
         renderWheel('wheel-canvas', currentWheelRotation);
         
         startGameScreenInactivityWatchdog();
+        openGameTutorial();
     }
 
     // SINCRONIZAÇÃO EM SEGUNDO PLANO
@@ -1264,7 +1613,6 @@
                     localStorage.setItem('totem_players', JSON.stringify(players));
                     lastSyncTime = Date.now();
 
-                    // Se houver um participante selecionado, atualiza o direcionamento dele em tempo real
                     if (selectedPlayer) {
                         const upPlayer = players.find(p => 
                             (p.email && selectedPlayer.email && p.email.toLowerCase() === selectedPlayer.email.toLowerCase()) ||
@@ -1276,9 +1624,6 @@
                     }
 
                     const isStartActive = document.getElementById('screen-start').classList.contains('active');
-                    
-                    // IMPORTANTE: Só atualiza vitrine e refaz fatias se estiver na TELA 1 (Start).
-                    // Se já estiver na tela do jogo ou girando, A ROLETA PERMANECE 100% FIXA.
                     if (isStartActive) {
                         renderShowcase();
                         generateWheelSlices();
@@ -1322,6 +1667,7 @@
         meterFill.style.width = '0%';
         timeTarget.textContent = '15s';
         timeTarget.classList.remove('overcharged');
+        pumpBtn.classList.remove('charging');
         selectedSpinDuration = 15000;
         pumpBtn.disabled = false;
         pumpBtn.textContent = 'SEGURE P/ TURBINAR OU TOQUE P/ 15s';
@@ -1369,9 +1715,7 @@
     pumpBtn.addEventListener('touchstart', startCharging, { passive: false });
     window.addEventListener('touchend', releaseAndSpin, { passive: false });
 
-    // ==========================================
-    // CONTROLE TOUCH DIRETO NA ROLETA
-    // ==========================================
+    // TOUCH DIRETO NA ROLETA
     const wheelCanvasEl = document.getElementById('wheel-canvas');
     let isDraggingWheel = false;
     let dragStartAngle = 0;
@@ -1406,7 +1750,6 @@
         let delta = currentAngle - dragStartAngle;
         currentWheelRotation = wheelBaseRotation + delta;
 
-        // Som tátil enquanto o usuário move a roleta com o dedo
         if (Math.abs(currentWheelRotation - lastDragTickAngle) > 0.28) {
             playTickSound();
             lastDragTickAngle = currentWheelRotation;
@@ -1425,24 +1768,20 @@
         if (isSpinning) return;
 
         const now = performance.now();
-        // Filtra pontos registrados nos últimos 150ms para pegar a velocidade do "arraste final"
         const recentMoves = dragMoveHistory.filter(p => now - p.time < 150);
 
         if (recentMoves.length >= 2) {
             const first = recentMoves[0];
             const last = recentMoves[recentMoves.length - 1];
-            const dt = (last.time - first.time) / 1000; // segundos
+            const dt = (last.time - first.time) / 1000;
             let dAngle = last.angle - first.angle;
 
-            // Corrige transição de quadrante (-PI / PI)
             if (dAngle > Math.PI) dAngle -= 2 * Math.PI;
             if (dAngle < -Math.PI) dAngle += 2 * Math.PI;
 
-            const angularSpeed = Math.abs(dAngle / dt); // radianos por segundo
+            const angularSpeed = Math.abs(dAngle / dt);
 
-            // Se o usuário deu um "puxão" com velocidade suficiente (gesto intencional)
             if (angularSpeed > 2.5) {
-                // Converte a força do puxão em tempo de giro (entre 14s e 26s)
                 const mappedDuration = Math.min(26000, Math.max(14000, Math.round(angularSpeed * 2200)));
                 timeTarget.textContent = `${Math.round(mappedDuration / 1000)}s`;
                 meterFill.style.width = `${Math.min(100, (mappedDuration - 14000) / 120)}%`;
@@ -1451,16 +1790,12 @@
                 return;
             }
         }
-
-        // Se o usuário apenas arrastou devagar e parou a roleta, ela fica na posição atual
-        // e ele pode puxar novamente ou pressionar o botão inferior.
     }
 
     wheelCanvasEl.addEventListener('touchstart', onWheelTouchStart, { passive: false });
     window.addEventListener('touchmove', onWheelTouchMove, { passive: false });
     window.addEventListener('touchend', onWheelTouchEnd);
 
-    // Compatibilidade com mouse no totem (se for testado no PC)
     wheelCanvasEl.addEventListener('mousedown', onWheelTouchStart);
     window.addEventListener('mousemove', onWheelTouchMove);
     window.addEventListener('mouseup', onWheelTouchEnd);
@@ -1476,14 +1811,10 @@
         pumpBtn.disabled = true;
         pumpBtn.textContent = 'GIRANDO ROLETA...';
 
-        // Dispara uma sincronização rápida no exato momento que começa o giro para capturar
-        // qualquer troca de última hora feita no Admin, sem mexer no visual da roleta
         fetchFromGoogleSheets(true);
 
-        // 1. Determina o Brinde Sorteado
         let winningSlice = null;
 
-        // Regra A: Brinde Pré-definido pelo Admin
         if (selectedPlayer && selectedPlayer.targetPrize) {
             winningSlice = dynamicSlices.find(s => 
                 !s.isOutOfStock && 
@@ -1491,7 +1822,6 @@
             );
         }
 
-        // Regra B: Sorteio randômico padrão
         if (!winningSlice) {
             const availableValid = dynamicSlices.filter(s => !s.isOutOfStock && !s.isNoPrize);
             const simpleOnes = availableValid.filter(s => s.isSimple);
@@ -1504,7 +1834,6 @@
             }
         }
 
-        // 2. Cálculo do Ângulo de Parada Exato
         const pointerAngle = (3 * Math.PI) / 2;
         const targetSliceMid = winningSlice.midAngle;
 
@@ -1675,7 +2004,6 @@
         stopConfetti();
         clearSelectedPlayer();
         
-        // Novo embaralhamento para a próxima pessoa
         generateWheelSlices();
         renderShowcase();
         
@@ -1700,27 +2028,23 @@
         const email = document.getElementById('new-email').value.trim().toLowerCase();
         const company = document.getElementById('new-company').value.trim();
 
-        // 1. Validação de preenchimento
         if (!name || !email) {
             alert("Nome e E-mail são obrigatórios!");
             return;
         }
 
-        // 2. Validação básica de formato de e-mail (evita "teste", "a@a", etc.)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert("Por favor, insira um e-mail válido!");
             return;
         }
 
-        // 3. Regra anti-fraude: Verifica se o e-mail já existe na base
         const existingPlayer = players.find(p => p.email && p.email.toLowerCase() === email);
         if (existingPlayer) {
             if (existingPlayer.played) {
                 alert(`Atenção: O e-mail (${email}) já participou e retirou o brinde: ${existingPlayer.wonPrize || 'N/A'}. Limite de 1 giro por participante!`);
                 return;
             } else {
-                // Já cadastrado pelo admin e liberado para jogar
                 closeNewPlayerModal();
                 selectPlayer(existingPlayer);
                 confirmAndGoToSpin();
@@ -1728,7 +2052,6 @@
             }
         }
 
-        // Fecha modal e inicia processo de gravação
         closeNewPlayerModal();
 
         fetch(WEBHOOK_URL, {
@@ -1778,9 +2101,7 @@
                 countdownEl.innerText = "BOA SORTE!";
                 subEl.innerText = "Entrando na arena...";
 
-                // Busca os dados da planilha mantendo o overlay ativo por cima de tudo
                 fetchFromGoogleSheets().then(() => {
-                    // Localiza o participante recém-cadastrado
                     const registered = players.find(p => p.email && p.email.toLowerCase() === email);
 
                     selectedPlayer = registered || {
@@ -1791,7 +2112,6 @@
                         targetPrize: ""
                     };
 
-                    // Prepara a roleta diretamente em segundo plano
                     generateWheelSlices();
                     document.getElementById('current-player-display').textContent = selectedPlayer.name.toUpperCase();
                     setScreen('screen-game');
@@ -1799,9 +2119,9 @@
                     renderWheel('wheel-canvas', currentWheelRotation);
                     startGameScreenInactivityWatchdog();
 
-                    // Esconde o overlay apenas quando a tela da roleta já estiver 100% pronta
                     setTimeout(() => {
                         overlay.style.display = 'none';
+                        openGameTutorial();
                     }, 350);
                 });
             }
@@ -1815,7 +2135,6 @@
         renderWheel('wheel-canvas', 0);
         fetchFromGoogleSheets();
 
-        // Polling de 3s roda apenas na tela inicial
         autoSyncInterval = setInterval(() => {
             const isStartActive = document.getElementById('screen-start').classList.contains('active');
             if (isStartActive && !isSpinning) {
