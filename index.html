@@ -666,7 +666,7 @@
 <div id="screensaver" onclick="dismissScreensaver()">
     <div style="text-align: center; margin-top: 15px;">
         <img src="logo.png" alt="Logo" class="brand-logo-img" onerror="this.style.display='none'">
-        <h2 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase;">Desafio Corporativo</h2>
+        <h2 style="font-family: 'Rajdhani'; color: var(--accent); font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase;">Desafio - Roleta</h2>
         <p class="brand-subtitle" style="font-size: 0.75rem; margin-top: 2px;">Gire a roleta e ganhe brindes exclusivos!</p>
     </div>
 
@@ -681,7 +681,7 @@
 
     <div style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;">
         <div style="display: inline-block; padding: 4px 14px; border-radius: 20px; background: rgba(0, 229, 255, 0.12); border: 1px solid var(--accent); color: var(--accent); font-family: 'Rajdhani'; font-weight: 700; font-size: 0.85rem; letter-spacing: 1.5px;">
-            ★ DEZENAS DE PRÊMIOS CADASTRADOS ★
+            ★ VÁRIOS DE PRÊMIOS CADASTRADOS ★
         </div>
         <div class="btn-action" style="max-width: 320px; text-align: center; animation: pulseAlert 1.2s infinite alternate;">
             TOQUE NA TELA PARA PARTICIPAR
@@ -796,11 +796,11 @@
         </div>
 
         <p id="end-helper-text" style="color: var(--text-dim); font-size: 1rem; text-align: center; font-weight: 600;">
-            Retire seu brinde com nosso consultor no estande.
+            Obrigado por participar das nossas brincadeiras.
         </p>
 
         <button id="btn-next" class="btn-action" onclick="finishAndReset()" style="font-size: 1.3rem; padding: 16px;">
-            Concluir Atendimento (15s)
+            Concluir Jogador (15s)
         </button>
     </div>
 
@@ -1014,7 +1014,7 @@
             grid.appendChild(card);
         });
 
-        document.getElementById('total-stock-counter').textContent = `${totalActiveStock} un disponíveis`;
+        document.getElementById('total-stock-counter').textContent = `${totalActiveStock} prêmios disponíveis`;
     }
 
     function renderWheel(canvasId, rotationAngle = 0) {
@@ -1302,7 +1302,7 @@
 
                     if (dot && syncText) {
                         dot.className = 'sync-dot online';
-                        syncText.textContent = 'Nuvem Conectada';
+                        syncText.textContent = 'Conectado';
                     }
                 }
                 resolve();
