@@ -621,7 +621,6 @@
         .tutorial-text-box p {color: var(--accent);font-size: 0.85rem;font-weight: 600;margin-top: 2px;}
 
         /* Arco indicando a puxada na roleta */
-        .tutorial-swipe-arc,
         .tutorial-swipe-indicator {
             position: absolute;
             top: 26%;
@@ -636,8 +635,10 @@
             opacity: 0;
             display: none;
         }
-        .tutorial-swipe-arc.active,
-        .tutorial-swipe-indicator.active {display: block;animation: arcSpinIndicator 2.6s infinite ease-out;}
+        .tutorial-swipe-indicator.active {
+            display: block;
+            animation: arcSpinIndicator 2.6s infinite ease-out;
+        }
 /* CURSOR MÃO SVG: z-index: 1000 garante que ele fica SEMPRE por cima de tudo */
         .tutorial-cursor-wrapper {
             position: absolute;
