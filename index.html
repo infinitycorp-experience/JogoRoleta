@@ -1479,10 +1479,11 @@
             const item = document.createElement('div');
             item.className = `autocomplete-item ${p.played ? 'disabled' : ''}`;
             item.style.padding = '12px 14px';
+            const maskedEmail = p.email ? maskEmail(p.email) : 'Sem e-mail';
             item.innerHTML = `
                 <div>
                     <strong style="color:#fff; font-size:1.05rem; display:block;">${p.name}</strong>
-                    <span style="color:var(--text-dim); font-size:0.8rem;">${p.email || 'Sem e-mail'} • ${p.company || 'InfinityCorp'}</span>
+                    <span style="color:var(--text-dim); font-size:0.8rem;">${maskedEmail} • ${p.company || 'InfinityCorp'}</span>
                 </div>
                 <div>
                     ${p.played ? '<span style="font-size:0.8rem; color:var(--red); font-weight:800; border: 1px solid var(--red); padding: 3px 8px; border-radius: 6px;">JÁ JOGOU</span>' : '<span style="font-size:0.8rem; color:var(--green); font-weight:800; border: 1px solid var(--green); padding: 3px 8px; border-radius: 6px;">LIBERADO</span>'}
@@ -1508,7 +1509,8 @@
         
         const badge = document.getElementById('player-badge-selected');
         document.getElementById('badge-name').textContent = p.name;
-        document.getElementById('badge-details').textContent = `${p.email ? p.email + ' • ' : ''}${p.company || 'InfinityCorp'}`;
+        const displayEmail = p.email ? maskEmail(p.email) + ' • ' : '';
+        document.getElementById('badge-details').textContent = `${displayEmail}${p.company || 'InfinityCorp'}`;
         badge.style.display = 'flex';
 
         document.getElementById('btn-to-spin').disabled = false;
@@ -2171,6 +2173,18 @@
             }
         }, 3000);
     };
+        // Função para mascarar e-mail mantendo a privacidade no totem
+    function maskEmail(email) {
+        if (!email || !email.includes('@')) return email || '';
+        const [user, domain] = email.split('@');
+        if (user.length <= 2) {
+            return user[0] + '***@' + domain;
+        }
+        const first = user.slice(0, 2);
+        const last = user.slice(-1);
+        return `${first}***${last}@${domain}`;
+    }
+
 </script>
 </body>
 </html>
