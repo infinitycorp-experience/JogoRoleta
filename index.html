@@ -518,8 +518,23 @@
         }
 
         #screen-end {
-            justify-content: center;
-            gap: 16px;
+            justify-content: space-evenly;
+            gap: 32px;
+            padding: 40px 16px;
+        }
+
+        #screen-end .brand-header {
+            margin-bottom: 12px;
+        }
+
+        #screen-end .prize-presentation-card {
+            margin: 20px 0;
+            padding: 42px 24px;
+        }
+
+        #screen-end #end-helper-text {
+            margin: 12px 0 16px 0;
+            font-size: 1.05rem;
         }
 
         .prize-presentation-card {
@@ -911,10 +926,18 @@
 
     ['click', 'touchstart'].forEach(e => window.addEventListener(e, resetIdleTimer, { passive: true }));
 
-    // CONSTRÓI AS FATIAS COM OS 3 VAZIOS E TAMANHOS DINÂMICOS
+    // CONSTRÓI AS FATIAS COM OS 3 VAZIOS E EMBARALHAMENTO DINÂMICO
     function generateWheelSlices() {
         const slices = [];
-        const prizeCount = rawPrizes.length;
+
+        // Embaralha uma cópia dos prêmios (Fisher-Yates) para mudar as posições a cada partida
+        const shuffledPrizes = [...rawPrizes];
+        for (let i = shuffledPrizes.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledPrizes[i], shuffledPrizes[j]] = [shuffledPrizes[j], shuffledPrizes[i]];
+        }
+
+        const prizeCount = shuffledPrizes.length;
 
         const emptyItems = [
             { id: 'empty_1', name: 'Não foi dessa vez', isNoPrize: true, stock: 9999, isSimple: true, weight: 0.85, color: '#161d2a' },
@@ -926,7 +949,7 @@
         const interval = Math.max(2, Math.floor(prizeCount / 3));
 
         for (let i = 0; i < prizeCount; i++) {
-            const p = rawPrizes[i];
+            const p = shuffledPrizes[i];
             const weight = p.isSimple ? 1.0 : 0.55; // Comum maior, raro menor
             const isOut = (p.stock <= 0);
             const color = isOut ? '#232a36' : SUBTLE_PALETTE[i % SUBTLE_PALETTE.length];
