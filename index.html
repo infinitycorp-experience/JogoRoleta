@@ -1773,27 +1773,31 @@
                 countdownEl.innerText = "BOA SORTE!";
                 subEl.innerText = "Entrando na arena...";
 
+                // Busca os dados da planilha mantendo o overlay ativo por cima de tudo
                 fetchFromGoogleSheets().then(() => {
+                    // Localiza o participante recém-cadastrado
+                    const registered = players.find(p => p.email && p.email.toLowerCase() === email);
+
+                    selectedPlayer = registered || {
+                        name: name,
+                        email: email,
+                        company: company,
+                        played: false,
+                        targetPrize: ""
+                    };
+
+                    // Prepara a roleta diretamente em segundo plano
+                    generateWheelSlices();
+                    document.getElementById('current-player-display').textContent = selectedPlayer.name.toUpperCase();
+                    setScreen('screen-game');
+                    resetPump();
+                    renderWheel('wheel-canvas', currentWheelRotation);
+                    startGameScreenInactivityWatchdog();
+
+                    // Esconde o overlay apenas quando a tela da roleta já estiver 100% pronta
                     setTimeout(() => {
                         overlay.style.display = 'none';
-
-                        // Busca garantida pelo E-MAIL ÚNICO
-                        const registered = players.find(p => p.email && p.email.toLowerCase() === email);
-
-                        if (registered) {
-                            selectPlayer(registered);
-                        } else {
-                            selectPlayer({
-                                name: name,
-                                email: email,
-                                company: company,
-                                played: false,
-                                targetPrize: ""
-                            });
-                        }
-
-                        confirmAndGoToSpin();
-                    }, 400);
+                    }, 350);
                 });
             }
         }, 1000);
