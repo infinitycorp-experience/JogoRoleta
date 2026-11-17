@@ -751,20 +751,34 @@
             }
         }
 
-        .tutorial-text-box {
-            background: rgba(18, 24, 38, 0.96);
-            border: 1.5px solid var(--accent);
-            padding: 10px 18px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
-            margin-top: 4px;
-            z-index: 100;
-            min-height: 58px;
-            width: 100%;
-            max-width: 480px;
-            animation: fadeIn 0.4s ease-out;
-        }
+            .tutorial-text-box {
+                background: rgba(18, 24, 38, 0.96);
+                border: 1.5px solid var(--accent);
+                padding: 10px 18px;
+                border-radius: 12px;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
+                margin-top: 4px;
+                z-index: 100;
+                min-height: 58px;
+                width: 100%;
+                max-width: 480px;
+                animation: fadeIn 0.4s ease-out;
+                transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            }
+
+            /* Quando for para o Passo 2, o texto desce colado no botão e na mão */
+            .tutorial-text-box.step-button {
+                margin-top: auto;
+                margin-bottom: 110px; /* Posiciona logo acima do painel de turbo */
+                border-color: var(--gold);
+                box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
+            }
+
+            .tutorial-text-box.step-button p {
+                color: var(--gold);
+            }
+
         .tutorial-text-box h4 {
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.25rem;
@@ -1196,123 +1210,126 @@
     let tutorialTimeouts = [];
     let tutorialSimInterval = null;
 
-    function openGameTutorial() {
-        const overlay = document.getElementById('game-tutorial-overlay');
-        const timerEl = document.getElementById('tutorial-timer');
-        const introCard = document.getElementById('tutorial-intro-card');
-        const textBox = document.getElementById('tutorial-text-box');
-        const titleEl = document.getElementById('tutorial-step-title');
-        const descEl = document.getElementById('tutorial-step-desc');
-        const swipeArc = document.getElementById('tutorial-swipe-arc');
-        const cursor = document.getElementById('tutorial-cursor');
-        const powerDashboard = document.getElementById('main-power-dashboard');
-
-        // Limpa timers e estados anteriores
-        tutorialTimeouts.forEach(t => clearTimeout(t));
-        tutorialTimeouts = [];
-        clearInterval(tutorialInterval);
-        clearInterval(tutorialSimInterval);
-
-        powerDashboard.classList.remove('tutorial-spotlight');
-        overlay.classList.add('active');
-        introCard.style.display = 'flex';
-        textBox.style.display = 'none';
-        swipeArc.classList.remove('active');
-        cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
-
-        resetPump();
-
-        let timeLeft = 9;
-        timerEl.textContent = `${timeLeft}s`;
-
-        // ETAPA 1: Banner "VEJA O TUTORIAL" suave por 2 segundos
-        tutorialTimeouts.push(setTimeout(() => {
-            if (!overlay.classList.contains('active')) return;
-
-            introCard.style.display = 'none';
-            textBox.style.display = 'block';
-
-            titleEl.textContent = "1. Gire Diretamente na Roleta";
-            descEl.textContent = "Toque e puxe a roleta na tela para dar o impulso inicial!";
-
-            swipeArc.classList.add('active');
-            cursor.classList.add('active', 'cursor-anim-wheel');
-
-        }, 2000));
-
-        // ETAPA 2: Spotlight no Botão + Mão sobreposta ao botão
-        tutorialTimeouts.push(setTimeout(() => {
-            if (!overlay.classList.contains('active')) return;
-
+        function openGameTutorial() {
+            const overlay = document.getElementById('game-tutorial-overlay');
+            const timerEl = document.getElementById('tutorial-timer');
+            const introCard = document.getElementById('tutorial-intro-card');
+            const textBox = document.getElementById('tutorial-text-box');
+            const titleEl = document.getElementById('tutorial-step-title');
+            const descEl = document.getElementById('tutorial-step-desc');
+            const swipeArc = document.getElementById('tutorial-swipe-arc');
+            const cursor = document.getElementById('tutorial-cursor');
+            const powerDashboard = document.getElementById('main-power-dashboard');
+    
+            // Limpa timers e estados anteriores
+            tutorialTimeouts.forEach(t => clearTimeout(t));
+            tutorialTimeouts = [];
+            clearInterval(tutorialInterval);
+            clearInterval(tutorialSimInterval);
+    
+            powerDashboard.classList.remove('tutorial-spotlight');
+            textBox.classList.remove('step-button'); // Reseta posição do texto
+            overlay.classList.add('active');
+            introCard.style.display = 'flex';
+            textBox.style.display = 'none';
             swipeArc.classList.remove('active');
-            cursor.classList.remove('cursor-anim-wheel');
-
-            // BOTÃO FURA O OVERLAY (z-index: 75)
-            powerDashboard.classList.add('tutorial-spotlight');
-
-            titleEl.textContent = "2. Ou Pressione & Segure o Botão";
-            descEl.textContent = "Segure firme para turbinar o tempo da roleta!";
-
-            // MÃO FICA NA FRENTE DO BOTÃO (z-index: 1000)
-            cursor.classList.add('cursor-anim-button');
-
+            cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
+    
+            resetPump();
+    
+            let timeLeft = 9;
+            timerEl.textContent = `${timeLeft}s`;
+    
+            // ETAPA 1: Roleta (Texto no alto, perto da roleta)
             tutorialTimeouts.push(setTimeout(() => {
                 if (!overlay.classList.contains('active')) return;
-
-                pumpBtn.classList.add('charging');
-                let simProgress = 0;
-
-                clearInterval(tutorialSimInterval);
-                tutorialSimInterval = setInterval(() => {
-                    simProgress += 0.05;
-                    const p = Math.min(1, simProgress);
-                    meterFill.style.width = `${p * 100}%`;
-                    const calcSec = Math.round(15 + (p * 15));
-                    timeTarget.textContent = `${calcSec}s`;
-
-                    if (calcSec >= 30) {
-                        timeTarget.classList.add('overcharged');
-                    }
-
-                    if (p >= 1) {
-                        clearInterval(tutorialSimInterval);
-                    }
-                }, 50);
-
-            }, 1000));
-
-        }, 5200));
-
-        // Contador regressivo total (9s)
-        tutorialInterval = setInterval(() => {
-            timeLeft--;
-            if (timeLeft > 0) {
-                timerEl.textContent = `${timeLeft}s`;
-            } else {
-                closeGameTutorial();
-            }
-        }, 1000);
-    }
-
-    function closeGameTutorial() {
-        clearInterval(tutorialInterval);
-        clearInterval(tutorialSimInterval);
-        tutorialTimeouts.forEach(t => clearTimeout(t));
-        tutorialTimeouts = [];
-
-        const overlay = document.getElementById('game-tutorial-overlay');
-        const cursor = document.getElementById('tutorial-cursor');
-        const swipeArc = document.getElementById('tutorial-swipe-arc');
-        const powerDashboard = document.getElementById('main-power-dashboard');
-
-        powerDashboard.classList.remove('tutorial-spotlight');
-        cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
-        swipeArc.classList.remove('active');
-        overlay.classList.remove('active');
-
-        resetPump();
-        fetchFromGoogleSheets(true);
-    }
+    
+                introCard.style.display = 'none';
+                textBox.style.display = 'block';
+                textBox.classList.remove('step-button');
+    
+                titleEl.textContent = "1. Gire Diretamente na Roleta";
+                descEl.textContent = "Toque e puxe a roleta na tela para dar o impulso inicial!";
+    
+                swipeArc.classList.add('active');
+                cursor.classList.add('active', 'cursor-anim-wheel');
+            }, 2000));
+    
+            // ETAPA 2: Botão (Texto desce suavemente para junto da mão e do botão)
+            tutorialTimeouts.push(setTimeout(() => {
+                if (!overlay.classList.contains('active')) return;
+    
+                swipeArc.classList.remove('active');
+                cursor.classList.remove('cursor-anim-wheel');
+    
+                // Destaque no botão
+                powerDashboard.classList.add('tutorial-spotlight');
+    
+                // Move o balão de texto para baixo
+                textBox.classList.add('step-button');
+                titleEl.textContent = "2. Ou Pressione & Segure o Botão";
+                descEl.textContent = "Segure firme para turbinar o tempo da roleta!";
+    
+                // Mão desce até o botão
+                cursor.classList.add('cursor-anim-button');
+    
+                tutorialTimeouts.push(setTimeout(() => {
+                    if (!overlay.classList.contains('active')) return;
+    
+                    pumpBtn.classList.add('charging');
+                    let simProgress = 0;
+    
+                    clearInterval(tutorialSimInterval);
+                    tutorialSimInterval = setInterval(() => {
+                        simProgress += 0.05;
+                        const p = Math.min(1, simProgress);
+                        meterFill.style.width = `${p * 100}%`;
+                        const calcSec = Math.round(15 + (p * 15));
+                        timeTarget.textContent = `${calcSec}s`;
+    
+                        if (calcSec >= 30) {
+                            timeTarget.classList.add('overcharged');
+                        }
+    
+                        if (p >= 1) {
+                            clearInterval(tutorialSimInterval);
+                        }
+                    }, 50);
+                }, 1000));
+            }, 5200));
+    
+            // Contador regressivo total (9s)
+            tutorialInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    timerEl.textContent = `${timeLeft}s`;
+                } else {
+                    closeGameTutorial();
+                }
+            }, 1000);
+        }
+    
+        function closeGameTutorial() {
+            clearInterval(tutorialInterval);
+            clearInterval(tutorialSimInterval);
+            tutorialTimeouts.forEach(t => clearTimeout(t));
+            tutorialTimeouts = [];
+    
+            const overlay = document.getElementById('game-tutorial-overlay');
+            const cursor = document.getElementById('tutorial-cursor');
+            const textBox = document.getElementById('tutorial-text-box');
+            const swipeArc = document.getElementById('tutorial-swipe-arc');
+            const powerDashboard = document.getElementById('main-power-dashboard');
+    
+            powerDashboard.classList.remove('tutorial-spotlight');
+            textBox.classList.remove('step-button');
+            cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
+            swipeArc.classList.remove('active');
+            overlay.classList.remove('active');
+    
+            resetPump();
+            fetchFromGoogleSheets(true);
+        }
 
     function playTickSound() {
         try {
