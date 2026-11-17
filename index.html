@@ -395,6 +395,7 @@
             letter-spacing: 1.5px;
         }
 
+        /* PAINEL DO BOTÃO COM SUPORTE AO DESTAQUE NO TUTORIAL */
         .power-pump-dashboard {
             width: 100%;
             background: var(--surface);
@@ -408,7 +409,17 @@
             flex-shrink: 0;
             position: relative;
             z-index: 15;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* EFEITO SPOTLIGHT: Traz o botão para a frente do tutorial totalmente nítido */
+        .power-pump-dashboard.tutorial-spotlight {
+            position: relative;
+            z-index: 75 !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 35px rgba(0, 229, 255, 0.8), 0 0 0 3px var(--accent);
+            background: #111a2f !important;
+            transform: scale(1.02);
         }
 
         .power-header {
@@ -645,12 +656,12 @@
         }
 
         /* ========================================================
-           SISTEMA DE TUTORIAL (INTRO + SIMULAÇÃO REALISTA)
+           SISTEMA DE TUTORIAL APERFEIÇOADO (FLUIDO E SPOTLIGHT)
            ======================================================== */
         .tutorial-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(4, 7, 14, 0.78);
+            background: rgba(4, 7, 14, 0.82);
             backdrop-filter: blur(5px);
             z-index: 60;
             display: none;
@@ -659,7 +670,7 @@
             align-items: center;
             padding: 14px 18px;
             pointer-events: all;
-            animation: fadeIn 0.3s ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
         .tutorial-overlay.active { display: flex; }
 
@@ -669,7 +680,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 6px;
-            z-index: 1000;
+            z-index: 100;
         }
 
         .tutorial-badge {
@@ -704,37 +715,51 @@
             color: #fff;
         }
 
-        /* Banner de Introdução (1.5s) */
+        /* Banner de Introdução - SEM TRAVAMENTO E PERFEITAMENTE CENTRALIZADO */
         .tutorial-intro-card {
             position: absolute;
-            top: 40%;
+            top: 42%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: radial-gradient(circle, #152238 0%, #0a1120 100%);
+            background: radial-gradient(circle, #152238 0%, #09101f 100%);
             border: 2px solid var(--accent);
-            box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
-            border-radius: 18px;
-            padding: 24px 28px;
+            box-shadow: 0 0 50px rgba(0, 229, 255, 0.45), 0 20px 40px rgba(0,0,0,0.8);
+            border-radius: 20px;
+            padding: 30px 32px;
             text-align: center;
             z-index: 1200;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            gap: 10px;
+            width: 88%;
+            max-width: 400px;
+            animation: tutorialIntroSmooth 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes tutorialIntroSmooth {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -42%) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
         }
 
         .tutorial-text-box {
-            background: rgba(18, 24, 38, 0.94);
-            border: 1px solid var(--accent);
+            background: rgba(18, 24, 38, 0.96);
+            border: 1.5px solid var(--accent);
             padding: 10px 18px;
             border-radius: 12px;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 229, 255, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.3);
             margin-top: 4px;
-            z-index: 1000;
+            z-index: 100;
             min-height: 58px;
             width: 100%;
             max-width: 480px;
+            animation: fadeIn 0.4s ease-out;
         }
         .tutorial-text-box h4 {
             font-family: 'Rajdhani', sans-serif;
@@ -745,7 +770,7 @@
         }
         .tutorial-text-box p {
             color: var(--accent);
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             font-weight: 600;
             margin-top: 2px;
         }
@@ -756,8 +781,8 @@
             top: 26%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
+            width: 290px;
+            height: 290px;
             border: 3.5px dashed var(--accent);
             border-color: var(--accent) transparent transparent transparent;
             border-radius: 50%;
@@ -770,11 +795,11 @@
             animation: arcSpinIndicator 2.6s infinite ease-out;
         }
 
-        /* Mão em Primeiro Plano Absoluto (z-index: 99999) */
+        /* Cursor Mão SVG com Nível de Camada Máximo */
         .tutorial-cursor-wrapper {
             position: absolute;
-            width: 74px;
-            height: 74px;
+            width: 78px;
+            height: 78px;
             pointer-events: none;
             z-index: 99999 !important;
             display: none;
@@ -788,11 +813,11 @@
             position: absolute;
             top: 10px;
             left: 24px;
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             border: 2px solid var(--accent);
-            background: rgba(0, 229, 255, 0.45);
+            background: rgba(0, 229, 255, 0.5);
             transform: translate(-50%, -50%) scale(0);
             opacity: 0;
         }
@@ -800,23 +825,22 @@
         .hand-pointer-svg {
             width: 100%;
             height: 100%;
-            filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 12px rgba(0, 229, 255, 0.7));
+            filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 14px rgba(0, 229, 255, 0.8));
         }
 
-        /* Animações dos Gestos */
         @keyframes arcSpinIndicator {
-            0% { opacity: 0; transform: translate(-50%, -50%) rotate(-40deg); }
+            0% { opacity: 0; transform: translate(-50%, -50%) rotate(-45deg); }
             20%, 75% { opacity: 1; transform: translate(-50%, -50%) rotate(45deg); }
             95%, 100% { opacity: 0; }
         }
 
-        /* Gesto 1: Arraste da Roleta */
+        /* Gesto 1: Arraste Suave da Roleta */
         .cursor-anim-wheel {
-            animation: handDragWheel 2.8s forwards cubic-bezier(0.25, 1, 0.5, 1);
+            animation: handDragWheel 3.0s forwards cubic-bezier(0.25, 1, 0.5, 1);
         }
         @keyframes handDragWheel {
             0% {
-                top: 30%;
+                top: 31%;
                 left: 36%;
                 transform: translate(-50%, -50%) scale(0.9) rotate(-15deg);
                 opacity: 0;
@@ -826,61 +850,61 @@
                 transform: translate(-50%, -50%) scale(1.1) rotate(0deg);
             }
             50% {
-                top: 22%;
-                left: 56%;
+                top: 23%;
+                left: 55%;
                 transform: translate(-50%, -50%) scale(1.05) rotate(16deg);
             }
             85% {
-                top: 30%;
+                top: 31%;
                 left: 68%;
                 transform: translate(-50%, -50%) scale(1) rotate(32deg);
                 opacity: 1;
             }
             100% {
-                top: 34%;
+                top: 35%;
                 left: 64%;
                 transform: translate(-50%, -50%) scale(0.95) rotate(20deg);
                 opacity: 0;
             }
         }
 
-        /* Gesto 2: Desce e Pressiona DIRETAMENTE SOBRE O BOTÃO */
+        /* Gesto 2: Desce e Pressiona SOBRE O BOTÃO DESTACADO */
         .cursor-anim-button {
-            animation: handPressButton 3.4s forwards cubic-bezier(0.22, 1, 0.36, 1);
+            animation: handPressButton 3.6s forwards cubic-bezier(0.22, 1, 0.36, 1);
         }
         @keyframes handPressButton {
             0% {
                 top: 60%;
                 left: 50%;
-                transform: translate(-50%, -50%) scale(1.15) rotate(-5deg);
+                transform: translate(-50%, -50%) scale(1.2) rotate(-5deg);
                 opacity: 0;
             }
             20% {
                 top: 92%;
                 left: 50%;
-                transform: translate(-50%, -50%) scale(1.05) rotate(0deg);
+                transform: translate(-50%, -50%) scale(1.08) rotate(0deg);
                 opacity: 1;
             }
             30% {
                 top: 92%;
                 left: 50%;
-                transform: translate(-50%, -46%) scale(0.88); /* Afunda encostando no botão */
+                transform: translate(-50%, -46%) scale(0.9); /* Dedo afunda no botão */
                 opacity: 1;
             }
-            32%, 85% {
+            32%, 84% {
                 top: 92%;
                 left: 50%;
-                transform: translate(-50%, -46%) scale(0.86); /* Pressionando o botão em primeiro plano */
+                transform: translate(-50%, -46%) scale(0.88); /* Mantém pressionado com força */
                 opacity: 1;
             }
             92% {
                 top: 88%;
                 left: 50%;
-                transform: translate(-50%, -50%) scale(1.05); /* Solta o botão */
+                transform: translate(-50%, -50%) scale(1.08); /* Solta */
                 opacity: 1;
             }
             100% {
-                top: 86%;
+                top: 85%;
                 left: 50%;
                 transform: translate(-50%, -50%) scale(1);
                 opacity: 0;
@@ -888,7 +912,7 @@
         }
 
         .cursor-anim-button .touch-ripple {
-            animation: rippleBtnPulse 3.4s forwards;
+            animation: rippleBtnPulse 3.6s forwards;
         }
         @keyframes rippleBtnPulse {
             0%, 26% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
@@ -995,30 +1019,30 @@
         <div id="game-tutorial-overlay" class="tutorial-overlay">
             <div class="tutorial-top-bar">
                 <div class="tutorial-badge">
-                    COMO JOGAR • <span id="tutorial-timer" style="color:#fff;">8s</span>
+                    COMO JOGAR • <span id="tutorial-timer" style="color:#fff;">9s</span>
                 </div>
                 <button class="btn-skip-tutorial" onclick="closeGameTutorial()">
                     Pular Tutorial ✕
                 </button>
             </div>
 
-            <!-- Intro Inicial de 1.5s -->
+            <!-- Card Central "Veja o Tutorial" - 100% Centralizado e Fluido -->
             <div class="tutorial-intro-card" id="tutorial-intro-card">
-                <div style="font-size: 2.2rem;">👋</div>
-                <h3 style="font-family: 'Rajdhani'; color: #fff; font-size: 1.6rem; letter-spacing: 2px;">VEJA O TUTORIAL</h3>
-                <p style="font-size: 0.85rem; color: var(--text-dim);">Aprenda a girar em 2 passos rápidos!</p>
+                <div style="font-size: 2.5rem;">🎯</div>
+                <h3 style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; letter-spacing: 2.5px;">VEJA O TUTORIAL</h3>
+                <p style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">Aprenda a girar em 2 passos rápidos!</p>
             </div>
 
-            <!-- Caixa de instrução que muda de texto -->
+            <!-- Caixa de instrução superior -->
             <div class="tutorial-text-box" id="tutorial-text-box" style="display: none;">
                 <h4 id="tutorial-step-title">1. Gire Diretamente na Roleta</h4>
                 <p id="tutorial-step-desc">Toque e puxe a roleta na tela para dar o impulso!</p>
             </div>
 
-            <!-- Indicador do arco de arraste -->
+            <!-- Indicador do arco de giro -->
             <div class="tutorial-swipe-indicator" id="tutorial-swipe-arc"></div>
 
-            <!-- Cursor Mão SVG (Sempre por cima de tudo) -->
+            <!-- Cursor Mão SVG (Sempre na Frente de Tudo) -->
             <div class="tutorial-cursor-wrapper" id="tutorial-cursor">
                 <div class="touch-ripple"></div>
                 <svg class="hand-pointer-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1036,12 +1060,12 @@
 
                     <!-- Palma e Dedos -->
                     <path d="M48 45 C48 38 56 38 56 45 L56 62 C56 65 60 65 60 62 L60 48 C60 41 68 41 68 48 L68 64 C68 67 72 67 72 64 L72 53 C72 46 80 46 80 53 L80 72 C80 88 68 102 52 102 C42 102 34 96 30 88 L18 68 C15 63 18 57 23 57 C27 57 30 60 34 66 L38 72 L38 20 C38 12 48 12 48 20 Z" 
-                          fill="url(#handGrad)" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+                          fill="url(#handGrad)" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
 
                     <!-- Brilho no Indicador -->
                     <path d="M40 22 C40 16 46 16 46 22 L46 58 L40 58 Z" fill="url(#fingerShineGrad)"/>
 
-                    <!-- Dobras dos dedos -->
+                    <!-- Detalhes de dobras -->
                     <path d="M40 34 C43 36 45 36 47 34" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
                     <path d="M57 54 C58 55 59 55 60 54" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
                     <path d="M68 56 C69 57 71 57 72 56" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round"/>
@@ -1162,7 +1186,7 @@
     let lastSyncTime = 0;
 
     // ==========================================
-    // TUTORIAL INTRO + DEMONSTRAÇÃO REALISTA
+    // SISTEMA DE TUTORIAL APERFEIÇOADO
     // ==========================================
     let tutorialInterval = null;
     let tutorialTimeouts = [];
@@ -1177,14 +1201,15 @@
         const descEl = document.getElementById('tutorial-step-desc');
         const swipeArc = document.getElementById('tutorial-swipe-arc');
         const cursor = document.getElementById('tutorial-cursor');
+        const powerDashboard = document.getElementById('main-power-dashboard');
 
-        // Limpa timers anteriores
+        // Limpa timers e estados anteriores
         tutorialTimeouts.forEach(t => clearTimeout(t));
         tutorialTimeouts = [];
         clearInterval(tutorialInterval);
         clearInterval(tutorialSimInterval);
 
-        // Prepara estados iniciais
+        powerDashboard.classList.remove('tutorial-spotlight');
         overlay.classList.add('active');
         introCard.style.display = 'flex';
         textBox.style.display = 'none';
@@ -1193,40 +1218,41 @@
 
         resetPump();
 
-        let timeLeft = 8;
+        let timeLeft = 9;
         timerEl.textContent = `${timeLeft}s`;
 
-        // 1. APRESENTAÇÃO INICIAL (1.5 segundos)
+        // ETAPA 1: Banner "VEJA O TUTORIAL" por 2.0 segundos com transição serena
         tutorialTimeouts.push(setTimeout(() => {
             if (!overlay.classList.contains('active')) return;
 
-            // Esconde Intro e exibe instruções
             introCard.style.display = 'none';
             textBox.style.display = 'block';
 
             titleEl.textContent = "1. Gire Diretamente na Roleta";
-            descEl.textContent = "Toque e puxe a roleta na tela para dar o impulso!";
+            descEl.textContent = "Toque e puxe a roleta na tela para dar o impulso inicial!";
 
-            // Ativa demonstração da roleta
             swipeArc.classList.add('active');
             cursor.classList.add('active', 'cursor-anim-wheel');
 
-        }, 1500));
+        }, 2000));
 
-        // 2. DEMONSTRAÇÃO DO BOTÃO INFERIOR (Aos 4.5 segundos)
+        // ETAPA 2: Destaque Spotlight no Botão (À frente do overlay) + Mão sobre o Botão
         tutorialTimeouts.push(setTimeout(() => {
             if (!overlay.classList.contains('active')) return;
 
             swipeArc.classList.remove('active');
             cursor.classList.remove('cursor-anim-wheel');
 
+            // ATIVA O SPOTLIGHT: Fura a cortina escura do overlay e ilumina o botão com 100% de nitidez
+            powerDashboard.classList.add('tutorial-spotlight');
+
             titleEl.textContent = "2. Ou Pressione & Segure o Botão";
             descEl.textContent = "Segure firme para turbinar o tempo da roleta!";
 
-            // Posiciona a mão em primeiro plano sobre o botão
+            // A mão desce e pousa exatamente em cima do botão destacado
             cursor.classList.add('cursor-anim-button');
 
-            // Delay para casar o toque com o início da pressão (30% da animação ~= 1s)
+            // Delay para sincronizar o contato do dedo com o afundamento do botão real
             tutorialTimeouts.push(setTimeout(() => {
                 if (!overlay.classList.contains('active')) return;
 
@@ -1235,7 +1261,7 @@
 
                 clearInterval(tutorialSimInterval);
                 tutorialSimInterval = setInterval(() => {
-                    simProgress += 0.055;
+                    simProgress += 0.05;
                     const p = Math.min(1, simProgress);
                     meterFill.style.width = `${p * 100}%`;
                     const calcSec = Math.round(15 + (p * 15));
@@ -1248,13 +1274,13 @@
                     if (p >= 1) {
                         clearInterval(tutorialSimInterval);
                     }
-                }, 55);
+                }, 50);
 
-            }, 900));
+            }, 1000));
 
-        }, 4500));
+        }, 5200));
 
-        // Contador regressivo total (8s)
+        // Contador regressivo total (9s)
         tutorialInterval = setInterval(() => {
             timeLeft--;
             if (timeLeft > 0) {
@@ -1274,12 +1300,14 @@
         const overlay = document.getElementById('game-tutorial-overlay');
         const cursor = document.getElementById('tutorial-cursor');
         const swipeArc = document.getElementById('tutorial-swipe-arc');
+        const powerDashboard = document.getElementById('main-power-dashboard');
 
+        // Remove spotlight e fecha overlays
+        powerDashboard.classList.remove('tutorial-spotlight');
         cursor.classList.remove('active', 'cursor-anim-wheel', 'cursor-anim-button');
         swipeArc.classList.remove('active');
         overlay.classList.remove('active');
 
-        // Garante botão limpo para o jogador real
         resetPump();
         fetchFromGoogleSheets(true);
     }
@@ -1639,7 +1667,7 @@
         openGameTutorial();
     }
 
-    // SINCRONIZAÇÃO EM SEGUNDO PLANO
+    // SINCRONIZAÇÃO EM SEGUNDO PLANO COM GOOGLE SHEETS
     let isFetchingSheet = false;
 
     function fetchFromGoogleSheets(silent = false) {
