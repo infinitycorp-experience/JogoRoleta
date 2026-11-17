@@ -90,21 +90,9 @@
             gap: 12px;
             position: relative;
         }
-
         .screen.active { display: flex; }
-
-        #screen-game {
-            position: relative;
-        }
-
-        .brand-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 4px;
-            flex-shrink: 0;
-        }
-
+        #screen-game {position: relative;}
+        .brand-header {display: flex;flex-direction: column;align-items: center;margin-bottom: 4px;flex-shrink: 0;}
         .title {
             font-family: 'Rajdhani', sans-serif;
             font-size: clamp(1.8rem, 3.8vh, 2.3rem);
@@ -115,20 +103,8 @@
             color: #ffffff;
             text-align: center;
         }
-
-        .title .corp-highlight {
-            color: #0096d6;
-            text-shadow: 0 0 20px rgba(0, 150, 214, 0.4);
-        }
-
-        .brand-subtitle {
-            color: var(--text-dim);
-            font-size: 0.65rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            margin-top: 3px;
-        }
-
+        .title .corp-highlight {color: #0096d6;text-shadow: 0 0 20px rgba(0, 150, 214, 0.4);}
+        .brand-subtitle {color: var(--text-dim);font-size: 0.65rem;letter-spacing: 0.25em;text-transform: uppercase;margin-top: 3px;}
         .showcase-container {
             width: 100%;
             background: var(--surface);
@@ -141,15 +117,7 @@
             flex-shrink: 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-
-        .showcase-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding-bottom: 4px;
-        }
-
+        .showcase-header {display: flex;justify-content: space-between;align-items: center;border-bottom: 1px solid rgba(255,255,255,0.06);padding-bottom: 4px;}
         .showcase-header span {
             font-family: 'Rajdhani', sans-serif;
             font-size: 0.82rem;
@@ -159,18 +127,9 @@
             text-transform: uppercase;
         }
 
-        .prizes-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 2px;
-        }
-
+        .prizes-grid {display: grid;grid-template-columns: repeat(2, 1fr);gap: 8px;max-height: 250px;overflow-y: auto;padding-right: 2px;}
         .prizes-grid::-webkit-scrollbar { width: 3px; }
         .prizes-grid::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.3); border-radius: 3px; }
-
         .prize-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -180,45 +139,12 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .prize-card.rare {
-            border-color: rgba(255, 215, 0, 0.35);
-            background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent);
-        }
-
-        .prize-card.out-of-stock {
-            opacity: 0.4;
-            filter: grayscale(1);
-            border-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .prize-card-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
+        .prize-card.rare {border-color: rgba(255, 215, 0, 0.35);background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent);}
+        .prize-card.out-of-stock {opacity: 0.4;filter: grayscale(1);border-color: rgba(255, 255, 255, 0.05);}
+        .prize-card-name {font-size: 0.8rem;font-weight: 600;color: #fff;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
         .prize-card.rare .prize-card-name { color: #ffd700; }
-
-        .prize-stock-pill {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 800;
-            color: var(--accent);
-            background: rgba(0, 229, 255, 0.12);
-            padding: 2px 6px;
-            border-radius: 10px;
-            margin-left: 6px;
-        }
-
-        .prize-stock-pill.out {
-            color: var(--red);
-            background: rgba(239, 68, 68, 0.12);
-        }
-
+        .prize-stock-pill {font-family: 'Rajdhani', sans-serif;font-size: 0.8rem;font-weight: 800;color: var(--accent);background: rgba(0, 229, 255, 0.12);padding: 2px 6px;border-radius: 10px;margin-left: 6px;}
+        .prize-stock-pill.out {color: var(--red);background: rgba(239, 68, 68, 0.12);}
         .search-container {
             width: 100%;
             position: relative;
@@ -228,35 +154,11 @@
             flex-direction: column;
             justify-content: flex-start;
         }
-
-        .search-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-
-        .sync-indicator {
-            font-size: 0.68rem;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: var(--text-dim);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .sync-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--text-dim);
-            display: inline-block;
-            transition: all 0.3s;
-        }
+        .search-top-bar {display: flex;justify-content: space-between;align-items: center;margin-bottom: 4px;}
+        .sync-indicator {font-size: 0.68rem;font-family: 'Rajdhani', sans-serif;font-weight: 700;letter-spacing: 1px;color: var(--text-dim);display: flex;align-items: center;gap: 5px;}
+        .sync-dot {width: 8px;height: 8px;border-radius: 50%;background: var(--text-dim);display: inline-block;transition: all 0.3s;}
         .sync-dot.online { background: var(--green); box-shadow: 0 0 10px var(--green); }
         .sync-dot.syncing { background: var(--gold); box-shadow: 0 0 10px var(--gold); }
-
         .form-input {
             width: 100%;
             padding: 12px 14px;
@@ -269,12 +171,7 @@
             transition: 0.2s;
         }
 
-        .form-input:focus {
-            border-color: var(--accent);
-            background: rgba(0, 229, 255, 0.05);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
+        .form-input:focus {border-color: var(--accent);background: rgba(0, 229, 255, 0.05);box-shadow: 0 0 15px var(--accent-glow);}
         .autocomplete-dropdown {
             position: absolute;
             top: 60px;
@@ -290,30 +187,10 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.85);
             padding: 4px;
         }
-
         .autocomplete-dropdown.show { display: block; }
-
-        .autocomplete-item {
-            padding: 8px 10px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            transition: background 0.15s;
-        }
-
-        .autocomplete-item:hover, .autocomplete-item:active {
-            background: rgba(0, 229, 255, 0.15);
-        }
-
-        .autocomplete-item.disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            filter: grayscale(1);
-        }
-
+        .autocomplete-item {padding: 8px 10px;border-radius: 6px;display: flex;justify-content: space-between;align-items: center;cursor: pointer;border-bottom: 1px solid rgba(255,255,255,0.03);transition: background 0.15s;}
+        .autocomplete-item:hover, .autocomplete-item:active {background: rgba(0, 229, 255, 0.15);}
+        .autocomplete-item.disabled {opacity: 0.4;cursor: not-allowed;filter: grayscale(1);}
         .player-badge-selected {
             background: rgba(0, 229, 255, 0.1);
             border: 1px solid var(--accent);
@@ -344,10 +221,7 @@
             touch-action: none;
             cursor: grab;
         }
-        .roulette-canvas:active {
-            cursor: grabbing;
-        }
-
+        .roulette-canvas:active {cursor: grabbing;}
         .roulette-pointer {
             position: absolute;
             top: -16px;
@@ -361,14 +235,7 @@
             transition: transform 0.08s ease;
         }
 
-        .brand-logo-img {
-            max-height: 85px;
-            max-width: 340px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.6));
-            margin-bottom: 6px;
-        }
-
+        .brand-logo-img {max-height: 85px;max-width: 340px;object-fit: contain;filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.6));margin-bottom: 6px;}
         .center-hub {
             position: absolute;
             width: 102px;
@@ -385,19 +252,8 @@
             overflow: hidden;
             padding: 6px;
         }
-        .center-hub img {
-            width: 88%;
-            height: 88%;
-            object-fit: contain;
-        }
-
-        .center-hub span {
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 800;
-            color: #fff;
-            font-size: 0.75rem;
-            letter-spacing: 1.5px;
-        }
+        .center-hub img {width: 88%;height: 88%;object-fit: contain;}
+        .center-hub span {font-family: 'Rajdhani', sans-serif;font-weight: 800;color: #fff;font-size: 0.75rem;letter-spacing: 1.5px;}
 
         /* PAINEL DO BOTÃO */
         .power-pump-dashboard {
@@ -425,53 +281,13 @@
             background: #111a2f !important;
             transform: scale(1.02);
         }
+        .power-header {display: flex;justify-content: space-between;align-items: center;}
+        .power-label {font-family: 'Rajdhani', sans-serif;font-size: 0.82rem;font-weight: 700;color: var(--text-dim);letter-spacing: 1.5px;text-transform: uppercase;}
 
-        .power-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .power-label {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--text-dim);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .power-time-target {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.45rem;
-            font-weight: 800;
-            color: var(--accent);
-            letter-spacing: 1px;
-            transition: color 0.2s;
-        }
-
-        .power-time-target.overcharged {
-            color: var(--red);
-            text-shadow: 0 0 15px var(--red);
-            animation: pulseAlert 0.3s infinite alternate;
-        }
-
-        .power-meter-track {
-            width: 100%;
-            height: 11px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .power-meter-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 60%, var(--orange) 85%, var(--red) 100%);
-            transition: width 0.05s linear;
-        }
-
+        .power-time-target {font-family: 'Rajdhani', sans-serif;font-size: 1.45rem;font-weight: 800;color: var(--accent);letter-spacing: 1px;transition: color 0.2s;}
+        .power-time-target.overcharged {color: var(--red);text-shadow: 0 0 15px var(--red);animation: pulseAlert 0.3s infinite alternate;}
+        .power-meter-track {width: 100%;height: 11px;background: rgba(255, 255, 255, 0.08);border-radius: 6px;overflow: hidden;border: 1px solid rgba(255, 255, 255, 0.1);}
+        .power-meter-fill {height: 100%;width: 0%;background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 60%, var(--orange) 85%, var(--red) 100%);transition: width 0.05s linear;}
         .btn-pump {
             background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
             color: #040812;
@@ -493,19 +309,8 @@
             z-index: 10;
         }
 
-        .btn-pump:active, .btn-pump.charging {
-            transform: scale(0.97);
-            background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
-            box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);
-        }
-
-        .btn-pump:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            filter: grayscale(0.8);
-            box-shadow: none;
-        }
-
+        .btn-pump:active, .btn-pump.charging {transform: scale(0.97);background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);box-shadow: 0 0 35px rgba(255, 215, 0, 0.6);}
+        .btn-pump:disabled {opacity: 0.4;cursor: not-allowed;filter: grayscale(0.8);box-shadow: none;}
         .btn-action {
             background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
             color: #040812;
@@ -524,13 +329,7 @@
             flex-shrink: 0;
         }
 
-        .btn-action:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            filter: grayscale(0.8);
-            box-shadow: none;
-        }
-
+        .btn-action:disabled {opacity: 0.45;cursor: not-allowed;filter: grayscale(0.8);box-shadow: none;}
         .btn-secondary {
             background: transparent;
             border: 1px solid var(--surface-border);
@@ -546,26 +345,10 @@
             transition: 0.2s;
         }
 
-        #screen-end {
-            justify-content: space-evenly;
-            gap: 32px;
-            padding: 40px 16px;
-        }
-
-        #screen-end .brand-header {
-            margin-bottom: 12px;
-        }
-
-        #screen-end .prize-presentation-card {
-            margin: 20px 0;
-            padding: 42px 24px;
-        }
-
-        #screen-end #end-helper-text {
-            margin: 12px 0 16px 0;
-            font-size: 1.05rem;
-        }
-
+        #screen-end {justify-content: space-evenly;gap: 32px;padding: 40px 16px;}
+        #screen-end .brand-header {margin-bottom: 12px;}
+        #screen-end .prize-presentation-card {margin: 20px 0;padding: 42px 24px;}
+        #screen-end #end-helper-text {margin: 12px 0 16px 0;font-size: 1.05rem;}
         .prize-presentation-card {
             background: radial-gradient(circle at center, #1a2744 0%, #0c1424 100%);
             border: 2px solid var(--accent);
@@ -577,13 +360,7 @@
             position: relative;
         }
 
-        .prize-presentation-card span {
-            color: var(--text-dim);
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-        }
-
+        .prize-presentation-card span {color: var(--text-dim);text-transform: uppercase;font-size: 0.8rem;letter-spacing: 3px;}
         .prize-title {
             font-family: 'Rajdhani', sans-serif;
             font-size: 2.3rem;
@@ -646,22 +423,14 @@
             50% { box-shadow: 0 0 60px rgba(0, 229, 255, 0.8), inset 0 0 30px rgba(0, 229, 255, 0.3); }
         }
 
-        #confetti-canvas {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 99998;
-        }
-
+        #confetti-canvas {position: fixed;inset: 0;pointer-events: none;z-index: 99998;}
         .prize-card.trophy-rare {
             border: 1px solid rgba(255, 215, 0, 0.6) !important;
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.18), rgba(255, 107, 0, 0.05)) !important;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
         }
 
-        /* ========================================================
-           SISTEMA DE TUTORIAL APERFEIÇOADO (FLUIDO E SPOTLIGHT)
-           ======================================================== */
+        /* SISTEMA DE TUTORIAL APERFEIÇOADO (FLUIDO E SPOTLIGHT) */
         .tutorial-overlay {
             position: absolute;
             inset: 0;
@@ -677,7 +446,6 @@
             animation: fadeIn 0.4s ease-out;
         }
         .tutorial-overlay.active { display: flex; }
-
         .tutorial-top-bar {
             width: 100%;
             display: flex;
@@ -714,10 +482,7 @@
             transition: 0.2s;
             text-transform: uppercase;
         }
-        .btn-skip-tutorial:hover {
-            border-color: var(--accent);
-            color: #fff;
-        }
+        .btn-skip-tutorial:hover {border-color: var(--accent);color: #fff;}
 
         /* Banner de Introdução - SEM TRAVAMENTO E PERFEITAMENTE CENTRALIZADO */
         .tutorial-intro-card {
@@ -776,11 +541,8 @@
                 box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
             }
 
-            .tutorial-text-box.step-button p {
-                color: var(--gold);
-            }
+            .tutorial-text-box.step-button p {color: var(--gold);}
 
-            /* TELA DE TRANSIÇÃO "VAMOS LÁ" */
             /* CARD DE TRANSIÇÃO FLUIDA "VAMOS LÁ" */
             .tutorial-ready-card {
                 position: absolute;
@@ -806,30 +568,9 @@
             }
 
             /* Quando ativo, entra suavemente */
-            .tutorial-ready-card.show {
-                opacity: 1;
-                pointer-events: auto;
-                transform: translate(-50%, -50%) scale(1);
-            }
-
-            .tutorial-ready-card h3 {
-                font-family: 'Rajdhani', sans-serif;
-                font-size: 2.2rem;
-                font-weight: 800;
-                color: #fff;
-                letter-spacing: 3px;
-                text-shadow: 0 0 20px var(--accent);
-                margin: 0;
-            }
-
-            .tutorial-ready-card p {
-                font-size: 0.95rem;
-                color: var(--text-dim);
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                font-weight: 600;
-                margin: 0;
-            }
+            .tutorial-ready-card.show {opacity: 1;pointer-events: auto;transform: translate(-50%, -50%) scale(1);}
+            .tutorial-ready-card h3 {font-family: 'Rajdhani', sans-serif;font-size: 2.2rem;font-weight: 800;color: #fff;letter-spacing: 3px;text-shadow: 0 0 20px var(--accent);margin: 0;}
+            .tutorial-ready-card p {font-size: 0.95rem;color: var(--text-dim);text-transform: uppercase;letter-spacing: 2px;font-weight: 600;margin: 0;}
 
             /* Container fixo para o número não pular o layout */
             .ready-countdown-box {
@@ -851,9 +592,7 @@
                 display: inline-block;
             }
 
-            .count-pop {
-                animation: countPopAnim 0.75s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-            }
+            .count-pop {animation: countPopAnim 0.75s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;}
 
             @keyframes countPopAnim {
                 0% {
@@ -878,21 +617,11 @@
                 }
             }
 
-        .tutorial-text-box h4 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 1.5px;
-        }
-        .tutorial-text-box p {
-            color: var(--accent);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-top: 2px;
-        }
+        .tutorial-text-box h4 {font-family: 'Rajdhani', sans-serif;font-size: 1.25rem;font-weight: 800;color: #fff;letter-spacing: 1.5px;}
+        .tutorial-text-box p {color: var(--accent);font-size: 0.85rem;font-weight: 600;margin-top: 2px;}
 
         /* Arco indicando a puxada na roleta */
+        .tutorial-swipe-arc,
         .tutorial-swipe-indicator {
             position: absolute;
             top: 26%;
@@ -907,12 +636,9 @@
             opacity: 0;
             display: none;
         }
-        .tutorial-swipe-indicator.active {
-            display: block;
-            animation: arcSpinIndicator 2.6s infinite ease-out;
-        }
-
-        /* CURSOR MÃO SVG: z-index: 1000 garante que ele fica SEMPRE por cima de tudo */
+        .tutorial-swipe-arc.active,
+        .tutorial-swipe-indicator.active {display: block;animation: arcSpinIndicator 2.6s infinite ease-out;}
+/* CURSOR MÃO SVG: z-index: 1000 garante que ele fica SEMPRE por cima de tudo */
         .tutorial-cursor-wrapper {
             position: absolute;
             width: 78px;
@@ -922,23 +648,8 @@
             display: none;
             transform: translate(-50%, -50%);
         }
-        .tutorial-cursor-wrapper.active {
-            display: block;
-        }
-
-        .touch-ripple {
-            position: absolute;
-            top: 10px;
-            left: 24px;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid var(--accent);
-            background: rgba(0, 229, 255, 0.5);
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-        }
-
+        .tutorial-cursor-wrapper.active {display: block;}
+        .touch-ripple {position: absolute;top: 10px;left: 24px;width: 28px;height: 28px;border-radius: 50%;border: 2px solid var(--accent);background: rgba(0, 229, 255, 0.5);transform: translate(-50%, -50%) scale(0);opacity: 0;}
         .hand-pointer-svg {
             width: 100%;
             height: 100%;
@@ -1028,23 +739,22 @@
             }
         }
 
-        .cursor-anim-button .touch-ripple {
-            animation: rippleBtnPulse 3.6s forwards;
-        }
+        .cursor-anim-button .touch-ripple {animation: rippleBtnPulse 3.6s forwards;}
         @keyframes rippleBtnPulse {
             0%, 26% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
             30% { opacity: 1; transform: translate(-50%, -50%) scale(1.8); }
             45%, 80% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.3); }
             90%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
         }
+                /* TRANSIÇÃO SUAVE DO OVERLAY DE SINCRONIZAÇÃO/BOA SORTE */
+        #sync-overlay {transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);opacity: 1;}
+        #sync-overlay.fade-out {opacity: 0;pointer-events: none;}
     </style>
 </head>
 <body>
-
 <button class="btn-fullscreen" onclick="toggleFullScreen()" title="Tela Cheia">
     <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
 </button>
-
 <div id="screensaver" onclick="dismissScreensaver()">
     <div style="text-align: center; margin-top: 15px;">
         <img src="logo.png" alt="Logo" class="brand-logo-img" onerror="this.style.display='none'">
@@ -2367,15 +2077,18 @@
             })
         }).catch(err => console.error("Erro POST registro:", err));
 
-        const overlay = document.getElementById('sync-overlay');
+               const overlay = document.getElementById('sync-overlay');
         const countdownEl = document.getElementById('sync-countdown');
         const titleEl = document.getElementById('sync-main-title');
         const subEl = document.getElementById('sync-sub-msg');
 
+        overlay.style.transition = 'opacity 0.5s ease';
+        overlay.style.opacity = '1';
         overlay.style.display = 'flex';
 
         let secondsLeft = 8;
         countdownEl.innerText = secondsLeft;
+        countdownEl.style.fontSize = ''; // Garante tamanho padrão inicial
         titleEl.innerText = "PREPARE-SE!";
         subEl.innerText = "Validando seu cadastro...";
 
@@ -2398,35 +2111,50 @@
                 }
             } else {
                 clearInterval(timer);
+                
+                // Mensagem de transição imponente
                 countdownEl.innerText = "BOA SORTE!";
+                countdownEl.style.fontSize = "2.8rem"; 
                 subEl.innerText = "Entrando na arena...";
 
-                fetchFromGoogleSheets().then(() => {
-                    const registered = players.find(p => p.email && p.email.toLowerCase() === email);
+                // Dispara sincronização em segundo plano
+                fetchFromGoogleSheets(true);
 
-                    selectedPlayer = registered || {
-                        name: name,
-                        email: email,
-                        company: company,
-                        played: false,
-                        targetPrize: ""
-                    };
+                // Prepara os dados do jogador e tela
+                const registered = players.find(p => p.email && p.email.toLowerCase() === email);
 
-                    generateWheelSlices();
-                    document.getElementById('current-player-display').textContent = selectedPlayer.name.toUpperCase();
-                    setScreen('screen-game');
-                    resetPump();
-                    renderWheel('wheel-canvas', currentWheelRotation);
-                    startGameScreenInactivityWatchdog();
+                selectedPlayer = registered || {
+                    name: name,
+                    email: email,
+                    company: company,
+                    played: false,
+                    targetPrize: ""
+                };
 
+                generateWheelSlices();
+                document.getElementById('current-player-display').textContent = selectedPlayer.name.toUpperCase();
+                setScreen('screen-game');
+                resetPump();
+                renderWheel('wheel-canvas', currentWheelRotation);
+                startGameScreenInactivityWatchdog();
+
+                // 1) Mantém "BOA SORTE!" visível por 2 segundos
+                setTimeout(() => {
+                    // 2) Dissolve suavemente o overlay escuro
+                    overlay.style.opacity = '0';
+
+                    // 3) Aguarda os 500ms da dissolução para sumir e iniciar o tutorial
                     setTimeout(() => {
                         overlay.style.display = 'none';
+                        overlay.style.opacity = '1';
+                        countdownEl.style.fontSize = ''; // Reseta para próximo jogador
                         openGameTutorial();
-                    }, 350);
-                });
+                    }, 500);
+
+                }, 2000); // 2 segundos de pausa para leitura
             }
         }, 1000);
-    }
+    } // <-- Chave que fecha a função do cadastro!
 
     // INICIALIZAÇÃO
     window.onload = () => {
