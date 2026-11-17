@@ -332,6 +332,11 @@
             height: 100%;
             border-radius: 50%;
             box-shadow: 0 0 40px rgba(0, 229, 255, 0.3), inset 0 0 25px rgba(0,0,0,0.85);
+            touch-action: none;
+            cursor: grab;
+        }
+        .roulette-canvas:active {
+            cursor: grabbing;
         }
 
         .roulette-pointer {
@@ -1359,11 +1364,110 @@
     pumpBtn.addEventListener('touchstart', startCharging, { passive: false });
     window.addEventListener('touchend', releaseAndSpin, { passive: false });
 
+    // ==========================================
+    // CONTROLE TOUCH DIRETO NA ROLETA
+    // ==========================================
+    const wheelCanvasEl = document.getElementById('wheel-canvas');
+    let isDraggingWheel = false;
+    let dragStartAngle = 0;
+    let wheelBaseRotation = 0;
+    let lastDragTickAngle = 0;
+    let dragMoveHistory = [];
+
+    function getTouchAngle(clientX, clientY) {
+        const rect = wheelCanvasEl.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        return Math.atan2(clientY - cy, clientX - cx);
+    }
+
+    function onWheelTouchStart(e) {
+        if (isSpinning) return;
+        const touch = e.touches ? e.touches[0] : e;
+        isDraggingWheel = true;
+        dragStartAngle = getTouchAngle(touch.clientX, touch.clientY);
+        wheelBaseRotation = currentWheelRotation;
+        lastDragTickAngle = currentWheelRotation;
+        dragMoveHistory = [{ time: performance.now(), angle: dragStartAngle }];
+    }
+
+    function onWheelTouchMove(e) {
+        if (!isDraggingWheel || isSpinning) return;
+        if (e.cancelable) e.preventDefault();
+
+        const touch = e.touches ? e.touches[0] : e;
+        const currentAngle = getTouchAngle(touch.clientX, touch.clientY);
+        
+        let delta = currentAngle - dragStartAngle;
+        currentWheelRotation = wheelBaseRotation + delta;
+
+        // Som tátil enquanto o usuário move a roleta com o dedo
+        if (Math.abs(currentWheelRotation - lastDragTickAngle) > 0.28) {
+            playTickSound();
+            lastDragTickAngle = currentWheelRotation;
+        }
+
+        renderWheel('wheel-canvas', currentWheelRotation);
+
+        const now = performance.now();
+        dragMoveHistory.push({ time: now, angle: currentAngle });
+        if (dragMoveHistory.length > 5) dragMoveHistory.shift();
+    }
+
+    function onWheelTouchEnd(e) {
+        if (!isDraggingWheel) return;
+        isDraggingWheel = false;
+        if (isSpinning) return;
+
+        const now = performance.now();
+        // Filtra pontos registrados nos últimos 150ms para pegar a velocidade do "arraste final"
+        const recentMoves = dragMoveHistory.filter(p => now - p.time < 150);
+
+        if (recentMoves.length >= 2) {
+            const first = recentMoves[0];
+            const last = recentMoves[recentMoves.length - 1];
+            const dt = (last.time - first.time) / 1000; // segundos
+            let dAngle = last.angle - first.angle;
+
+            // Corrige transição de quadrante (-PI / PI)
+            if (dAngle > Math.PI) dAngle -= 2 * Math.PI;
+            if (dAngle < -Math.PI) dAngle += 2 * Math.PI;
+
+            const angularSpeed = Math.abs(dAngle / dt); // radianos por segundo
+
+            // Se o usuário deu um "puxão" com velocidade suficiente (gesto intencional)
+            if (angularSpeed > 2.5) {
+                // Converte a força do puxão em tempo de giro (entre 14s e 26s)
+                const mappedDuration = Math.min(26000, Math.max(14000, Math.round(angularSpeed * 2200)));
+                timeTarget.textContent = `${Math.round(mappedDuration / 1000)}s`;
+                meterFill.style.width = `${Math.min(100, (mappedDuration - 14000) / 120)}%`;
+                
+                executeSpin(mappedDuration);
+                return;
+            }
+        }
+
+        // Se o usuário apenas arrastou devagar e parou a roleta, ela fica na posição atual
+        // e ele pode puxar novamente ou pressionar o botão inferior.
+    }
+
+    wheelCanvasEl.addEventListener('touchstart', onWheelTouchStart, { passive: false });
+    window.addEventListener('touchmove', onWheelTouchMove, { passive: false });
+    window.addEventListener('touchend', onWheelTouchEnd);
+
+    // Compatibilidade com mouse no totem (se for testado no PC)
+    wheelCanvasEl.addEventListener('mousedown', onWheelTouchStart);
+    window.addEventListener('mousemove', onWheelTouchMove);
+    window.addEventListener('mouseup', onWheelTouchEnd);
+
     // FÍSICA E SORTEIO DO RESULTADO
-    function executeSpin() {
+    function executeSpin(customDuration = null) {
         if (isSpinning) return;
         clearTimeout(gameScreenTimeout);
         isSpinning = true;
+        if (customDuration) {
+            selectedSpinDuration = customDuration;
+        }
         pumpBtn.disabled = true;
         pumpBtn.textContent = 'GIRANDO ROLETA...';
 
