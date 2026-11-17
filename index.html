@@ -1535,13 +1535,13 @@
 
         if (wonSlice.isNoPrize) {
             titleHeader.textContent = "QUE PENA!";
-            subtitleHeader.textContent = "Mais sorte na próxima";
-            helperText.textContent = "Agradecemos a sua visita ao nosso estande!";
+            subtitleHeader.textContent = "Mais sorte na próxima vez";
+            helperText.textContent = "Obrigado por participar de nossas brincadeiras.";
             stopConfetti();
         } else {
             titleHeader.textContent = "PARABÉNS!";
             subtitleHeader.textContent = "Prêmio Conquistado";
-            helperText.textContent = "Obrigado por participar de nossas brincadeiras .";
+            helperText.textContent = "Obrigado por participar de nossas brincadeiras.";
             triggerConfetti();
         }
 
@@ -1553,7 +1553,7 @@
         clearInterval(endCountdownInterval);
         endCountdownInterval = setInterval(() => {
             countdown--;
-            btnNext.textContent = `Concluir Atendimento (${countdown}s)`;
+            btnNext.textContent = `Concluir Jogador (${countdown}s)`;
             if (countdown <= 0) {
                 clearInterval(endCountdownInterval);
                 finishAndReset();
